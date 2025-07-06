@@ -1,0 +1,32 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="JAD WebRTC Prototype"
+config/features=PackedStringArray("4.5", "GL Compatibility")
+config/icon="uid://er7ks6c1nypb"
+
+[autoload]
+
+BADMultiplayerManager="*res://addons/bad.multiplayer/autoloads/bad_multiplayer_manager.gd"
+BADNetworkManager="*res://addons/bad.multiplayer/autoloads/bad_network_manager.gd"
+BADNetworkEvents="*res://addons/bad.multiplayer/autoloads/bad_network_events.gd"
+BADSceneManager="*res://addons/bad.multiplayer/autoloads/bad_scene_manager.gd"
+BADMP="*res://addons/bad.multiplayer/autoloads/bad_mp.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/bad.multiplayer/plugin.cfg")
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
