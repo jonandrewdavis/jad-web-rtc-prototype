@@ -140,15 +140,24 @@ var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity") 
 #endregion
 
 @export_group("Multiplayer")
-@export var player_input: Node
+@export var player_input: PlayerInput
+@export var player_ui: Control
+@export var camera: Camera3D
+@export var arms_animation_player: AnimationPlayer
 
 func _enter_tree():
 	player_input.set_multiplayer_authority(str(name).to_int())
 
 #region Main Control Flow
 
+func _is_client_player():
+	return multiplayer.get_unique_id() == str(name).to_int()
+	#return not multiplayer.is_server() and str(name).to_int() == player_input.get_multiplayer_authority()
+
 func _ready():
-	
+	if _is_client_player():
+		camera.make_current()
+
 	#It is safe to comment this line if your game doesn't start with the mouse captured
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
@@ -182,12 +191,13 @@ func _physics_process(delta): # Most things happen here.
 	
 	# AD: Changed
 	var input_dir = player_input.input_dir
-
-	if not immobile: # Immobility works by interrupting user input, so other forces can still be applied to the player
-		player_input.input_dir = Input.get_vector(controls.LEFT, controls.RIGHT, controls.FORWARD, controls.BACKWARD)
+	
+	# TODO: restore
+	#if not immobile: # Immobility works by interrupting user input, so other forces can still be applied to the player
+		#player_input.input_dir = Input.get_vector(controls.LEFT, controls.RIGHT, controls.FORWARD, controls.BACKWARD)
 
 	handle_movement(delta, input_dir)
-
+	handle_interact()
 	handle_head_rotation()
 
 	# The player is not able to stand up if the ceiling is too low
@@ -212,14 +222,16 @@ func _physics_process(delta): # Most things happen here.
 #region Input Handling
 
 func handle_jumping():
+	#const offline =  Input.is_action_pressed(controls.JUMP)
+	var jump_input = player_input.is_jumping
 	if jumping_enabled:
 		if continuous_jumping: # Hold down the jump button
-			if Input.is_action_pressed(controls.JUMP) and is_on_floor() and !low_ceiling:
+			if jump_input and is_on_floor() and !low_ceiling:
 				if jump_animation:
 					JUMP_ANIMATION.play("jump", 0.25)
 				velocity.y += jump_velocity # Adding instead of setting so jumping on slopes works properly
 		else:
-			if Input.is_action_just_pressed(controls.JUMP) and is_on_floor() and !low_ceiling:
+			if jump_input and is_on_floor() and !low_ceiling:
 				if jump_animation:
 					JUMP_ANIMATION.play("jump", 0.25)
 				velocity.y += jump_velocity
@@ -271,8 +283,11 @@ func handle_head_rotation():
 			HEAD.rotation.y += controller_view_rotation.y * -1
 		else:
 			HEAD.rotation.y += controller_view_rotation.y
+	
+	# AD: NOTE: this might not work...
+	if _is_client_player():
+		player_input.mouseInput = Vector2(0,0)
 
-	player_input.mouseInput = Vector2(0,0)
 	HEAD.rotation.x = clamp(HEAD.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 
 
@@ -310,7 +325,7 @@ func check_controls(): # If you add a control, you might want to add a check for
 func handle_state(moving):
 	if sprint_enabled:
 		if sprint_mode == 0:
-			if Input.is_action_pressed(controls.SPRINT) and state != "crouching":
+			if player_input.is_sprinting and state != "crouching":
 				if moving:
 					if state != "sprinting":
 						enter_sprint_state()
@@ -322,9 +337,9 @@ func handle_state(moving):
 		elif sprint_mode == 1:
 			if moving:
 				# If the player is holding sprint before moving, handle that scenario
-				if Input.is_action_pressed(controls.SPRINT) and state == "normal":
+				if player_input.is_sprinting and state == "normal":
 					enter_sprint_state()
-				if Input.is_action_just_pressed(controls.SPRINT):
+				if player_input.is_sprinting:
 					match state:
 						"normal":
 							enter_sprint_state()
@@ -494,5 +509,9 @@ func handle_pausing():
 			Input.MOUSE_MODE_VISIBLE:
 				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 				#get_tree().paused = false
+
+func handle_interact():
+	if player_input.is_interacting:
+		arms_animation_player.play("arms_armature|Combat_punch_right")
 
 #endregion

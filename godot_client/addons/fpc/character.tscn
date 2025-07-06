@@ -1,8 +1,8 @@
-[gd_scene load_steps=26 format=3 uid="uid://cc1m2a1obsyn4"]
+[gd_scene load_steps=25 format=3 uid="uid://cc1m2a1obsyn4"]
 
 [ext_resource type="Script" uid="uid://cisejjtyctybh" path="res://addons/fpc/character.gd" id="1_0t4e8"]
 [ext_resource type="Script" uid="uid://b444whi1t4ggg" path="res://addons/fpc/player_input.gd" id="2_bx7cj"]
-[ext_resource type="Script" uid="uid://cg7sm7qrfwdbw" path="res://addons/fpc/EditorModule.gd" id="3_v3ckk"]
+[ext_resource type="PackedScene" uid="uid://db3bwsg1ai8rg" path="res://assets/models/psx_first_person_arms/scene.gltf" id="3_bx7cj"]
 [ext_resource type="Script" uid="uid://c40oofqddkrqe" path="res://addons/fpc/debug.gd" id="3_x1wcc"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bx7cj"]
@@ -12,6 +12,15 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:is_jumping")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath(".:mouseInput")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:is_sprinting")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:is_interacting")
+properties/4/spawn = true
+properties/4/replication_mode = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kp17n"]
 albedo_color = Color(0.909804, 0.596078, 0, 1)
@@ -156,9 +165,6 @@ _data = {
 &"RESET": SubResource("Animation_j8cx7"),
 &"crouch": SubResource("Animation_5ec5e")
 }
-
-[sub_resource type="PrismMesh" id="PrismMesh_bupmj"]
-size = Vector3(0.5, 0.5, 0.5)
 
 [sub_resource type="Animation" id="Animation_gh776"]
 resource_name = "RESET"
@@ -396,11 +402,17 @@ MarginContainer/constants/margin_top = 10
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
-properties/1/path = NodePath("Head:rotation")
+properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath("Head:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("Head/Sketchfab_Scene/AnimationPlayer:current_animation")
+properties/3/spawn = true
+properties/3/replication_mode = 1
 
-[node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH", "player_input")]
+[node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH", "player_input", "player_ui", "camera", "arms_animation_player")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 script = ExtResource("1_0t4e8")
 default_reticle = "res://addons/fpc/reticles/reticle_1.tscn"
@@ -411,6 +423,9 @@ JUMP_ANIMATION = NodePath("Head/JumpAnimation")
 CROUCH_ANIMATION = NodePath("CrouchAnimation")
 COLLISION_MESH = NodePath("Collision")
 player_input = NodePath("PlayerInput")
+player_ui = NodePath("UserInterface")
+camera = NodePath("Head/Camera")
+arms_animation_player = NodePath("Head/Sketchfab_Scene/AnimationPlayer")
 
 [node name="PlayerInput" type="Node" parent="."]
 script = ExtResource("2_bx7cj")
@@ -434,15 +449,8 @@ libraries = {
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.39666882, -0.62171733, -0.5733209)
-mesh = SubResource("PrismMesh_bupmj")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -0.519465, -0.62171733, -0.5733209)
-mesh = SubResource("PrismMesh_bupmj")
-skeleton = NodePath("../..")
+[node name="Sketchfab_Scene" parent="Head" instance=ExtResource("3_bx7cj")]
+transform = Transform3D(-0.7, 0, -1.05697055e-07, 0, 0.7, 0, 1.05697055e-07, 0, -0.7, 0, -3.5394692, 0)
 
 [node name="Camera" type="Camera3D" parent="Head"]
 
@@ -488,8 +496,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("SphereShape3D_k4wwl")
 target_position = Vector3(0, 0.5, 0)
 
-[node name="EditorModule" type="Node" parent="."]
-script = ExtResource("3_v3ckk")
-
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_bupmj")
+
+[editable path="Head/Sketchfab_Scene"]
