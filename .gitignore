@@ -3,3 +3,4 @@ godot_client/.godot/
 *.pem
 godot_client/dist/
 .DS_Store
+node_modules
