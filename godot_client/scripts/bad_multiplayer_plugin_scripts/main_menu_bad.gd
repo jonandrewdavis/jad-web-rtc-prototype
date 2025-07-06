@@ -6,10 +6,15 @@ signal host_options_cancelled
 signal join_options_submitted
 signal join_options_cancelled
 
-@export var main_options_panel: Panel
+@export_category("Buttons")
+@export var host_option_btn: Button
+@export var join_option_btn: Button
 @export var host_btn: Button
 @export var join_btn: Button
 @export var exit_btn: Button
+
+@export_category("Panels")
+@export var main_options_panel: Panel
 @export var host_options_panel_scene: PackedScene
 @export var join_options_panel_scene: PackedScene
 
@@ -17,9 +22,10 @@ var _host_options_panel
 var _join_options_panel
 
 func _ready() -> void:
-	# AD: added connects & unique name
-	%Host.pressed.connect(_on_host_game_pressed)
-	%Join.pressed.connect(_on_join_game_pressed)
+	# AD: added connects
+	host_option_btn.pressed.connect(_on_host_option_pressed)
+	join_option_btn.pressed.connect(_on_join_option_pressed)
+
 	exit_btn.pressed.connect(_on_exit_game_pressed)
 	
 	if BADMP.is_dedicated_server():
@@ -35,14 +41,14 @@ func _ready() -> void:
 		
 		host_btn.grab_focus()
 
-func _on_host_game_pressed():
+func _on_host_option_pressed():
 	print("host game hit...")
 	if host_options_panel_scene:
 		main_options_panel.visible = false
 		_host_options_panel = host_options_panel_scene.instantiate()
 		add_child(_host_options_panel)
 
-func _on_join_game_pressed():
+func _on_join_option_pressed():
 	print("Join game pressed...")
 	if join_options_panel_scene:
 		main_options_panel.visible = false
