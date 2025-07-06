@@ -1,0 +1,182 @@
+[gd_scene load_steps=7 format=3 uid="uid://bxckjot076ujd"]
+
+[ext_resource type="Script" uid="uid://bm8oc50iho7vj" path="res://scripts/bad_multiplayer_plugin_scripts/join_options_panel.gd" id="1_phboy"]
+[ext_resource type="Texture2D" uid="uid://dsv4jm4vydflb" path="res://assets/textures/orange.png" id="2_7k01g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ctr5"]
+bg_color = Color(0, 0.654902, 0.878431, 0.176471)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_phboy"]
+draw_center = false
+border_width_left = 20
+border_color = Color(0.246067, 0.915248, 0.82259, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ux8y"]
+draw_center = false
+border_width_left = 20
+border_color = Color(0.8, 0.184314, 0.145098, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gsmth"]
+draw_center = false
+border_width_left = 20
+border_color = Color(0, 0.298039, 0.984314, 1)
+
+[node name="JoinOptionsMenu" type="Panel" node_paths=PackedStringArray("server_input_panel", "noray_input_panel", "server_host_input", "server_port_input", "noray_host_input", "noray_game_id_input")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0ctr5")
+script = ExtResource("1_phboy")
+server_input_panel = NodePath("ServerSubMenu")
+noray_input_panel = NodePath("NoraySubMenu")
+server_host_input = NodePath("ServerSubMenu/Host")
+server_port_input = NodePath("ServerSubMenu/Port")
+noray_host_input = NodePath("NoraySubMenu/Host")
+noray_game_id_input = NodePath("NoraySubMenu/GameId")
+
+[node name="SelectedIcon" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+offset_left = 1092.0
+offset_top = 131.0
+offset_right = 1192.0
+offset_bottom = 209.0
+texture = ExtResource("2_7k01g")
+expand_mode = 1
+flip_h = true
+
+[node name="HostSubMenu" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -113.0
+offset_right = 300.0
+offset_bottom = 113.0
+grow_vertical = 2
+
+[node name="Server" type="Button" parent="HostSubMenu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+theme_override_styles/focus = SubResource("StyleBoxFlat_phboy")
+text = "Server
+"
+flat = true
+
+[node name="Noray" type="Button" parent="HostSubMenu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+theme_override_styles/focus = SubResource("StyleBoxFlat_5ux8y")
+text = "Noray"
+flat = true
+
+[node name="Steam" type="Button" parent="HostSubMenu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+theme_override_styles/focus = SubResource("StyleBoxFlat_gsmth")
+text = "Steam"
+flat = true
+
+[node name="ServerSubMenu" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -85.0
+offset_right = 250.0
+offset_bottom = 85.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ServerSubMenu"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 20
+text = "Can be used to connect to local or remote hosts"
+horizontal_alignment = 1
+
+[node name="Host" type="LineEdit" parent="ServerSubMenu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "localhost"
+placeholder_text = "Host IP"
+caret_blink = true
+
+[node name="Port" type="LineEdit" parent="ServerSubMenu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "8080"
+placeholder_text = "Port"
+
+[node name="NoraySubMenu" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -85.0
+offset_right = 250.0
+offset_bottom = 85.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="RichTextLabel" type="RichTextLabel" parent="NoraySubMenu"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 20
+text = "Enter Noray host and game Id to join game"
+horizontal_alignment = 1
+
+[node name="Host" type="LineEdit" parent="NoraySubMenu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "localhost"
+placeholder_text = "Host IP"
+caret_blink = true
+
+[node name="GameId" type="LineEdit" parent="NoraySubMenu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+placeholder_text = "Game ID"
+
+[node name="ButtonOptions" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -200.0
+offset_right = 150.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 20
+
+[node name="Start" type="Button" parent="ButtonOptions"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
+text = "START"
+
+[node name="Cancel" type="Button" parent="ButtonOptions"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Back"
+flat = true
+
+[connection signal="pressed" from="HostSubMenu/Server" to="." method="_on_local_pressed"]
+[connection signal="pressed" from="HostSubMenu/Noray" to="." method="_on_noray_pressed"]
+[connection signal="pressed" from="HostSubMenu/Steam" to="." method="_on_steam_pressed"]
+[connection signal="pressed" from="ButtonOptions/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="ButtonOptions/Cancel" to="." method="_on_cancel_pressed"]

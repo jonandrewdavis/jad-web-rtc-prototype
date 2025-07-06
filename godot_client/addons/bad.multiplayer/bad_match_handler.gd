@@ -15,6 +15,7 @@ extends Node
 
 @export var player_scene: PackedScene
 @export var player_spawn_point: Node
+@export var player_spawn_random: Node
 
 var _players_in_game: Dictionary = {}
 
@@ -112,10 +113,10 @@ func ready_player(network_id: int, player: Player):
 
 ## Override with custom spawn point logic
 func get_spawn_point(player_name) -> Variant:
-	if player_name == "1": # For now, just check if you're the host, spawn on left side.
-		return Transform2D(0, Vector2(100, randi_range(50, 570)))
+	if int(player_name) == 1:
+		return $"../SpawnPoints/Marker3D".global_transform
 	else:
-		return Transform2D(0, Vector2(1000, randi_range(50, 570)))
+		return $"../SpawnPoints/Marker3D2".global_transform
 
 func get_players_in_game():
 	return _players_in_game

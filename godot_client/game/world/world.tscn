@@ -1,0 +1,118 @@
+[gd_scene load_steps=16 format=3 uid="uid://3o00hq8ytpai"]
+
+[ext_resource type="Script" uid="uid://hxohhat02ubx" path="res://addons/bad.multiplayer/bad_match_handler.gd" id="1_k7f6b"]
+[ext_resource type="Material" uid="uid://dpuau02nlxdgb" path="res://game/world/floor_material.tres" id="1_vn0wg"]
+[ext_resource type="PackedScene" uid="uid://cc1m2a1obsyn4" path="res://addons/fpc/character.tscn" id="2_4adp2"]
+[ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://assets/textures/green.png" id="3_k7f6b"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_k7f6b"]
+
+[sub_resource type="Sky" id="Sky_4adp2"]
+sky_material = SubResource("ProceduralSkyMaterial_k7f6b")
+
+[sub_resource type="Environment" id="Environment_dess5"]
+background_mode = 2
+sky = SubResource("Sky_4adp2")
+reflected_light_source = 2
+tonemap_mode = 4
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4adp2"]
+load_path = "res://.godot/imported/purple.png-08dcdaa0b4e1b4963325b152a5f4143d.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dess5"]
+albedo_color = Color(0.50840497, 0.50840497, 0.50840497, 1)
+albedo_texture = SubResource("CompressedTexture2D_4adp2")
+metallic_specular = 0.0
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_dess5"]
+material = SubResource("StandardMaterial3D_dess5")
+size = Vector3(1, 1, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uynus"]
+size = Vector3(1, 1, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uynus"]
+albedo_color = Color(0.50840497, 0.50840497, 0.50840497, 1)
+albedo_texture = ExtResource("3_k7f6b")
+metallic_specular = 0.0
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_we8ss"]
+material = SubResource("StandardMaterial3D_uynus")
+size = Vector3(1, 1, 4)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_aseec"]
+material = ExtResource("1_vn0wg")
+size = Vector2(50, 50)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_tvmmn"]
+
+[node name="World" type="Node3D"]
+
+[node name="BADMatchHandler" type="Node" parent="." node_paths=PackedStringArray("player_spawn_point", "player_spawn_random")]
+script = ExtResource("1_k7f6b")
+player_scene = ExtResource("2_4adp2")
+player_spawn_point = NodePath("../PlayerContainer")
+player_spawn_random = NodePath("../SpawnPoints")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dess5")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.09011109, -0.7987319, 0.5949012, 0, 0.5973313, 0.8019946, -0.99593174, 0.07226861, -0.053826176, 0, 3.7201366, 8.137672)
+light_energy = 4.0
+shadow_enabled = true
+directional_shadow_mode = 0
+
+[node name="PlayerContainer" type="Node3D" parent="."]
+
+[node name="TestTerrain" type="Node3D" parent="."]
+
+[node name="Barrier" type="StaticBody3D" parent="TestTerrain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestTerrain/Barrier"]
+mesh = SubResource("BoxMesh_dess5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestTerrain/Barrier"]
+shape = SubResource("BoxShape3D_uynus")
+
+[node name="Barrier2" type="StaticBody3D" parent="TestTerrain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestTerrain/Barrier2"]
+mesh = SubResource("BoxMesh_dess5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestTerrain/Barrier2"]
+shape = SubResource("BoxShape3D_uynus")
+
+[node name="Barrier3" type="StaticBody3D" parent="TestTerrain"]
+transform = Transform3D(0.5748767, 0, -0.81824005, 0, 1, 0, 0.81824005, 0, 0.5748767, 5, 0.5, 6.155007)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestTerrain/Barrier3"]
+mesh = SubResource("BoxMesh_we8ss")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestTerrain/Barrier3"]
+shape = SubResource("BoxShape3D_uynus")
+
+[node name="Floor" type="StaticBody3D" parent="TestTerrain"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestTerrain/Floor"]
+mesh = SubResource("PlaneMesh_aseec")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestTerrain/Floor"]
+shape = SubResource("WorldBoundaryShape3D_tvmmn")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://cc1m2a1obsyn4")
+spawn_path = NodePath("../PlayerContainer")
+
+[node name="SpawnPoints" type="Marker3D" parent="."]
+
+[node name="Marker3D" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6762977, 4.1718044)
+
+[node name="Marker3D2" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3436141, -5.3050785)
