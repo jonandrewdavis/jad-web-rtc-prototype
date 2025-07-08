@@ -1,14 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://chqusw4w4e11"]
+[gd_scene load_steps=2 format=3 uid="uid://chqusw4w4e11"]
 
 [ext_resource type="Script" uid="uid://e1via0bhi4hy" path="res://menus/lobby_menu/lobby_menu.gd" id="1_3p3bs"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3p3bs"]
-bg_color = Color(0.41779894, 0.7696412, 0.9103308, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.282353, 0.282353, 0.282353, 1)
 
 [node name="LobbyMenu" type="Control"]
 layout_mode = 3
@@ -18,15 +10,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3p3bs")
-
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_3p3bs")
 
 [node name="TopCenter" type="MarginContainer" parent="."]
 layout_mode = 1

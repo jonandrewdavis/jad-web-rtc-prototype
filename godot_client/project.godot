@@ -23,6 +23,11 @@ BADNetworkEvents="*res://addons/bad.multiplayer/autoloads/bad_network_events.gd"
 BADSceneManager="*res://addons/bad.multiplayer/autoloads/bad_scene_manager.gd"
 BADMP="*res://addons/bad.multiplayer/autoloads/bad_mp.gd"
 
+[display]
+
+window/size/mode=2
+window/stretch/mode="canvas_items"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/bad.multiplayer/plugin.cfg")

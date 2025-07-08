@@ -1,16 +1,50 @@
-[gd_scene load_steps=3 format=3 uid="uid://coipmkwg135us"]
+[gd_scene load_steps=8 format=3 uid="uid://coipmkwg135us"]
 
 [ext_resource type="Script" uid="uid://cvbrcxopt3pdp" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://cybu63jspuy30" path="res://menus/main_menu_bad/main_menu_bad.tscn" id="2_0xm2m"]
+[ext_resource type="Shader" uid="uid://d8hbewvob8f6" path="res://shaders/nebula.gdshader" id="2_h2yge"]
+[ext_resource type="FastNoiseLite" uid="uid://s5s6uy8lpt7q" path="res://shaders/nebula_fast_lite_cubic_noise.tres" id="3_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://chqusw4w4e11" path="res://menus/lobby_menu/lobby_menu.tscn" id="3_h2yge"]
 
-[node name="Main" type="Control"]
-layout_mode = 3
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_lquwl"]
+noise = ExtResource("3_1bvp3")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
+shader = ExtResource("2_h2yge")
+shader_parameter/stars_on = true
+shader_parameter/stars_flicker = true
+shader_parameter/timeScaleFactor = 0.029999999998835847
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_lquwl")
+shader_parameter/colour_muiltiplier = Color(0.41884705, 0.7190553, 1, 1)
+shader_parameter/colour_muiltiplier2 = Color(0.07450981, 1, 1, 1)
+shader_parameter/brightness = 1.0000000475000002
+shader_parameter/clouds_resolution = 8.000000380000001
+shader_parameter/clouds_intesity = 0.20000001369110004
+shader_parameter/waveyness = 0.5
+shader_parameter/fragmentation = 7.0
+shader_parameter/distortion = 1.5
+shader_parameter/clouds_alpha = 0.5
+shader_parameter/movement = 0.89999999757907
+shader_parameter/blur = 1.4
+shader_parameter/blur2 = 0.01
+shader_parameter/bg_speed = 0.19999999999708962
+shader_parameter/mid_speed = 0.5
+shader_parameter/fg_speed = 1.0
+
+[node name="Main" type="Node"]
+script = ExtResource("1_ig7tw")
+
+[node name="BackgroundShader" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_7mycd")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_ig7tw")
+metadata/_edit_use_anchors_ = true
 
 [node name="LobbyMenu" parent="." instance=ExtResource("3_h2yge")]
-layout_mode = 1
+visible = false
+
+[node name="MainMenuBad" parent="." instance=ExtResource("2_0xm2m")]
+visible = false
