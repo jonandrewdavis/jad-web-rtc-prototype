@@ -1,4 +1,4 @@
-import WebSocket = require("ws");
+import WebSocket from 'ws';
 import { v4 } from "uuid";
 
 import { ClientSocket } from "./models/clientSocket";

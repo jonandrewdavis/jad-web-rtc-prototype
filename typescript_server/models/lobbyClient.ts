@@ -1,4 +1,4 @@
-import WebSocket = require("ws");
+import WebSocket from 'ws';
 import { Vector2 } from "./vector2";
 import { LoggerHelper } from "../helpers/logger-helper";
 

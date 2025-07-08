@@ -47,7 +47,7 @@ func _check_and_set_available_networks():
 	else:
 		BADMP.available_networks[BADMP.AvailableNetworks.NORAY].enabled = false
 		
-	print("Enabled networks: %s" % BADMP.available_networks)	
+	#print("Enabled networks: %s" % BADMP.available_networks)	
 
 func _on_peer_created():
 	BADMP.get_scene_manager().load_game()

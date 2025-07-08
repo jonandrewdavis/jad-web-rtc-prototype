@@ -1,4 +1,4 @@
-import WebSocket = require("ws");
+import WebSocket from 'ws';
 import { Vector2 } from "./vector2";
 import { LoggerHelper } from "../helpers/logger-helper";
 
@@ -12,15 +12,15 @@ export class ClientSocket {
 
   constructor(
     socket: WebSocket,
-    id: String,
-    position: Vector2 = new Vector2(0, 0),
-    direction = new Vector2(0, 0)
+    id: String, // NOTE: UUID
+    // position: Vector2 = new Vector2(0, 0),
+    // direction = new Vector2(0, 0)
   ) {
     try {
       this.socket = socket;
       this.id = id;
-      this.position = position;
-      this.direction = direction;
+      // this.position = position; 
+      // this.direction = direction;
 
       this.logoutTimeout = setTimeout(() => {
         LoggerHelper.logWarn(`Closing socket ${this.id}. No validation.`);
