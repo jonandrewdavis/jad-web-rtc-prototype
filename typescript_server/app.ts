@@ -1,3 +1,5 @@
+const crypto = require("crypto");
+
 import WebSocket from 'ws';
 import { v4 } from "uuid";
 
@@ -12,12 +14,16 @@ import { LoggerHelper } from "./helpers/logger-helper";
 
 const gameServer = new GameServerHandler();
 
+function randomId() {
+	return Math.abs(new Int32Array(crypto.randomBytes(4).buffer)[0]);
+}
+
 try {
   LoggerHelper.logInfo("Starting Server on port " + configuration.port);
   const wss = new WebSocket.Server({ port: configuration.port });
 
   wss.on("connection", (ws) => {
-    const clientSocket: ClientSocket = new ClientSocket(ws, v4());
+    const clientSocket: ClientSocket = new ClientSocket(ws, randomId());
 
     gameServer.addClient(clientSocket);
 

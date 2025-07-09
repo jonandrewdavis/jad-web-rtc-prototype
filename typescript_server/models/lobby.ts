@@ -42,7 +42,7 @@ export class Lobby {
     }
   }
 
-  removePlayer(idPlayer: String) {
+  removePlayer(idPlayer: number) {
     try {
       // remove the player from the list
       const index = this.players.findIndex((el) => el.id === idPlayer);

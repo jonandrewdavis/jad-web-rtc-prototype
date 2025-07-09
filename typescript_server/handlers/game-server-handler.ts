@@ -21,7 +21,7 @@ export class GameServerHandler {
     }
   }
 
-  public removeClient(clientId: String) {
+  public removeClient(clientId: number) {
     try {
       // 1) If the player was in a lobby then remove the player from it
       for (const lobby of this.lobbies) {
@@ -83,7 +83,7 @@ export class GameServerHandler {
     }
   }
 
-  public getLobbyByPlayerId(clientId: String): Lobby | undefined {
+  public getLobbyByPlayerId(clientId: number): Lobby | undefined {
     try {
       return this.lobbies.find(
         (el) => el.players.findIndex((player) => player.id === clientId) > -1

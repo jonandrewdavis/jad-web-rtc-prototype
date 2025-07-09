@@ -11,7 +11,7 @@ import { LoggerHelper } from "../helpers/logger-helper";
 export class ProtocolHelper {
   public static sendPlayerDisconnectToAll = (
     gameServer: GameServerHandler,
-    playerDisconnectedId: String
+    playerDisconnectedId: number
   ) => {
     const playerDisconnectedMessage: Message = new Message(EAction.PlayerLeft, {
       webId: playerDisconnectedId,
@@ -99,6 +99,11 @@ export class ProtocolHelper {
         case EAction.GameStarted:
           LoggerHelper.logInfo("Recieved Lobby Start " + message);
           ProtocolHelper.startGameForLobby(gameServer, clientSocket, message);
+          break;
+        case EAction.Offer:
+        case EAction.Answer:
+        case EAction.Candidate:
+          ProtocolHelper.sendOfferAnswerOrCandidate(gameServer, clientSocket, message);
           break;
         }
     } catch (err) {
@@ -349,14 +354,26 @@ export class ProtocolHelper {
         //     ProtocolHelper.sendLobbyChanged(el, lobbyToJoin);
         //   });
 
-          // TODO: Remove - AD 
-          if (lobbyToStart.players.length >= 2 && !lobbyToStart.isGameStarted) {
+        
+        if (lobbyToStart.players.length >= 2 && !lobbyToStart.isGameStarted) {
             setTimeout(() => {
               lobbyToStart.isGameStarted = true;
-              lobbyToStart.players.forEach((el) => {
-                ProtocolHelper.sendGameStarted(el);
+              lobbyToStart.players.forEach((player) => {
+                // Start
+                ProtocolHelper.sendGameStarted(player);
+                
+                // Share all new sendNewPeerConnection
+                var player_client: ClientSocket = player
+                var current_player_id: number = player.id
+                for (const next_player of lobbyToStart.players) { 
+                  if (current_player_id !== next_player.id){
+                    ProtocolHelper.sendNewPeerConnection(player_client, next_player.id);
+                  }
+                }
               });
               // TODO: Remove lobby from list, disconnect all players. 
+              // TODO: Remove lobby from list, disconnect all players. 
+              // TODO: Remove lobby from list, disconnect all players. Not here, later...
             }, 1000);
           }
       } else {
@@ -367,11 +384,41 @@ export class ProtocolHelper {
       }
     } catch (err: any) {
       LoggerHelper.logError(
-        `[ProtocolHelper.joinExistingLobby()] An error had occurred while parsing a message: ${err}`
+        `[ProtocolHelper.startGameForLobby()] An error had occurred while parsing a message: ${err}`
       );
     }
   };
 
+  // NEW:
+  public static sendNewPeerConnection(clientSocket: ClientSocket, next_player_id: number) {
+    try {
+      const newPeerConnection: Message = new Message(EAction.NewPeerConnection, {
+        id: next_player_id,
+      });
+      clientSocket.socket.send(newPeerConnection.toString());
+    } catch (err: any) {
+      LoggerHelper.logError(
+        `[ProtocolHelper.sendnewPeerConnection()] An error had occurred while parsing a message: ${err}`
+      );
+    }
+  }
+  // NOTE: NEW!!! WILL IT WORK?
+  // TODO: Prettier
+  public static sendOfferAnswerOrCandidate(
+    gameServer: GameServerHandler,
+    _clientSocket: ClientSocket,
+    message: Message
+  ) {
+    try {
+      const getClientForMessage: ClientSocket = gameServer.connectedClients.find(client => client.id === message.payload.id)
+      const newOfferAnswerOrCandidateMessage: Message = new Message(EAction.NewPeerConnection, message.payload);
+      getClientForMessage.socket.send(newOfferAnswerOrCandidateMessage.toString());
+    } catch (err: any) {
+      LoggerHelper.logError(
+        `[ProtocolHelper.sendOfferAnswerOrCandidate()] An error had occurred while parsing a message: ${err}`
+      );
+    }
+  }
 
   public static sendGameStarted(clientSocket: ClientSocket) {
     try {

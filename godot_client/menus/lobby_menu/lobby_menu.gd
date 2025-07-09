@@ -39,6 +39,7 @@ signal game_started
 
 # AD: new signal
 signal signal_data_received(text)
+signal signal_new_peer_connection(id: String) # You can type signals now???
 
 #signal entity_position_update(data)
 #signal entity_hard_position_update(data)
@@ -69,6 +70,12 @@ const Action_GameStarted = "GameStarted"
 
 const Action_MessageToLobby = "MessageToLobby"
 const Action_Heartbeat = "Heartbeat"
+# ADDED: 
+const Action_NewPeerConnection = "NewPeerConnection"
+
+const Action_Offer = "Offer"
+const Action_Answer = "Answer"
+const Action_Candidate = "Candidate"
 
 # TODO: Do those code "sections" like in fpc.
 
@@ -151,9 +158,9 @@ func connect_to_server(username : String):
 	await get_tree().create_timer(4.0).timeout
 	
 	if !(_is_web_socket_connected()):
+		# TODO: Disconnect isn't working yet.
 		web_socket_client.disconnect_from_host()
 		emit_signal("web_socket_disconnected")
-
 
 
 func data_received():
@@ -292,6 +299,10 @@ func parse_message_received(json_message):
 				lobby_data = json_message.payload.lobby
 		Action_GameStarted:
 			emit_signal("game_started")
+		Action_NewPeerConnection:
+			# TODO: Could recieve... all the peers at once & mesh them client side. this... hmm
+			# Each time this polls, it's a new player id to mesh to.
+			signal_new_peer_connection.emit(json_message.payload.id)
 		#Action_MessageToLobby:
 			#if json_message.payload.has("type"):
 				#match (json_message.payload.type):
@@ -339,7 +350,7 @@ func render_user_list(success, users):
 			child.queue_free()
 		for single_user in users:
 			var user_label = Label.new()
-			user_label.name = single_user.id
+			user_label.name = str(single_user.id)
 			user_label.text = single_user.username
 			%UserList.add_child(user_label)
 
@@ -352,7 +363,7 @@ func render_lobby_list(lobbies):
 	#id
 	for lobby in lobbies:
 		var render_lobby: LobbyListItem = LobbyItemScene.instantiate()
-		render_lobby.name = lobby.id
+		render_lobby.name = str(lobby.id)
 		render_lobby.player_count = lobby.players.size()
 		%LobbyList.add_child(render_lobby, true)
 		# TODO: do this a lot better
@@ -377,15 +388,122 @@ func render_data_recieved_debug(new_message):
 
 # TODO: this one is gonna be kinda nutty....... but basically it'll exchange ICE & turn
 func on_game_started():
-	print('lets go')
+	print("Game Started! WEB RTC Connections")
+	# Lets rock.
+	ready_rtc_peer()
+	# New RTC Peer (own id)
+	set_multiplayer_peer_to_rtc(current_web_id)
 	
-	
-	
-
-
-
-
-
 #############
 #############
 #############
+# WebRTC
+#############
+#############
+#############
+
+var rtcPeer : WebRTCMultiplayerPeer = WebRTCMultiplayerPeer.new()
+
+func ready_rtc_peer():
+	multiplayer.connected_to_server.connect(RTCServerConnected)
+	multiplayer.peer_connected.connect(RTCPeerConnected)
+	multiplayer.peer_disconnected.connect(RTCPeerDisconnected)
+	# New
+	signal_new_peer_connection.connect(create_multiplayer_peer_connection)
+
+func RTCServerConnected():
+	print("RTC server connected")
+
+func RTCPeerConnected(id):
+	print("rtc peer connected " + str(id))
+	
+func RTCPeerDisconnected(id):
+	print("rtc peer disconnected " + str(id))
+
+# TODO: Remove notes, this was formerlly "connect"
+# Caller is:
+#			if data.message == Utilities.Message.id:
+#				id = data.id
+				#connected(id)
+
+# TODO: This could techincally be any MultipayerPeer Type (if it took a :MultiplayerPeer as an arg)
+func set_multiplayer_peer_to_rtc(id):
+	rtcPeer.create_mesh(id)
+	multiplayer.multiplayer_peer = rtcPeer
+#
+			#if data.message == Utilities.Message.userConnected:
+				##GameManager.Players[data.id] = data.player
+				#createPeer(data.id)
+
+# TODO: Formerlly createPeer
+func create_multiplayer_peer_connection(id: int):
+	print("INCOMING")
+	if id != current_web_id:
+		var new_peer_connection: WebRTCPeerConnection = WebRTCPeerConnection.new()
+		new_peer_connection.initialize({
+			"iceServers" : [{ "urls": ["stun:stun.l.google.com:19302"] }]
+		})
+		print("binding id " + str(id) + "my id is " + str(current_web_id))
+
+		new_peer_connection.session_description_created.connect(self.offerCreated.bind(id))
+		new_peer_connection.ice_candidate_created.connect(self.iceCandidateCreated.bind(id))
+		rtcPeer.add_peer(new_peer_connection, id)
+		if id < rtcPeer.get_unique_id():
+			new_peer_connection.create_offer()
+
+
+enum Message { 
+	offer,
+	answer,
+	candidate
+}
+
+func offerCreated(type, data, id):
+	if !rtcPeer.has_peer(id):
+		return
+		
+	rtcPeer.get_peer(id).connection.set_local_description(type, data)
+	
+	if type == "offer":
+		sendOffer(id, data)
+	else:
+		sendAnswer(id, data)
+	pass
+
+func sendOffer(id, data):
+	var message = {
+		"peer" : id,
+		"orgPeer" : current_web_id,
+		#"message" :  Message.offer,
+		"data": data,
+		#"Lobby": lobbyValue
+	}
+	_send_message(Action_Offer, message)
+	#peer.put_packet(JSON.stringify(message).to_utf8_buffer())
+	pass
+
+func sendAnswer(id, data):
+	var message = {
+		"peer" : id, 
+		"orgPeer" : current_web_id, # NOT USED. 
+		#"message" : Message.answer,
+		"data": data,
+		#"Lobby": lobbyValue
+	}
+	_send_message(Action_Answer, message)
+	#peer.put_packet(JSON.stringify(message).to_utf8_buffer())
+	pass
+
+func iceCandidateCreated(midName, indexName, sdpName, id):
+	var message = {
+		"peer" : id,
+		"orgPeer" : current_web_id,
+		#"message" :  Message.candidate,
+		"mid": midName,
+		"index": indexName,
+		"sdp": sdpName,
+		#"Lobby": lobbyValue
+	}
+	_send_message(Action_Candidate, message)
+	#peer.put_packet(JSON.stringify(message).to_utf8_buffer())
+	pass

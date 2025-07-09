@@ -16,6 +16,14 @@ export enum EAction {
 
   MessageToLobby = "MessageToLobby",
   Heartbeat = "Heartbeat",
+
+  // NOTE: Added
+  NewPeerConnection = "NewPeerConnection",
+
+  Offer = "Offer",
+  Answer = "Answer",
+  Candidate = "Candidate",
+
 }
 
 export enum EGenericAction {

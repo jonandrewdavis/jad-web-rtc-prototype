@@ -4,12 +4,12 @@ import { LoggerHelper } from "../helpers/logger-helper";
 
 export class LobbyClient {
   username: String;
-  id: String;
+  id: number;
   position: Vector2;
   direction: Vector2;
 
   constructor(
-    id: String,
+    id: number,
     username: String,
     position: Vector2 = new Vector2(0, 0),
     direction = new Vector2(0, 0)

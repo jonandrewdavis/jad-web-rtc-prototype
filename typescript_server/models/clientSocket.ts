@@ -5,14 +5,14 @@ import { LoggerHelper } from "../helpers/logger-helper";
 export class ClientSocket {
   username: String;
   socket: WebSocket;
-  id: String;
+  id: number;
   position: Vector2;
   direction: Vector2;
   logoutTimeout: NodeJS.Timeout;
 
   constructor(
     socket: WebSocket,
-    id: String, // NOTE: UUID
+    id: number, // NOTE: UUID ... sadly had to change to crypto random num for Web RTC
     // position: Vector2 = new Vector2(0, 0),
     // direction = new Vector2(0, 0)
   ) {
