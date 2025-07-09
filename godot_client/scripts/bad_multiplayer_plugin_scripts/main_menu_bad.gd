@@ -1,4 +1,5 @@
 extends Control
+class_name BADCustomMenu
 
 signal host_options_submitted
 signal host_options_cancelled

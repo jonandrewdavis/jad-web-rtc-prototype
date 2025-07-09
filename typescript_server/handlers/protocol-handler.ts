@@ -103,6 +103,7 @@ export class ProtocolHelper {
         case EAction.Offer:
         case EAction.Answer:
         case EAction.Candidate:
+          // console.log('DEBUG OFFER', gameServer, clientSocket, message)
           ProtocolHelper.sendOfferAnswerOrCandidate(gameServer, clientSocket, message);
           break;
         }
@@ -410,8 +411,13 @@ export class ProtocolHelper {
     message: Message
   ) {
     try {
-      const getClientForMessage: ClientSocket = gameServer.connectedClients.find(client => client.id === message.payload.id)
-      const newOfferAnswerOrCandidateMessage: Message = new Message(EAction.NewPeerConnection, message.payload);
+      const getClientForMessage: ClientSocket = gameServer.connectedClients.find(client => client.id === message.payload.peer)
+      // NOTE: passes along all of these tob be handled on the client using `message.action`!
+        // case EAction.Offer:
+        // case EAction.Answer:
+        // case EAction.Candidate:
+
+      const newOfferAnswerOrCandidateMessage: Message = new Message(message.action, message.payload);
       getClientForMessage.socket.send(newOfferAnswerOrCandidateMessage.toString());
     } catch (err: any) {
       LoggerHelper.logError(

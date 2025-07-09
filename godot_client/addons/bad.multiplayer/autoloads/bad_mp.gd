@@ -12,7 +12,7 @@ var _scene_manager = BADSceneManager
 var _network_events_manager = BADNetworkEvents
 var _match_handler
 
-enum AvailableNetworks {OFFLINE, ENET, NORAY, STEAM}
+enum AvailableNetworks {OFFLINE, ENET, NORAY, STEAM, WEB_RTC}
 
 # IMPORTANT: Accessing with get_setting must use the same default value as the initial setting defined in the plugin.
 # The get_setting will return null if you don't supply a default value that matches the default value in the setting configuration.
@@ -20,7 +20,8 @@ var available_networks: Dictionary = {
 	AvailableNetworks.OFFLINE: {"script":"res://addons/bad.multiplayer/networks/offline_network.gd", "name": "OFFLINE_NETWORK", "enabled": ProjectSettings.get_setting(&"bad.multiplayer/networks/offline", true)},
 	AvailableNetworks.ENET: {"script":"res://addons/bad.multiplayer/networks/enet_network.gd", "name": "ENET_NETWORK", "enabled": ProjectSettings.get_setting(&"bad.multiplayer/networks/enet", true)},
 	AvailableNetworks.NORAY: {"script":"res://addons/bad.noray/networks/noray_network.gd", "name": "NORAY_NETWORK", "enabled": ProjectSettings.get_setting(&"bad.multiplayer/networks/noray", false)},
-	AvailableNetworks.STEAM: {"script": "", "name": "STEAM_NETWORK", "enabled": false} #TODO: work this once supported
+	AvailableNetworks.STEAM: {"script": "", "name": "STEAM_NETWORK", "enabled": false}, #TODO: work this once supported
+	AvailableNetworks.WEB_RTC: {"script": "res://scripts/bad_networks/bad_network_web_rtc.gd", "name": "WEB_RTC_NETWORK", "enabled": true}
 	# Add more networks here
 }
 

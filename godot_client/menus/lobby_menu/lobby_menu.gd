@@ -88,7 +88,7 @@ var connection_validated = false
 # TODO: Enable disconnect when connected.
 
 # TODO: Clear about these assets.
-@export var LobbyItemScene: PackedScene = preload("res://menus/lobby_menu/lobby_list_item.tscn") 
+@onready var LobbyItemScene: PackedScene = preload("res://menus/lobby_menu/lobby_list_item.tscn") 
 
 func _ready():
 	set_process(false)
@@ -303,6 +303,17 @@ func parse_message_received(json_message):
 			# TODO: Could recieve... all the peers at once & mesh them client side. this... hmm
 			# Each time this polls, it's a new player id to mesh to.
 			signal_new_peer_connection.emit(json_message.payload.id)
+		Action_Offer:
+			# TODO: The payload is chaotic and untyped... could this be better? Do we know it in each case?
+			rtcPeer.get_peer(json_message.payload.orgPeer).connection.set_remote_description("offer", json_message.payload.data)
+		Action_Answer:
+			rtcPeer.get_peer(json_message.payload.orgPeer).connection.set_remote_description("answer", json_message.payload.data)
+		Action_Candidate:
+			# untyped chaos
+			var data = json_message.payload
+			print("Got Candididate: " + str(data.orgPeer) + " my id is " + str(current_web_id))
+			rtcPeer.get_peer(data.orgPeer).connection.add_ice_candidate(data.mid, data.index, data.sdp)
+
 		#Action_MessageToLobby:
 			#if json_message.payload.has("type"):
 				#match (json_message.payload.type):
@@ -416,6 +427,10 @@ func RTCServerConnected():
 
 func RTCPeerConnected(id):
 	print("rtc peer connected " + str(id))
+	# TODO: TRUE START MATCH:
+	var configs = BADNetworkConnectionConfigs.new(BADMP.AvailableNetworks.WEB_RTC, '')
+	BADMP.host_game(configs)
+	
 	
 func RTCPeerDisconnected(id):
 	print("rtc peer disconnected " + str(id))
@@ -437,13 +452,12 @@ func set_multiplayer_peer_to_rtc(id):
 
 # TODO: Formerlly createPeer
 func create_multiplayer_peer_connection(id: int):
-	print("INCOMING")
 	if id != current_web_id:
 		var new_peer_connection: WebRTCPeerConnection = WebRTCPeerConnection.new()
 		new_peer_connection.initialize({
 			"iceServers" : [{ "urls": ["stun:stun.l.google.com:19302"] }]
 		})
-		print("binding id " + str(id) + "my id is " + str(current_web_id))
+		print("binding id " + str(id) + " my id is " + str(current_web_id))
 
 		new_peer_connection.session_description_created.connect(self.offerCreated.bind(id))
 		new_peer_connection.ice_candidate_created.connect(self.iceCandidateCreated.bind(id))
@@ -485,7 +499,7 @@ func sendOffer(id, data):
 func sendAnswer(id, data):
 	var message = {
 		"peer" : id, 
-		"orgPeer" : current_web_id, # NOT USED. 
+		"orgPeer" : current_web_id, 
 		#"message" : Message.answer,
 		"data": data,
 		#"Lobby": lobbyValue
