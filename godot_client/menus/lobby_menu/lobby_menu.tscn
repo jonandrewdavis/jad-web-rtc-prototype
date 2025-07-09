@@ -1,70 +1,133 @@
-[gd_scene load_steps=2 format=3 uid="uid://chqusw4w4e11"]
+[gd_scene load_steps=3 format=3 uid="uid://chqusw4w4e11"]
 
 [ext_resource type="Script" uid="uid://e1via0bhi4hy" path="res://menus/lobby_menu/lobby_menu.gd" id="1_3p3bs"]
+[ext_resource type="StyleBox" uid="uid://8nr6rb2m1nto" path="res://assets/ui/section_panel_style_box_flat.tres" id="2_urr6r"]
 
-[node name="LobbyMenu" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="LobbyMenu" type="CanvasLayer"]
 script = ExtResource("1_3p3bs")
 
 [node name="TopCenter" type="MarginContainer" parent="."]
-layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -61.0
-offset_right = 61.0
-offset_bottom = 41.0
+offset_left = -347.5
+offset_right = 347.5
+offset_bottom = 240.0
 grow_horizontal = 2
 theme_override_constants/margin_top = 20
 
-[node name="Label" type="Label" parent="TopCenter"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TopCenter"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="WebsocketsLobbyLabel" type="Label" parent="TopCenter/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
-text = "Websockets Lobby
-"
+text = "JAD WebRTC Prototype"
+horizontal_alignment = 1
 
-[node name="Center" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="WebSockets Lobby" type="Label" parent="TopCenter/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Websockets Lobby Client"
+horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Center"]
+[node name="Sections" type="HBoxContainer" parent="TopCenter/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 100
+
+[node name="Login" type="PanelContainer" parent="TopCenter/VBoxContainer/Sections"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_urr6r")
+
+[node name="SectionLogin" type="VBoxContainer" parent="TopCenter/VBoxContainer/Sections/Login"]
 layout_mode = 2
 
-[node name="UsernameInput" type="LineEdit" parent="Center/VBoxContainer"]
+[node name="Label" type="Label" parent="TopCenter/VBoxContainer/Sections/Login/SectionLogin"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Connect"
+
+[node name="UsernameInput" type="LineEdit" parent="TopCenter/VBoxContainer/Sections/Login/SectionLogin"]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Username"
 emoji_menu_enabled = false
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Center/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TopCenter/VBoxContainer/Sections/Login/SectionLogin"]
 layout_mode = 2
 
-[node name="LobbyServerConnect" type="Button" parent="Center/VBoxContainer/HBoxContainer"]
+[node name="LobbyServerConnect" type="Button" parent="TopCenter/VBoxContainer/Sections/Login/SectionLogin/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Connect to Server"
 
-[node name="LobbyServerDisconnect" type="Button" parent="Center/VBoxContainer/HBoxContainer"]
+[node name="LobbyServerDisconnect" type="Button" parent="TopCenter/VBoxContainer/Sections/Login/SectionLogin/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 text = "Disconnect"
 
-[node name="CurrentUserList" type="VBoxContainer" parent="Center/VBoxContainer"]
+[node name="Users" type="PanelContainer" parent="TopCenter/VBoxContainer/Sections"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_urr6r")
+
+[node name="SectionUsers" type="VBoxContainer" parent="TopCenter/VBoxContainer/Sections/Users"]
+layout_mode = 2
+
+[node name="ConnectedUsersLabel" type="Label" parent="TopCenter/VBoxContainer/Sections/Users/SectionUsers"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "User List"
+
+[node name="UserList" type="VBoxContainer" parent="TopCenter/VBoxContainer/Sections/Users/SectionUsers"]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="Lobbies" type="PanelContainer" parent="TopCenter/VBoxContainer/Sections"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_urr6r")
+
+[node name="SectionLobbies" type="VBoxContainer" parent="TopCenter/VBoxContainer/Sections/Lobbies"]
+layout_mode = 2
+
+[node name="LobbyLabel" type="Label" parent="TopCenter/VBoxContainer/Sections/Lobbies/SectionLobbies"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Lobbies"
+
+[node name="LobbyCreateContainer" type="VBoxContainer" parent="TopCenter/VBoxContainer/Sections/Lobbies/SectionLobbies"]
+layout_mode = 2
+
+[node name="LobbyNameInput" type="LineEdit" parent="TopCenter/VBoxContainer/Sections/Lobbies/SectionLobbies/LobbyCreateContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="LobbyCreate" type="Button" parent="TopCenter/VBoxContainer/Sections/Lobbies/SectionLobbies/LobbyCreateContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CreateLobby"
+
+[node name="LobbyList" type="VBoxContainer" parent="TopCenter/VBoxContainer/Sections/Lobbies/SectionLobbies"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Debug" type="VBoxContainer" parent="TopCenter/VBoxContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="TopCenter/VBoxContainer/Debug"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_urr6r")
+
+[node name="DebugText" type="RichTextLabel" parent="TopCenter/VBoxContainer/Debug/PanelContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+focus_mode = 2
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+scroll_following = true
+selection_enabled = true

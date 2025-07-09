@@ -96,7 +96,11 @@ export class ProtocolHelper {
         case EAction.MessageToLobby:
           ProtocolHelper.sendMessageToLobby(gameServer, clientSocket, message);
           break;
-      }
+        case EAction.GameStarted:
+          LoggerHelper.logInfo("Recieved Lobby Start " + message);
+          ProtocolHelper.startGameForLobby(gameServer, clientSocket, message);
+          break;
+        }
     } catch (err) {
       LoggerHelper.logError(
         `[ProtocolHelper.parseReceivingMessage()] An error had occurred while parsing a message: ${err}`
@@ -297,14 +301,15 @@ export class ProtocolHelper {
             ProtocolHelper.sendLobbyChanged(el, lobbyToJoin);
           });
 
-          if (lobbyToJoin.players.length >= 2 && !lobbyToJoin.isGameStarted) {
-            setTimeout(() => {
-              lobbyToJoin.isGameStarted = true;
-              lobbyToJoin.players.forEach((el) => {
-                ProtocolHelper.sendGameStarted(el);
-              });
-            }, 1000);
-          }
+          // TODO: Remove - AD 
+          // if (lobbyToJoin.players.length >= 2 && !lobbyToJoin.isGameStarted) {
+          //   setTimeout(() => {
+          //     lobbyToJoin.isGameStarted = true;
+          //     lobbyToJoin.players.forEach((el) => {
+          //       ProtocolHelper.sendGameStarted(el);
+          //     });
+          //   }, 1000);
+          // }
         }
       } else {
         const joinLobbyFailureMessage = new Message(EAction.JoinLobby, {
@@ -318,6 +323,55 @@ export class ProtocolHelper {
       );
     }
   };
+
+
+  private static startGameForLobby = (
+    gameServer: GameServerHandler,
+    clientSocket: ClientSocket,
+    message: Message
+  ) => {
+    try {
+      const lobbyToStart: Lobby | undefined = gameServer.getLobbyById(
+        message.payload.id
+      );
+      if (!!lobbyToStart) {
+        // if (lobbyToJoin.addPlayer(clientSocket)) {
+        //   const joinLobbySuccessMessage = new Message(EAction.JoinLobby, {
+        //     success: true,
+        //     lobbyId: lobbyToJoin.id,
+        //   });
+        //   clientSocket.socket.send(joinLobbySuccessMessage.toString());
+        //   // Alert all clients the changes to the lobbies
+        //   gameServer.connectedClients.forEach((el) =>
+        //     ProtocolHelper.sendLobbyList(gameServer, el)
+        //   );
+        //   lobbyToJoin.players.forEach((el) => {
+        //     ProtocolHelper.sendLobbyChanged(el, lobbyToJoin);
+        //   });
+
+          // TODO: Remove - AD 
+          if (lobbyToStart.players.length >= 2 && !lobbyToStart.isGameStarted) {
+            setTimeout(() => {
+              lobbyToStart.isGameStarted = true;
+              lobbyToStart.players.forEach((el) => {
+                ProtocolHelper.sendGameStarted(el);
+              });
+              // TODO: Remove lobby from list, disconnect all players. 
+            }, 1000);
+          }
+      } else {
+        const joinLobbyFailureMessage = new Message(EAction.JoinLobby, {
+          success: false,
+        });
+        clientSocket.socket.send(joinLobbyFailureMessage.toString());
+      }
+    } catch (err: any) {
+      LoggerHelper.logError(
+        `[ProtocolHelper.joinExistingLobby()] An error had occurred while parsing a message: ${err}`
+      );
+    }
+  };
+
 
   public static sendGameStarted(clientSocket: ClientSocket) {
     try {

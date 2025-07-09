@@ -1,5 +1,5 @@
 class_name LobbyMenu
-extends Control
+extends CanvasLayer
 
 
 # SERVER
@@ -15,7 +15,6 @@ var current_web_id = ""
 var is_lobby_master = false
 
 var lobby_data = null
-var current_map_key = "Map001"
 
 # Web socket signals
 signal web_socket_connected
@@ -37,6 +36,9 @@ signal left_lobby(success)
 signal lobby_changed(lobby)
 
 signal game_started
+
+# AD: new signal
+signal signal_data_received(text)
 
 #signal entity_position_update(data)
 #signal entity_hard_position_update(data)
@@ -78,32 +80,32 @@ var connection_validated = false
 # TODO: Disable connect if connected.
 # TODO: Enable disconnect when connected.
 
+# TODO: Clear about these assets.
+@export var LobbyItemScene: PackedScene = preload("res://menus/lobby_menu/lobby_list_item.tscn") 
+
 func _ready():
 	set_process(false)
-	%UsernameInput.text_changed.connect(func (text): username_input = text)
-	%LobbyServerConnect.pressed.connect(lobby_server_connect)
 	
 	# TODO: all UI could go to antoher node. Good to seperate? or is it all tied together
+	ready_button_connections()
+	ready_render_connections()	
+
+	# Once connected, this signal confirms the authentication
+	# TODO: Improve the true/false & property handle disconnect from Websocket server
+	#web_socket_connected.connect()
+	game_started.connect(on_game_started)
+
+func ready_button_connections():
+	%UsernameInput.text_changed.connect(func (text): username_input = text)
+	%LobbyServerConnect.pressed.connect(func (): connect_to_server(username_input))
+	%LobbyCreate.pressed.connect(func (): send_message_create_lobby())
+
+func ready_render_connections():
+	web_socket_connected.connect(render_connection_confirmed)
 	update_user_list.connect(render_user_list)
-	player_left.connect(remove_user_from_list)
-	
-	# confirmed
-	web_socket_connected.connect(web_socket_connected_confirmed)
-	
-	# TODO: un do the true
-	
-	
-	## Initiate connection to the given URL.
-	#var err = socket.connect_to_url(Server_WSUrl)
-	#if err != OK:
-		#print("Unable to connect")
-		#set_process(false)
-	#else:
-		## Wait for the socket to connect.
-		#await get_tree().create_timer(2).timeout
-		### Send data.
-		##socket.send_text("Test packet")
-		#print('Websocket lobby connected')
+	player_left.connect(render_remove_user_from_list)
+	signal_data_received.connect(render_data_recieved_debug)
+	update_lobby_list.connect(render_lobby_list)
 
 func _process(_delta):
 	web_socket_client.poll()
@@ -112,6 +114,7 @@ func _process(_delta):
 		WebSocketPeer.STATE_CONNECTING:
 			return
 		WebSocketPeer.STATE_OPEN:
+			# TODO: Improve. This confirms our authentication with the server.
 			if connection_validated == false:
 				send_message_connect(current_username)
 				connection_validated = true
@@ -127,9 +130,6 @@ func _process(_delta):
 			var reason = web_socket_client.get_close_reason()
 			print("WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
 			set_process(false) # Stop processing.
-
-func lobby_server_connect():
-	connect_to_server(username_input)
 
 func connect_to_server(username : String):
 	if _is_web_socket_connected() || _is_web_socket_connecting():
@@ -157,11 +157,12 @@ func connect_to_server(username : String):
 
 
 func data_received():
-	var packet = web_socket_client.get_packet()
-	var packet_to_json = JSON.parse_string(packet.get_string_from_utf8())
+	var packet = web_socket_client.get_packet().get_string_from_utf8()
+	var packet_to_json = JSON.parse_string(packet)
  	# print('DEBUG DATA RECIEVED', packet_to_json)
 	if packet_to_json and packet_to_json.has('action') and packet_to_json.has('payload'):
 		parse_message_received(packet_to_json)
+		signal_data_received.emit(packet)
 	else:
 		push_warning("Invalid message received")
 
@@ -196,6 +197,7 @@ func _is_web_socket_connecting() -> bool:
 		return web_socket_client.get_ready_state() == WebSocketPeer.STATE_CONNECTING
 	return false 
 
+# TODO: all of these do a pretty wasteful "_is_web_socket_connected" check... 
 func send_message_connect(username : String):
 	if _is_web_socket_connected():
 		_send_message(Action_Connect, {"secretKey" : Server_SecretKey, "username" : username})
@@ -203,6 +205,8 @@ func send_message_connect(username : String):
 func send_message_get_users():
 	if _is_web_socket_connected():
 		_send_message(Action_GetUsers,  {})
+
+
 
 func send_message_get_lobbies():
 	if _is_web_socket_connected():
@@ -231,6 +235,11 @@ func send_message_to_lobby(messageContent):
 func send_message_heartbeat():
 	if _is_web_socket_connected():
 		_send_message(Action_Heartbeat, {})
+
+# NOTE: Adapted from Lobby Join
+func send_message_start_game(idLobby: String):
+	if _is_web_socket_connected():
+		_send_message(Action_GameStarted, { "id": idLobby })
 
 func parse_message_received(json_message):
 	match(json_message.action):
@@ -326,19 +335,57 @@ func get_position_in_lobby():
 # TODO: lol. be better.
 func render_user_list(success, users):
 	if success:
-		for child in %CurrentUserList.get_children():
+		for child in %UserList.get_children():
 			child.queue_free()
 		for single_user in users:
 			var user_label = Label.new()
 			user_label.name = single_user.id
 			user_label.text = single_user.username
-			%CurrentUserList.add_child(user_label)
+			%UserList.add_child(user_label)
 
-func remove_user_from_list(webId):
-	for child in %CurrentUserList.get_children():
+func render_lobby_list(lobbies):
+	for child in %LobbyList.get_children():
+		child.queue_free()
+
+	#players
+	#isGameStarted
+	#id
+	for lobby in lobbies:
+		var render_lobby: LobbyListItem = LobbyItemScene.instantiate()
+		render_lobby.name = lobby.id
+		render_lobby.player_count = lobby.players.size()
+		%LobbyList.add_child(render_lobby, true)
+		# TODO: do this a lot better
+		render_lobby.lobby_join_button.pressed.connect(func(): send_message_join_lobby(lobby.id))
+		render_lobby.lobby_leave_button.pressed.connect(func(): send_message_leave_lobby())
+		render_lobby.lobby_start_button.pressed.connect(func(): send_message_start_game(lobby.id))
+
+func render_remove_user_from_list(webId):
+	# TODO: Unify "webId" ... sometimes it's id, sometimes it's "webId"
+	# TODO: Requires server edits
+	for child in %UserList.get_children():
 		if child.name == str(webId):
 			child.queue_free()
 
-func web_socket_connected_confirmed():
+func render_connection_confirmed():
 	%LobbyServerConnect.disabled = true
 	%LobbyServerDisconnect.disabled = false
+	send_message_get_lobbies()
+
+func render_data_recieved_debug(new_message):
+	%DebugText.text = %DebugText.text + new_message + '[br]' 
+
+# TODO: this one is gonna be kinda nutty....... but basically it'll exchange ICE & turn
+func on_game_started():
+	print('lets go')
+	
+	
+	
+
+
+
+
+
+#############
+#############
+#############

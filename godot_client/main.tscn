@@ -13,7 +13,7 @@ noise = ExtResource("3_1bvp3")
 shader = ExtResource("2_h2yge")
 shader_parameter/stars_on = true
 shader_parameter/stars_flicker = true
-shader_parameter/timeScaleFactor = 0.029999999998835847
+shader_parameter/timeScaleFactor = 0.02999999999883584
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_lquwl")
 shader_parameter/colour_muiltiplier = Color(0.41884705, 0.7190553, 1, 1)
 shader_parameter/colour_muiltiplier2 = Color(0.07450981, 1, 1, 1)
@@ -27,7 +27,7 @@ shader_parameter/clouds_alpha = 0.5
 shader_parameter/movement = 0.89999999757907
 shader_parameter/blur = 1.4
 shader_parameter/blur2 = 0.01
-shader_parameter/bg_speed = 0.19999999999708962
+shader_parameter/bg_speed = 0.1999999999970896
 shader_parameter/mid_speed = 0.5
 shader_parameter/fg_speed = 1.0
 
@@ -44,7 +44,6 @@ grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="LobbyMenu" parent="." instance=ExtResource("3_h2yge")]
-visible = false
 
 [node name="MainMenuBad" parent="." instance=ExtResource("2_0xm2m")]
 visible = false

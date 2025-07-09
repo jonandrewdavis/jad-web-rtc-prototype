@@ -1,0 +1,71 @@
+[gd_scene load_steps=3 format=3 uid="uid://qupkhqd1vtcj"]
+
+[ext_resource type="Script" uid="uid://do2hcwlhgt0pu" path="res://menus/lobby_menu/lobby_list_item.gd" id="1_l0bna"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l0bna"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="LobbyListItem" type="PanelContainer"]
+offset_right = 260.0
+offset_bottom = 48.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_l0bna")
+script = ExtResource("1_l0bna")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="LobbyButton" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LobbyButton"]
+layout_mode = 2
+
+[node name="LobbyIdLabel" type="Label" parent="HBoxContainer/LobbyButton/VBoxContainer"]
+layout_mode = 2
+text = "Lobby Id:"
+
+[node name="PlayersLabel" type="Label" parent="HBoxContainer/LobbyButton/VBoxContainer"]
+layout_mode = 2
+text = "Players:"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/LobbyButton"]
+layout_mode = 2
+
+[node name="LobbyId" type="Label" parent="HBoxContainer/LobbyButton/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PlayerCount" type="Label" parent="HBoxContainer/LobbyButton/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LobbyButtons" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="LobbyJoinButton" type="Button" parent="HBoxContainer/LobbyButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "Join Lobby"
+
+[node name="LobbyLeaveButton" type="Button" parent="HBoxContainer/LobbyButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "Leave Lobby"
+
+[node name="LobbyStartGame" type="Button" parent="HBoxContainer/LobbyButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "Start Game"

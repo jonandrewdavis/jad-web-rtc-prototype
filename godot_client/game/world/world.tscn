@@ -1,13 +1,16 @@
-[gd_scene load_steps=16 format=3 uid="uid://3o00hq8ytpai"]
+[gd_scene load_steps=17 format=3 uid="uid://3o00hq8ytpai"]
 
 [ext_resource type="Script" uid="uid://hxohhat02ubx" path="res://addons/bad.multiplayer/bad_match_handler.gd" id="1_k7f6b"]
 [ext_resource type="Material" uid="uid://dpuau02nlxdgb" path="res://game/world/floor_material.tres" id="1_vn0wg"]
 [ext_resource type="PackedScene" uid="uid://cc1m2a1obsyn4" path="res://addons/fpc/character.tscn" id="2_4adp2"]
-[ext_resource type="Material" uid="uid://dsenaup7yl1qq" path="res://game/world/panorama_sky_material.tres" id="3_dess5"]
+[ext_resource type="Texture2D" uid="uid://3bbhh1hy8wyv" path="res://assets/textures/NightSkyHDRI008_2K-TONEMAPPED.jpg" id="3_dess5"]
 [ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://assets/textures/green.png" id="3_k7f6b"]
 
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_uynus"]
+panorama = ExtResource("3_dess5")
+
 [sub_resource type="Sky" id="Sky_4adp2"]
-sky_material = ExtResource("3_dess5")
+sky_material = SubResource("PanoramaSkyMaterial_uynus")
 
 [sub_resource type="Environment" id="Environment_dess5"]
 background_mode = 2
