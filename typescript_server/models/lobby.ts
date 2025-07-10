@@ -23,10 +23,6 @@ export class Lobby {
 
   addPlayer(newPlayer: ClientSocket) {
     try {
-      // Stop the player if the lobby if full
-      if (this.players.length >= 2) {
-        return false;
-      }
       // Stop if the player is already in the lobby
       if (this.players.find((el) => el.id === newPlayer.id)) {
         return false;

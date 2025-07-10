@@ -6,7 +6,8 @@ extends CanvasLayer
 const Server_SecretKey = "YOUR_SECRET_KEY_HERE_NEVER_SHOW_IT_:)"
 
 # Change to your server url, currently set to the localhost
-const Server_WSUrl = "ws://127.0.0.1:8080"
+#const Server_WSUrl = "ws://127.0.0.1:80"
+const Server_WSUrl = "ws://web-rtc-tunnel.jonandrewdavis.com"
 
 var current_username : String = ""
 var web_socket_client : WebSocketPeer
@@ -113,6 +114,7 @@ func ready_render_connections():
 	update_user_list.connect(render_user_list)
 	player_left.connect(render_remove_user_from_list)
 	signal_data_received.connect(render_data_recieved_debug)
+	# lobby
 	update_lobby_list.connect(render_lobby_list)
 
 func ready_web_rtc_connections():
@@ -164,7 +166,7 @@ func connect_to_server(username : String):
 	
 	if !(_is_web_socket_connected()):
 		# TODO: Disconnect isn't working yet.
-		web_socket_client.disconnect_from_host()
+		#web_socket_client.disconnect_from_host()
 		emit_signal("web_socket_disconnected")
 
 

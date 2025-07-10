@@ -4,4 +4,20 @@
     "assets": {
         "directory": "./dist"
     }
+    // "durable_objects": {
+    //     "bindings": [
+    //         {
+    //         "name": "WEBSOCKET_SERVER",
+    //         "class_name": "WebSocketServer"
+    //         }
+    //     ]
+    // },
+    // "migrations": [
+    //     {
+    //         "tag": "v1",
+    //         "new_sqlite_classes": [
+    //            "WebSocketServer"
+    //         ]
+    //     }
+    // ]
 }
