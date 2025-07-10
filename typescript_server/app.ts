@@ -1,6 +1,5 @@
 import WebSocket from 'ws';
 import { v4 } from "uuid";
-import * as crypto from 'crypto';
 
 import { ClientSocket } from "./models/clientSocket";
 import { Message } from "./models/message";
