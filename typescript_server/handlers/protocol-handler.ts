@@ -428,8 +428,8 @@ export class ProtocolHelper {
 
   public static sendGameStarted(clientSocket: ClientSocket) {
     try {
-      const lobbyListMessage: Message = new Message(EAction.GameStarted, {});
-      clientSocket.socket.send(lobbyListMessage.toString());
+      const sendGameStartedMessage: Message = new Message(EAction.GameStarted, {});
+      clientSocket.socket.send(sendGameStartedMessage.toString());
     } catch (err: any) {
       LoggerHelper.logError(
         `[ProtocolHelper.sendGameStarted()] An error had occurred while parsing a message: ${err}`

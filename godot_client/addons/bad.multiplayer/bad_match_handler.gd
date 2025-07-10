@@ -42,6 +42,14 @@ func _ready() -> void:
 	
 	# This prevents the on_server_start signals from getting fired before the game scene is loaded...
 	BADMP.get_network_events_manager().enabled = true
+	
+	# AD: Added...
+	await get_tree().create_timer(0.5).timeout
+	
+	add_player_to_game(multiplayer.get_unique_id())
+	for player in multiplayer.get_peers():
+		add_player_to_game(player)
+		#print(multiplayer.get_peers())
 
 func on_server_start():
 	print("Handle host start")
@@ -80,18 +88,20 @@ func on_client_stop():
 	BADMP.exit_gameplay_load_main_menu()
 	
 func add_player_to_game(network_id: int):
-	if is_multiplayer_authority():
-		print("Adding player to game: %s" % network_id)
+	# NOTE: AD : removed
+	#if is_multiplayer_authority(): 
+	print("Adding player to game: %s" % network_id)
 
-		if _players_in_game.get(network_id) == null:
-			var player_to_add = player_scene.instantiate()
+	if _players_in_game.get(network_id) == null:
+		var player_to_add = player_scene.instantiate()
 
-			ready_player(network_id, player_to_add)
+		ready_player(network_id, player_to_add)
 
-			_players_in_game[network_id] = player_to_add
-			player_spawn_point.add_child(player_to_add)
-		else:
-			print("Warning! Attempted to add existing player to game: %s" % network_id)
+		_players_in_game[network_id] = player_to_add
+		player_to_add.position = 	Vector3(randi_range(-2, 2), 0.8, randi_range(-2, 2)) * 10 + Vector3(0.0, 0.0, -30.0)
+		player_spawn_point.add_child(player_to_add)
+	else:
+		print("Warning! Attempted to add existing player to game: %s" % network_id)
 
 func remove_player_from_game(network_id: int):
 	if is_multiplayer_authority():
@@ -104,19 +114,13 @@ func remove_player_from_game(network_id: int):
 
 ## Setup initial or reload saved player properties
 func ready_player(network_id: int, player: Player):
-	if is_multiplayer_authority():
-		player.name = str(network_id)
-		player.global_transform = get_spawn_point(player.name)
-		
-		# Player is always owned by the server
-		player.set_multiplayer_authority(1)
-
-## Override with custom spawn point logic
-func get_spawn_point(player_name) -> Variant:
-	if int(player_name) == 1:
-		return $"../SpawnPoints/Marker3D".global_transform
-	else:
-		return $"../SpawnPoints/Marker3D2".global_transform
+	# NOTE: AD Removed in mesh set up
+	#if is_multiplayer_authority():
+	player.name = str(network_id)
+	
+	# Player is always owned by the server 
+	# NOTE: NOT IN MESH MODE
+	player.set_multiplayer_authority(network_id)
 
 func get_players_in_game():
 	return _players_in_game

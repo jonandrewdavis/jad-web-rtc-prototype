@@ -11,7 +11,7 @@ const Server_WSUrl = "ws://127.0.0.1:8080"
 var current_username : String = ""
 var web_socket_client : WebSocketPeer
 
-var current_web_id = ""
+var current_web_id: int 
 var is_lobby_master = false
 
 var lobby_data = null
@@ -20,8 +20,9 @@ var lobby_data = null
 signal web_socket_connected
 signal web_socket_disconnected
 
-# Web socket message signals
-signal connection(success)
+# Web socket message signals - NOT USEd
+# See: web_socket_connected
+#signal connection(success)
 
 signal update_user_list(success, users)
 #signal player_join(id, position, direction)
@@ -95,11 +96,11 @@ func _ready():
 	
 	# TODO: all UI could go to antoher node. Good to seperate? or is it all tied together
 	ready_button_connections()
-	ready_render_connections()	
+	ready_render_connections()
+	ready_web_rtc_connections()	
 
 	# Once connected, this signal confirms the authentication
 	# TODO: Improve the true/false & property handle disconnect from Websocket server
-	#web_socket_connected.connect()
 	game_started.connect(on_game_started)
 
 func ready_button_connections():
@@ -113,6 +114,10 @@ func ready_render_connections():
 	player_left.connect(render_remove_user_from_list)
 	signal_data_received.connect(render_data_recieved_debug)
 	update_lobby_list.connect(render_lobby_list)
+
+func ready_web_rtc_connections():
+	created_lobby.connect(on_host_lobby_rtc)
+
 
 func _process(_delta):
 	web_socket_client.poll()
@@ -213,8 +218,6 @@ func send_message_get_users():
 	if _is_web_socket_connected():
 		_send_message(Action_GetUsers,  {})
 
-
-
 func send_message_get_lobbies():
 	if _is_web_socket_connected():
 		_send_message(Action_GetLobbies, {})
@@ -252,12 +255,12 @@ func parse_message_received(json_message):
 	match(json_message.action):
 		Action_Connect:
 			if json_message.payload.has("success") &&  json_message.payload.has("webId"):
-				current_web_id = json_message.payload.webId
-				emit_signal("connection", json_message.payload.success)
+				current_web_id = int(json_message.payload.webId)
+				#emit_signal("connection", json_message.payload.success)
 				if !json_message.payload.success:
 					web_socket_client.disconnect_from_host(1000, "Couldn't authenticate")
 			else:
-				emit_signal("connection", false)
+				#emit_signal("connection", false)
 				web_socket_client.disconnect_from_host(1000, "Couldn't authenticate")
 		Action_GetUsers:
 			if json_message.payload.has("success"):
@@ -394,17 +397,27 @@ func render_connection_confirmed():
 	%LobbyServerDisconnect.disabled = false
 	send_message_get_lobbies()
 
+	
+
 func render_data_recieved_debug(new_message):
 	%DebugText.text = %DebugText.text + new_message + '[br]' 
 
 # TODO: this one is gonna be kinda nutty....... but basically it'll exchange ICE & turn
 func on_game_started():
 	print("Game Started! WEB RTC Connections")
-	# Lets rock.
+
+	# NOTE: THIS MIGHT NOT BE GOOD IF WE WANT HOST / CLIENT...
+	set_multiplayer_peer_to_rtc_mesh(current_web_id)
 	ready_rtc_peer()
-	# New RTC Peer (own id)
-	set_multiplayer_peer_to_rtc(current_web_id)
-	
+	var configs = BADNetworkConnectionConfigs.new(BADMP.AvailableNetworks.WEB_RTC, '')
+	#if is_lobby_master:
+		#BADMP.host_game(configs)
+	#else:
+	await get_tree().create_timer(2).timeout
+	print(BADMP.get_network_manager().multiplayer)
+	BADMP.join_game(configs)
+
+
 #############
 #############
 #############
@@ -424,32 +437,19 @@ func ready_rtc_peer():
 
 func RTCServerConnected():
 	print("RTC server connected")
-
+	
 func RTCPeerConnected(id):
 	print("rtc peer connected " + str(id))
 	# TODO: TRUE START MATCH:
-	var configs = BADNetworkConnectionConfigs.new(BADMP.AvailableNetworks.WEB_RTC, '')
-	BADMP.host_game(configs)
 	
 	
 func RTCPeerDisconnected(id):
 	print("rtc peer disconnected " + str(id))
 
-# TODO: Remove notes, this was formerlly "connect"
-# Caller is:
-#			if data.message == Utilities.Message.id:
-#				id = data.id
-				#connected(id)
-
-# TODO: This could techincally be any MultipayerPeer Type (if it took a :MultiplayerPeer as an arg)
-func set_multiplayer_peer_to_rtc(id):
+func set_multiplayer_peer_to_rtc_mesh(id: int):
 	rtcPeer.create_mesh(id)
 	multiplayer.multiplayer_peer = rtcPeer
 #
-			#if data.message == Utilities.Message.userConnected:
-				##GameManager.Players[data.id] = data.player
-				#createPeer(data.id)
-
 # TODO: Formerlly createPeer
 func create_multiplayer_peer_connection(id: int):
 	if id != current_web_id:
@@ -464,13 +464,6 @@ func create_multiplayer_peer_connection(id: int):
 		rtcPeer.add_peer(new_peer_connection, id)
 		if id < rtcPeer.get_unique_id():
 			new_peer_connection.create_offer()
-
-
-enum Message { 
-	offer,
-	answer,
-	candidate
-}
 
 func offerCreated(type, data, id):
 	if !rtcPeer.has_peer(id):
@@ -488,7 +481,6 @@ func sendOffer(id, data):
 	var message = {
 		"peer" : id,
 		"orgPeer" : current_web_id,
-		#"message" :  Message.offer,
 		"data": data,
 		#"Lobby": lobbyValue
 	}
@@ -512,7 +504,6 @@ func iceCandidateCreated(midName, indexName, sdpName, id):
 	var message = {
 		"peer" : id,
 		"orgPeer" : current_web_id,
-		#"message" :  Message.candidate,
 		"mid": midName,
 		"index": indexName,
 		"sdp": sdpName,
@@ -521,3 +512,7 @@ func iceCandidateCreated(midName, indexName, sdpName, id):
 	_send_message(Action_Candidate, message)
 	#peer.put_packet(JSON.stringify(message).to_utf8_buffer())
 	pass
+
+# TODO: remove
+func on_host_lobby_rtc(_success):
+	print('i am good at hosting')

@@ -114,12 +114,10 @@ _spawnable_scenes = PackedStringArray("uid://cc1m2a1obsyn4")
 spawn_path = NodePath("../PlayerContainer")
 
 [node name="SpawnPoints" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9467144, 0)
 
 [node name="Marker3D" type="Marker3D" parent="SpawnPoints"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6762977, 4.1718044)
 
 [node name="Marker3D2" type="Marker3D" parent="SpawnPoints"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3436141, -5.3050785)
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.9343849, -0.35626507, 0, 0.35626507, 0.9343849, 2.040536, 3.1169095, 4.559601)
