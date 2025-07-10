@@ -119,7 +119,7 @@ func ready_player(network_id: int, player: Player):
 	player.name = str(network_id)
 	
 	# Player is always owned by the server 
-	# NOTE: NOT IN MESH MODE
+	# NOTE: NOT IN MESH MODE!! lol....
 	player.set_multiplayer_authority(network_id)
 
 func get_players_in_game():

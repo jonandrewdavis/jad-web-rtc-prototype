@@ -3,6 +3,9 @@ extends BADNetwork
 
 const DEFAULT_PORT = 8080
 
+
+# TODO: Figure out how to get rpcPeer in here from the Lobby.... kinda can't .new() in here... but can do some other stuff...
+
 func create_server_peer(_network_connection_configs: BADNetworkConnectionConfigs):
 	#print('DEBUG: BAD HOSTING:', _network_connection_configs)
 	#var rtc_peer: WebRTCMultiplayerPeer = WebRTCMultiplayerPeer.new()
