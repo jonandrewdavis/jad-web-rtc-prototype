@@ -1,5 +1,8 @@
 # Typescript Websocket Server for Godot Lobby
 
+
+#### TS build is pretty annoying...
+
 ## Updates July 2025
 
 https://nodejs.org/en/learn/typescript/run
