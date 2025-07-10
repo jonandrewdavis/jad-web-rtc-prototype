@@ -1,8 +1,4 @@
 {
     "name": "jad-web-rtc-typescript-server",
     "compatibility_date": "2025-07-10",
-    "main": "app.ts",
-    "compatibility_flags": [
-      "nodejs_compat"
-    ]
 }

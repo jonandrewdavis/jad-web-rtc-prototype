@@ -9,5 +9,9 @@
   "devDependencies": {
     "@types/node": "^24.0.12",
     "@types/ws": "^8"
+  },
+  "scripts": {
+    "build": "tsc --outDir dist",
+    "clean": "tsc --build --clean"
   }
 }
