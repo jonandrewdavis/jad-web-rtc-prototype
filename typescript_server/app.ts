@@ -1,5 +1,3 @@
-const crypto = require("crypto");
-
 import WebSocket from 'ws';
 import { v4 } from "uuid";
 
@@ -11,11 +9,12 @@ import { GameServerHandler } from "./handlers/game-server-handler";
 
 import configuration from "./configuration.json";
 import { LoggerHelper } from "./helpers/logger-helper";
+import { randomBytes } from 'crypto';
 
 const gameServer = new GameServerHandler();
 
 function randomId() {
-	return Math.abs(new Int32Array(crypto.randomBytes(4).buffer)[0]);
+	return Math.abs(new Int32Array(randomBytes(4).buffer)[0]);
 }
 
 try {
