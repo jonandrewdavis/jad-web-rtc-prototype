@@ -1,5 +1,5 @@
 import { secretKey } from "../configuration.json";
 
 export class Constants {
-  public static SecretKey: String = env.USER_ID || secretKey;
+  public static SecretKey: String = env.SECRET_KEY || secretKey;
 }
