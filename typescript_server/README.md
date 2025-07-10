@@ -1,5 +1,10 @@
 # Typescript Websocket Server for Godot Lobby
 
+####
+
+butler push dist
+
+butler push dist jonandrewitchio/jad-web-rtc-prototype:html5
 
 #### TS build is pretty annoying...
 
@@ -8,7 +13,7 @@
 https://nodejs.org/en/learn/typescript/run
 
 ```
-yarn
+yarn build
 ```
 
 ```
