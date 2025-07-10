@@ -10,7 +10,7 @@ import { GameServerHandler } from "./handlers/game-server-handler";
 import configuration from "./configuration.json";
 import { LoggerHelper } from "./helpers/logger-helper";
 
-import * as crypto from 'crypto';
+// import * as crypto from 'crypto';
 
 const gameServer = new GameServerHandler();
 
