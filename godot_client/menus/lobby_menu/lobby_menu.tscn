@@ -5,7 +5,6 @@
 
 [node name="LobbyMenu" type="CanvasLayer"]
 script = ExtResource("1_3p3bs")
-LobbyItemScene = null
 
 [node name="TopCenter" type="MarginContainer" parent="."]
 anchors_preset = 5

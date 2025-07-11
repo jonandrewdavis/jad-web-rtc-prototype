@@ -1,10 +1,12 @@
-[gd_scene load_steps=17 format=3 uid="uid://3o00hq8ytpai"]
+[gd_scene load_steps=22 format=3 uid="uid://3o00hq8ytpai"]
 
 [ext_resource type="Script" uid="uid://hxohhat02ubx" path="res://addons/bad.multiplayer/bad_match_handler.gd" id="1_k7f6b"]
 [ext_resource type="Material" uid="uid://dpuau02nlxdgb" path="res://game/world/floor_material.tres" id="1_vn0wg"]
 [ext_resource type="PackedScene" uid="uid://cc1m2a1obsyn4" path="res://addons/fpc/character.tscn" id="2_4adp2"]
 [ext_resource type="Texture2D" uid="uid://3bbhh1hy8wyv" path="res://assets/textures/NightSkyHDRI008_2K-TONEMAPPED.jpg" id="3_dess5"]
 [ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://assets/textures/green.png" id="3_k7f6b"]
+[ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://assets/textures/dark.png" id="5_uynus"]
+[ext_resource type="Material" uid="uid://bmdff5vqfpnen" path="res://game/world/barrier_material.tres" id="6_we8ss"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_uynus"]
 panorama = ExtResource("3_dess5")
@@ -44,6 +46,20 @@ uv1_triplanar = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_we8ss"]
 material = SubResource("StandardMaterial3D_uynus")
+size = Vector3(1, 1, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ibfx6"]
+albedo_color = Color(0.50840497, 0.50840497, 0.50840497, 1)
+albedo_texture = ExtResource("5_uynus")
+metallic_specular = 0.0
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_ibfx6"]
+material = SubResource("StandardMaterial3D_ibfx6")
+size = Vector3(1, 1, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vwhhl"]
+material = ExtResource("6_we8ss")
 size = Vector3(1, 1, 4)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_aseec"]
@@ -98,6 +114,91 @@ transform = Transform3D(0.5748767, 0, -0.81824005, 0, 1, 0, 0.81824005, 0, 0.574
 mesh = SubResource("BoxMesh_we8ss")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TestTerrain/Barrier3"]
+shape = SubResource("BoxShape3D_uynus")
+
+[node name="Barrier4" type="StaticBody3D" parent="TestTerrain"]
+transform = Transform3D(-8.742278e-08, -2, 8.742278e-08, 0, -8.742278e-08, -2, 2, -8.742278e-08, 3.821371e-15, 0, 3.6483445, -7.7197714)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestTerrain/Barrier4"]
+transform = Transform3D(0.55392927, 0.8325637, -3.6392507e-08, -0.8325637, 0.55392927, 1.9498371e-08, 3.6392514e-08, 1.9498371e-08, 1, -1.3885827, 0.7137089, 0.20418406)
+mesh = SubResource("BoxMesh_ibfx6")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="TestTerrain/Barrier4"]
+transform = Transform3D(0.55392927, 0.8325637, -3.6392507e-08, -0.8325637, 0.55392927, 1.9498371e-08, 3.6392514e-08, 1.9498371e-08, 1, 1.392231, 2.5638661, 0.20418394)
+mesh = SubResource("BoxMesh_ibfx6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestTerrain/Barrier4"]
+transform = Transform3D(1, 0, 0, 0, 1, -8.351872e-23, 0, -8.351872e-23, 1, -1.2388339, 0.6282083, 0)
+shape = SubResource("BoxShape3D_uynus")
+
+[node name="Barrier5" type="StaticBody3D" parent="TestTerrain"]
+transform = Transform3D(1.165863, -1.6250426, 7.1032865e-08, 0, -8.742278e-08, -2, 1.6250426, 1.165863, -5.0961493e-08, 0, 3.6483445, 6.2177)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestTerrain/Barrier5"]
+mesh = SubResource("BoxMesh_ibfx6")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="TestTerrain/Barrier5"]
+transform = Transform3D(1, 0, 1.7763568e-15, 0, 1, 2.6645353e-15, 0, 1.7763568e-15, 1, -5.008812, -8.649852, 3.5762787e-07)
+mesh = SubResource("BoxMesh_ibfx6")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="TestTerrain/Barrier5"]
+transform = Transform3D(0.93917537, 0.06949453, 0.3363326, -0.33284634, -0.057143364, 0.9412477, 0.08463088, -0.9959442, -0.030536627, -6.7137012, -2.7483377, -2.156135)
+mesh = SubResource("BoxMesh_ibfx6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestTerrain/Barrier5"]
+shape = SubResource("BoxShape3D_uynus")
+
+[node name="Barrier6" type="StaticBody3D" parent="TestTerrain"]
+transform = Transform3D(0.69951785, -0.9750256, 4.261972e-08, 0, -5.2453668e-08, -1.2, 0.9750256, 0.69951785, -3.0576896e-08, 11.388407, 2.4741282, 6.2177)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="TestTerrain/Barrier6"]
+mesh = SubResource("BoxMesh_ibfx6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestTerrain/Barrier6"]
+shape = SubResource("BoxShape3D_uynus")
+
+[node name="Barrier7" type="StaticBody3D" parent="TestTerrain"]
+transform = Transform3D(-1.041434, -1.1069075, -1.5906509, 1.4559281, 0.74484783, -1.4715555, 1.2789404, -1.7492735, 0.37993962, 2.6146336, -0.28758717, 11.37141)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="TestTerrain/Barrier7"]
+mesh = SubResource("BoxMesh_ibfx6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestTerrain/Barrier7"]
+shape = SubResource("BoxShape3D_uynus")
+
+[node name="Barrier8" type="StaticBody3D" parent="TestTerrain"]
+transform = Transform3D(-2.4627168, 9.5975065, 2.4213471, 6.7502103, 3.4533873, -6.822666, -7.2394533, -0.04487109, -7.185284, -37.20745, -2.1051683, 11.37141)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="TestTerrain/Barrier8"]
+mesh = SubResource("BoxMesh_ibfx6")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="TestTerrain/Barrier8"]
+transform = Transform3D(0.62601507, 0.7603859, 0.17296733, -0.34782085, 0.4707883, -0.81078774, -0.6979438, 0.44740474, 0.5591988, 3.5907996, 5.257964, 5.3654194)
+mesh = SubResource("BoxMesh_ibfx6")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="TestTerrain/Barrier8"]
+transform = Transform3D(-0.011911631, -0.031693906, 0.99942523, 0.80318457, 0.5950496, 0.028443132, -0.59561026, 0.80306345, 0.018369138, 0.19620723, 9.988079, 4.708212)
+mesh = SubResource("BoxMesh_ibfx6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestTerrain/Barrier8"]
+shape = SubResource("BoxShape3D_uynus")
+
+[node name="Barrier9" type="StaticBody3D" parent="TestTerrain"]
+transform = Transform3D(-6.683164, -1.7583919, -7.5022254, 6.750211, 3.453387, -6.8226657, 3.7161775, -9.435158, -1.099023, -26.222706, -0.28758717, 38.102448)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="TestTerrain/Barrier9"]
+transform = Transform3D(0.6088851, 0.77555853, 0.166637, -0.6207388, 0.33503896, 0.70882446, 0.49390498, -0.5350308, 0.68541944, 0, 0, 0)
+mesh = SubResource("BoxMesh_ibfx6")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="TestTerrain/Barrier9"]
+transform = Transform3D(-0.16857034, 0.65372217, 0.7377204, -0.9577408, 0.068333775, -0.2793982, -0.23306003, -0.7536439, 0.61457676, -7.864964, 7.2497616, -4.351219)
+mesh = SubResource("BoxMesh_vwhhl")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="TestTerrain/Barrier9"]
+transform = Transform3D(-0.16857034, 0.65372217, 0.7377204, -0.9577408, 0.068333775, -0.2793982, -0.23306003, -0.7536439, 0.61457676, -7.864964, 7.2497616, -4.351219)
+mesh = SubResource("BoxMesh_ibfx6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestTerrain/Barrier9"]
 shape = SubResource("BoxShape3D_uynus")
 
 [node name="Floor" type="StaticBody3D" parent="TestTerrain"]

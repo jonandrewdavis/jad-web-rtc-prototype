@@ -14,11 +14,10 @@ func _physics_process(_delta: float) -> void:
 		is_sprinting = Input.is_action_pressed("sprint")
 		is_interacting = Input.is_action_pressed("interact")
 
-func _input(event):
-	if is_multiplayer_authority():
-		if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			mouseInput.x += event.relative.x
-			mouseInput.y += event.relative.y
+func _unhandled_input(event: InputEvent):
+	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		mouseInput.x += event.relative.x
+		mouseInput.y += event.relative.y
 #
 #func _unhandled_input(event : InputEvent):
 	#if get_tree().get_multiplayer().multiplayer_peer != null && is_multiplayer_authority():

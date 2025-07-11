@@ -7,7 +7,7 @@ const Server_SecretKey = "YOUR_SECRET_KEY_HERE_NEVER_SHOW_IT_:)"
 
 # Change to your server url, currently set to the localhost
 #const Server_WSUrl = "ws://127.0.0.1:80"
-const Server_WSUrl = "ws://web-rtc-tunnel.jonandrewdavis.com"
+const Server_WSUrl = "wss://web-rtc-tunnel.jonandrewdavis.com"
 
 var current_username : String = ""
 var web_socket_client : WebSocketPeer

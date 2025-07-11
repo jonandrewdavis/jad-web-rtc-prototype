@@ -4,7 +4,7 @@
 load_path = "res://.godot/imported/purple.png-08dcdaa0b4e1b4963325b152a5f4143d.s3tc.ctex"
 
 [resource]
-albedo_color = Color(0.50840497, 0.50840497, 0.50840497, 1)
+albedo_color = Color(0.2504693, 0.25046936, 0.2504693, 1)
 albedo_texture = SubResource("CompressedTexture2D_fhnqf")
 metallic_specular = 0.0
 uv1_triplanar = true

@@ -98,7 +98,7 @@ func add_player_to_game(network_id: int):
 		ready_player(network_id, player_to_add)
 
 		_players_in_game[network_id] = player_to_add
-		player_to_add.position = 	Vector3(randi_range(-2, 2), 0.8, randi_range(-2, 2)) * 10 + Vector3(0.0, 0.0, -30.0)
+		player_to_add.position = 	Vector3(randi_range(-2, 2), 0.8, randi_range(-2, 2)) * 4
 		player_spawn_point.add_child(player_to_add)
 	else:
 		print("Warning! Attempted to add existing player to game: %s" % network_id)
