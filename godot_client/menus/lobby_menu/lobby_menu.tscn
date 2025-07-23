@@ -23,10 +23,11 @@ theme_override_constants/separation = 10
 [node name="WebsocketsLobbyLabel" type="Label" parent="TopCenter/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
-text = "JAD WebRTC Prototype"
+text = "sockets.jonandrewdavis.com"
 horizontal_alignment = 1
 
 [node name="WebSockets Lobby" type="Label" parent="TopCenter/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
 text = "Websockets Lobby Client"
@@ -34,7 +35,6 @@ horizontal_alignment = 1
 
 [node name="Sections" type="HBoxContainer" parent="TopCenter/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 100
 
 [node name="Login" type="PanelContainer" parent="TopCenter/VBoxContainer/Sections"]
 layout_mode = 2
@@ -51,6 +51,7 @@ text = "Connect"
 [node name="UsernameInput" type="LineEdit" parent="TopCenter/VBoxContainer/Sections/Login/SectionLogin"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 placeholder_text = "Username"
 emoji_menu_enabled = false
 
@@ -60,7 +61,7 @@ layout_mode = 2
 [node name="LobbyServerConnect" type="Button" parent="TopCenter/VBoxContainer/Sections/Login/SectionLogin/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Connect to Server"
+text = "Connect"
 
 [node name="LobbyServerDisconnect" type="Button" parent="TopCenter/VBoxContainer/Sections/Login/SectionLogin/HBoxContainer"]
 unique_name_in_owner = true
@@ -69,6 +70,7 @@ disabled = true
 text = "Disconnect"
 
 [node name="Users" type="PanelContainer" parent="TopCenter/VBoxContainer/Sections"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("2_urr6r")
 
@@ -87,6 +89,7 @@ layout_mode = 2
 [node name="Lobbies" type="PanelContainer" parent="TopCenter/VBoxContainer/Sections"]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/panel = ExtResource("2_urr6r")
 
 [node name="SectionLobbies" type="VBoxContainer" parent="TopCenter/VBoxContainer/Sections/Lobbies"]

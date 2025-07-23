@@ -23,6 +23,13 @@ func load_scene(scene_name: String):
 	var scene_path = _enabled_game_scenes[scene_name]
 	get_tree().call_deferred(&"change_scene_to_packed", load(scene_path))
 
+#func load_scene(scene_name: String):
+	#var scene_path = _enabled_game_scenes[scene_name]
+	##get_tree().call_deferred(&"change_scene_to_packed", load(scene_path))
+	#var scene_loaded: PackedScene = load(scene_path)
+	#if (scene_loaded.can_instantiate()):
+		#add_child(scene_loaded.instantiate())
+
 func load_main_menu():
 	load_scene(MAIN)
 

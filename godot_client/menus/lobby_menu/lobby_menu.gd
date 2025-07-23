@@ -1,13 +1,19 @@
 class_name LobbyMenu
 extends CanvasLayer
 
+# TODO: This needs to be a global / autoload
+# That way we can always be in a lobby & the connection won't close
+# when we swap scenes
 
 # SERVER
-const Server_SecretKey = "YOUR_SECRET_KEY_HERE_NEVER_SHOW_IT_:)"
+const Server_SecretKey = ""
 
 # Change to your server url, currently set to the localhost
-#const Server_WSUrl = "ws://127.0.0.1:80"
-const Server_WSUrl = "wss://web-rtc-tunnel.jonandrewdavis.com"
+#const Server_WSUrl = "ws://127.0.0.1:80" 
+#const Server_WSUrl = "wss://web-rtc-tunnel.jonandrewdavis.com" # NOTE: 80. Standard cloudflare port
+#const Server_WSUrl = 'ws://localhost:8787'
+
+const Server_WSUrl = 'ws-lobby-worker.jonandrewdavis.workers.dev'
 
 var current_username : String = ""
 var web_socket_client : WebSocketPeer
@@ -31,11 +37,11 @@ signal player_join(id)
 signal player_left(webId)
 
 signal update_lobby_list(success, lobbies)
-signal get_own_lobby(lobby)
+signal get_own_lobby(lobby) # NOT USED
 signal created_lobby(success)
 signal joined_lobby(success)
 signal left_lobby(success)
-signal lobby_changed(lobby)
+signal lobby_changed(lobby) # NOT USED - no methods handle single lobby update
 
 signal game_started
 
@@ -96,29 +102,28 @@ func _ready():
 	set_process(false)
 	
 	# TODO: all UI could go to antoher node. Good to seperate? or is it all tied together
-	ready_button_connections()
+	ready_input_connections()
 	ready_render_connections()
-	ready_web_rtc_connections()	
 
 	# Once connected, this signal confirms the authentication
 	# TODO: Improve the true/false & property handle disconnect from Websocket server
 	game_started.connect(on_game_started)
 
-func ready_button_connections():
+func ready_input_connections():
 	%UsernameInput.text_changed.connect(func (text): username_input = text)
 	%LobbyServerConnect.pressed.connect(func (): connect_to_server(username_input))
+	%LobbyServerDisconnect.pressed.connect(on_disconnect_button_pressed)
 	%LobbyCreate.pressed.connect(func (): send_message_create_lobby())
 
 func ready_render_connections():
 	web_socket_connected.connect(render_connection_confirmed)
+	web_socket_disconnected.connect(render_web_socket_disconnect)
+	web_socket_disconnected.connect(on_web_socket_disconnected)
 	update_user_list.connect(render_user_list)
 	player_left.connect(render_remove_user_from_list)
 	signal_data_received.connect(render_data_recieved_debug)
 	# lobby
 	update_lobby_list.connect(render_lobby_list)
-
-func ready_web_rtc_connections():
-	created_lobby.connect(on_host_lobby_rtc)
 
 
 func _process(_delta):
@@ -143,11 +148,12 @@ func _process(_delta):
 			var code = web_socket_client.get_close_code()
 			var reason = web_socket_client.get_close_reason()
 			print("WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
-			set_process(false) # Stop processing.
+			web_socket_disconnected.emit()
 
 func connect_to_server(username : String):
 	if _is_web_socket_connected() || _is_web_socket_connecting():
-		web_socket_client.disconnect_from_host(1000, "Reconnecting")
+		web_socket_client.close()
+		web_socket_disconnected.emit()
 	
 	current_username = username
 	
@@ -166,14 +172,13 @@ func connect_to_server(username : String):
 	
 	if !(_is_web_socket_connected()):
 		# TODO: Disconnect isn't working yet.
-		#web_socket_client.disconnect_from_host()
-		emit_signal("web_socket_disconnected")
-
+		web_socket_client.close()
+		#emit_signal("web_socket_disconnected")
 
 func data_received():
 	var packet = web_socket_client.get_packet().get_string_from_utf8()
+	print('DEBUG DATA RECIEVED', packet)
 	var packet_to_json = JSON.parse_string(packet)
- 	# print('DEBUG DATA RECIEVED', packet_to_json)
 	if packet_to_json and packet_to_json.has('action') and packet_to_json.has('payload'):
 		parse_message_received(packet_to_json)
 		signal_data_received.emit(packet)
@@ -366,9 +371,9 @@ func render_user_list(success, users):
 			child.queue_free()
 		for single_user in users:
 			var user_label = Label.new()
-			user_label.name = str(single_user.id)
+			user_label.name = str(int(single_user.id))
 			user_label.text = single_user.username
-			%UserList.add_child(user_label)
+			%UserList.add_child(user_label, true)
 
 func render_lobby_list(lobbies):
 	for child in %LobbyList.get_children():
@@ -389,17 +394,17 @@ func render_lobby_list(lobbies):
 
 func render_remove_user_from_list(webId):
 	# TODO: Unify "webId" ... sometimes it's id, sometimes it's "webId"
-	# TODO: Requires server edits
 	for child in %UserList.get_children():
-		if child.name == str(webId):
+		# TODO: Ugh, str, int... to remove 111.0
+		if child.name == str(int(webId)):
 			child.queue_free()
+			
+	send_message_get_lobbies()
 
 func render_connection_confirmed():
 	%LobbyServerConnect.disabled = true
 	%LobbyServerDisconnect.disabled = false
 	send_message_get_lobbies()
-
-	
 
 func render_data_recieved_debug(new_message):
 	%DebugText.text = %DebugText.text + new_message + '[br]' 
@@ -418,7 +423,6 @@ func on_game_started():
 	await get_tree().create_timer(2).timeout
 	print(BADMP.get_network_manager().multiplayer)
 	BADMP.join_game(configs)
-
 
 #############
 #############
@@ -444,14 +448,13 @@ func RTCPeerConnected(id):
 	print("rtc peer connected " + str(id))
 	# TODO: TRUE START MATCH:
 	
-	
 func RTCPeerDisconnected(id):
 	print("rtc peer disconnected " + str(id))
 
 func set_multiplayer_peer_to_rtc_mesh(id: int):
 	rtcPeer.create_mesh(id)
 	multiplayer.multiplayer_peer = rtcPeer
-#
+
 # TODO: Formerlly createPeer
 func create_multiplayer_peer_connection(id: int):
 	if id != current_web_id:
@@ -515,6 +518,17 @@ func iceCandidateCreated(midName, indexName, sdpName, id):
 	#peer.put_packet(JSON.stringify(message).to_utf8_buffer())
 	pass
 
-# TODO: remove
-func on_host_lobby_rtc(_success):
-	print('i am good at hosting')
+func render_web_socket_disconnect(): 
+	%LobbyServerConnect.disabled = false
+	%LobbyServerDisconnect.disabled = true
+	for child in %LobbyList.get_children():
+		child.queue_free()
+	for child in %UserList.get_children():
+		child.queue_free()
+
+func on_disconnect_button_pressed():
+	web_socket_client.close(1000, 'User clicked disconnect')
+
+func on_web_socket_disconnected():
+	connection_validated = false
+	set_process(false)
