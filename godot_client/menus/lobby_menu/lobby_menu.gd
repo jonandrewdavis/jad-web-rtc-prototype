@@ -84,6 +84,7 @@ func ready_required_connections():
 	signal_connection_confirmed.emit(_on_ws_connection_confirmed)
 	signal_disconnect.connect(_on_ws_disconnect)
 	signal_lobby_game_started.connect(_on_game_started)
+	tree_exited.connect(_close_ws_connection)
 
 func _on_ws_connection_confirmed(webId: int):
 	connection_validated = true
@@ -93,6 +94,10 @@ func _on_ws_connection_confirmed(webId: int):
 func _on_ws_disconnect():
 	connection_validated = false
 	set_process(false)
+
+func _close_ws_connection():
+	if _is_web_socket_connected():
+		_client.close(1000, 'User closed the app')
 
 func _on_game_started():
 	webRTCPeer = WebRTCMultiplayerPeer.new()
@@ -121,9 +126,8 @@ func ready_render_connections():
 	signal_message.connect(render_data_recieved_debug)
 	signal_lobby_updated.connect(render_lobby_list)
 	signal_left_lobby.connect(render_left_lobby)
-	signal_heartbeat.connect(render_heartbeat)
 	signal_lobby_message.connect(render_lobby_message)
-	# NOTE: 	The server will send a candidate, offer, and answer for each peer in the lobby
+	# NOTE: The server will send a candidate, offer, and answer for each peer in the lobby
 	signal_new_rtc_peer_connection.connect(create_multiplayer_peer_connection)
 
 func ready_timers():
@@ -185,70 +189,6 @@ func data_received():
 		signal_message.emit("Invalid message received")
 		push_warning("Invalid message received")
 
-func _send_message(action : String, payload : Dictionary):
-	if _is_web_socket_connected():
-		var message = {
-			"action": action,
-			"payload": payload
-		}
-		var parsed_message = JSON.stringify(message)
-		_client.put_packet(parsed_message.to_utf8_buffer())
-
-func _is_web_socket_connected() -> bool:
-	if _client:
-		return _client.get_ready_state() == WebSocketPeer.STATE_OPEN
-	return false
-
-func _is_web_socket_connecting() -> bool:
-	if _client:
-		return _client.get_ready_state() == WebSocketPeer.STATE_CONNECTING
-	return false 
-
-# TODO: all of these do a pretty wasteful "_is_web_socket_connected" check... 
-func send_message_confirm_connection(username : String):
-	if _is_web_socket_connected():
-		_send_message(Action_Connect, {"secretKey" : WEB_SOCKET_SECRET_KEY, "username" : username})
-
-func send_message_get_users():
-	if _is_web_socket_connected():
-		_send_message(Action_GetUsers,  {})
-
-func send_message_get_lobbies():
-	if _is_web_socket_connected():
-		_send_message(Action_GetLobbies, {})
-
-func send_message_get_own_lobby():
-	if _is_web_socket_connected():
-		_send_message(Action_GetOwnLobby, {})
-
-func send_message_create_lobby():
-	if _is_web_socket_connected():
-		_send_message(Action_CreateLobby, {})
-
-
-func send_message_join_lobby(idLobby : String):
-	if _is_web_socket_connected():
-		_send_message(Action_JoinLobby, { "id": idLobby })
-
-func send_message_leave_lobby():
-	if _is_web_socket_connected():
-		_send_message(Action_LeaveLobby, {})
-
-func send_message_to_lobby(message_text: String):
-	if _is_web_socket_connected():
-		%LobbyInput.clear()
-		var message_payload = { 
-			'message_text': message_text,
-		}
-		_send_message(Action_MessageToLobby, message_payload)
-
-func send_message_heartbeat():
-	if _is_web_socket_connected():
-		_send_message(Action_Heartbeat, {})
-
-func send_message_start_game(idLobby: String):
-	if _is_web_socket_connected():
-		_send_message(Action_GameStarted, { "id": idLobby })
 
 func parse_message_from_server(message):
 	match(message.action):
@@ -305,7 +245,70 @@ func parse_message_from_server(message):
 		Action_MessageToLobby:
 			if message.payload.has("message_text"):
 				signal_lobby_message.emit(message.payload)
-				
+
+func _send_message(action : String, payload : Dictionary):
+	if _is_web_socket_connected():
+		var message = {
+			"action": action,
+			"payload": payload
+		}
+		var parsed_message = JSON.stringify(message)
+		_client.put_packet(parsed_message.to_utf8_buffer())
+
+func _is_web_socket_connected() -> bool:
+	if _client:
+		return _client.get_ready_state() == WebSocketPeer.STATE_OPEN
+	return false
+
+func _is_web_socket_connecting() -> bool:
+	if _client:
+		return _client.get_ready_state() == WebSocketPeer.STATE_CONNECTING
+	return false 
+
+func send_message_confirm_connection(username : String):
+	if _is_web_socket_connected():
+		_send_message(Action_Connect, {"secretKey" : WEB_SOCKET_SECRET_KEY, "username" : username})
+
+func send_message_get_users():
+	if _is_web_socket_connected():
+		_send_message(Action_GetUsers,  {})
+
+func send_message_get_lobbies():
+	if _is_web_socket_connected():
+		_send_message(Action_GetLobbies, {})
+
+func send_message_get_own_lobby():
+	if _is_web_socket_connected():
+		_send_message(Action_GetOwnLobby, {})
+
+func send_message_create_lobby():
+	if _is_web_socket_connected():
+		_send_message(Action_CreateLobby, {})
+
+func send_message_join_lobby(idLobby : String):
+	if _is_web_socket_connected():
+		_send_message(Action_JoinLobby, { "id": idLobby })
+
+func send_message_leave_lobby():
+	if _is_web_socket_connected():
+		_send_message(Action_LeaveLobby, {})
+
+func send_message_to_lobby(message_text: String):
+	if _is_web_socket_connected():
+		%LobbyInput.clear()
+		var message_payload = { 
+			'message_text': message_text,
+		}
+		_send_message(Action_MessageToLobby, message_payload)
+
+func send_message_heartbeat():
+	if _is_web_socket_connected():
+		_send_message(Action_Heartbeat, {})
+
+func send_message_start_game(idLobby: String):
+	if _is_web_socket_connected():
+		_send_message(Action_GameStarted, { "id": idLobby })
+
 func render_user_list(users):
 	for child in %UserList.get_children():
 		child.queue_free()
@@ -318,10 +321,6 @@ func render_user_list(users):
 func render_lobby_list(lobbies):
 	for child in %LobbyList.get_children():
 		child.queue_free()
-
-	#players
-	#isGameStarted
-	#id
 	for lobby in lobbies:
 		var render_lobby: LobbyListItem = LobbyItemScene.instantiate()
 		render_lobby.name = str(lobby.id)
@@ -333,13 +332,11 @@ func render_lobby_list(lobbies):
 		render_lobby.lobby_start_button.pressed.connect(func(): send_message_start_game(lobby.id))
 
 func render_remove_user_from_list(webId):
-	# TODO: Unify "webId" ... sometimes it's id, sometimes it's "webId"
 	for child in %UserList.get_children():
-		# TODO: Ugh, str, int... to remove 111.0
+		# TODO: Better types here, float can often have an extra .0 decimal
 		if child.name == str(int(webId)):
 			child.queue_free()
 
-# TODO: This is a little more important... 
 func render_connection_confirmed(_webId):
 	%LobbyServerConnect.disabled = true
 	%LobbyServerDisconnect.disabled = false
@@ -356,7 +353,6 @@ func render_data_recieved_debug(new_message):
 
 func render_lobby_message(message_payload):
 	%LobbyChat.text = %LobbyChat.text + message_payload.username + ' : ' + message_payload.message_text + '[br]'
-
 
 #############
 #############
@@ -382,7 +378,7 @@ func RTCPeerDisconnected(id):
 	print("rtc peer disconnected " + str(id))
 #endregion
 
-# NOTE: 	The server will send a candidate, offer, and answer for each peer in the lobby
+# NOTE: The server will send a candidate, offer, and answer for each peer in the lobby
 func create_multiplayer_peer_connection(id: int):
 	if id != current_web_id:
 		var new_peer_connection: WebRTCPeerConnection = WebRTCPeerConnection.new()
@@ -407,7 +403,6 @@ func offerCreated(type, data, id):
 		sendOffer(id, data)
 	else:
 		sendAnswer(id, data)
-	pass
 
 func sendOffer(id, data):
 	var message = {
@@ -458,15 +453,6 @@ func render_web_socket_disconnect():
 func on_disconnect_button_pressed():
 	_client.close(1000, 'User clicked disconnect')
 
-func _exit_tree() -> void:
-	if _is_web_socket_connected():
-		_client.close(1000, 'User closed the app')
-
-func render_heartbeat():
-	#%ConnectLight.modulate = Color.WHITE
-	#timer_heartbeat_light.start()
-	pass
-	
 func on_heartbeat_light():
 	%ConnectLight.modulate = Color.GREEN
 	if _is_web_socket_connected() == false:
@@ -482,7 +468,6 @@ func quick_join():
 	set_process(true)
 	
 	signal_lobby_updated.connect(quick_join_seek_lobby)
-	# signal_quick_join_confirmed.connect(quick_join_get_lobby)
 
 func quick_join_seek_lobby(lobbies):
 	if lobbies:
