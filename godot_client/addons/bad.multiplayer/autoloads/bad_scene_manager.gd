@@ -19,16 +19,23 @@ func add_enabled_game_scene(scene_name: String, scene_path: String):
 	_enabled_game_scenes[scene_name] = scene_path
 
 ## Use this to load non-default scenes that have been added to enabled game scenes
-func load_scene(scene_name: String):
-	var scene_path = _enabled_game_scenes[scene_name]
-	get_tree().call_deferred(&"change_scene_to_packed", load(scene_path))
-
 #func load_scene(scene_name: String):
 	#var scene_path = _enabled_game_scenes[scene_name]
-	##get_tree().call_deferred(&"change_scene_to_packed", load(scene_path))
-	#var scene_loaded: PackedScene = load(scene_path)
-	#if (scene_loaded.can_instantiate()):
-		#add_child(scene_loaded.instantiate())
+	#get_tree().call_deferred(&"change_scene_to_packed", load(scene_path))
+#
+#func load_scene(scene_name: String):
+	#var scene_path = _enabled_game_scenes[scene_name]
+	#get_tree() .call_deferred(&"change_scene_to_packed", load(scene_path))
+
+func load_scene(scene_name: String):
+	var game = get_tree().get_first_node_in_group("game")
+	for node in game.get_children():
+		node.queue_free()
+	var scene_path = _enabled_game_scenes[scene_name]
+	#get_tree().call_deferred(&"change_scene_to_packed", load(scene_path))
+	var scene_loaded: PackedScene = load(scene_path)
+	if (scene_loaded.can_instantiate()):
+		game.add_child(scene_loaded.instantiate())
 
 func load_main_menu():
 	load_scene(MAIN)

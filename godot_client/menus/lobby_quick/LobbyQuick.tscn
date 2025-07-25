@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://bu30ndxonicaf"]
+
+[ext_resource type="Script" uid="uid://drwphq6jqmfxd" path="res://menus/lobby_quick/lobby_quick.gd" id="1_orj1w"]
+
+[node name="LobbyQuick" type="CanvasLayer"]
+script = ExtResource("1_orj1w")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="QuickConnect" type="Button" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Connect"

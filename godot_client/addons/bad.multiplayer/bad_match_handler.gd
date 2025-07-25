@@ -117,7 +117,7 @@ func ready_player(network_id: int, player: Player):
 	# NOTE: AD Removed in mesh set up
 	#if is_multiplayer_authority():
 	player.name = str(network_id)
-	
+
 	# Player is always owned by the server 
 	# NOTE: NOT IN MESH MODE!! lol....
 	player.set_multiplayer_authority(network_id)

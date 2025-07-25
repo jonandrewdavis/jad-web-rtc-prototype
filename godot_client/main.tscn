@@ -33,7 +33,10 @@ shader_parameter/fg_speed = 1.0
 [node name="Main" type="Node"]
 script = ExtResource("1_ig7tw")
 
+[node name="Game" type="Node" parent="." groups=["game"]]
+
 [node name="BackgroundShader" type="ColorRect" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_7mycd")
 anchors_preset = 15
 anchor_right = 1.0

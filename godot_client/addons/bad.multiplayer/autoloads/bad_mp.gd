@@ -30,9 +30,11 @@ var available_networks: Dictionary = {
 
 func host_game(network_configs: BADNetworkConnectionConfigs):
 	_multiplayer_manager.host_game(network_configs)
+	#queue_free()
 
 func join_game(network_configs: BADNetworkConnectionConfigs):
 	_multiplayer_manager.join_game(network_configs)
+	#queue_free()
 
 
 ## Utilities 

@@ -45,6 +45,10 @@ folder_colors={
 "res://scripts/": "yellow"
 }
 
+[global_group]
+
+game=""
+
 [gui]
 
 theme/custom="uid://b3kq74llqlv3x"
