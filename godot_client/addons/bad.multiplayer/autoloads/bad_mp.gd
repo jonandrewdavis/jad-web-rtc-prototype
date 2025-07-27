@@ -36,7 +36,6 @@ func join_game(network_configs: BADNetworkConnectionConfigs):
 	_multiplayer_manager.join_game(network_configs)
 	#queue_free()
 
-
 ## Utilities 
 
 ## Use to add supported game scenes
@@ -113,3 +112,4 @@ func set_match_manager(match_handler):
 	
 func get_match_manager():
 	return _match_handler
+	

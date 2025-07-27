@@ -144,6 +144,7 @@ var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity") 
 @export var player_ui: Control
 @export var camera: Camera3D
 @export var arms_animation_player: AnimationPlayer
+@export var weapon_manager: WeaponsManager
 
 func _enter_tree():
 	player_input.set_multiplayer_authority(str(name).to_int())
@@ -199,6 +200,7 @@ func _physics_process(delta): # Most things happen here.
 	handle_movement(delta, input_dir)
 	handle_interact()
 	handle_head_rotation()
+	handle_weapon_manager()
 
 	# The player is not able to stand up if the ceiling is too low
 	low_ceiling = $CrouchCeilingDetection.is_colliding()
@@ -513,5 +515,20 @@ func handle_pausing():
 func handle_interact():
 	if player_input.is_interacting:
 		arms_animation_player.play("arms_armature|Combat_punch_right")
+
+func handle_weapon_manager():
+	if player_input.is_weapon_up:
+		weapon_manager.change_weapon(weapon_manager.CHANGE_DIR.UP)
+	elif player_input.is_weapon_down:
+		weapon_manager.change_weapon(weapon_manager.CHANGE_DIR.UP)
+	elif player_input.is_weapon_shoot:
+		weapon_manager.shoot()
+	elif player_input.is_weapon_melee:
+		weapon_manager.melee()
+	elif player_input.is_weapon_reload:
+		weapon_manager.reload()
+	elif player_input.is_weapon_aim:
+		pass
+		#weapon_manager.aim
 
 #endregion

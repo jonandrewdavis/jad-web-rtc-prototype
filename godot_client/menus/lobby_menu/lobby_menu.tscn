@@ -185,11 +185,9 @@ text = "Send"
 
 [node name="DebugContainer" type="FoldableContainer" parent="TopCenter/TopVbox"]
 layout_mode = 2
-folded = true
 title = "Debug"
 
 [node name="Debug" type="VBoxContainer" parent="TopCenter/TopVbox/DebugContainer"]
-visible = false
 layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="TopCenter/TopVbox/DebugContainer/Debug"]

@@ -1,9 +1,12 @@
-[gd_scene load_steps=25 format=3 uid="uid://cc1m2a1obsyn4"]
+[gd_scene load_steps=28 format=3 uid="uid://cc1m2a1obsyn4"]
 
 [ext_resource type="Script" uid="uid://cisejjtyctybh" path="res://addons/fpc/character.gd" id="1_0t4e8"]
 [ext_resource type="Script" uid="uid://b444whi1t4ggg" path="res://addons/fpc/player_input.gd" id="2_bx7cj"]
 [ext_resource type="PackedScene" uid="uid://db3bwsg1ai8rg" path="res://assets/models/psx_first_person_arms/scene.gltf" id="3_bx7cj"]
 [ext_resource type="Script" uid="uid://c40oofqddkrqe" path="res://addons/fpc/debug.gd" id="3_x1wcc"]
+[ext_resource type="Script" uid="uid://dphmvwbbu21nt" path="res://game/weapon_manager/scripts/Weapon_State_Machine/WeaponSlot.gd" id="5_4fv23"]
+[ext_resource type="PackedScene" uid="uid://cf6jco7ctb45m" path="res://game/weapon_manager/weapons_manager.tscn" id="5_qaoyu"]
+[ext_resource type="PackedScene" uid="uid://crep3klgx68p5" path="res://game/systems/projectile_system.tscn" id="6_gv6je"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bx7cj"]
 properties/0/path = NodePath(".:input_dir")
@@ -412,7 +415,7 @@ properties/3/path = NodePath("Head/Sketchfab_Scene/AnimationPlayer:current_anima
 properties/3/spawn = true
 properties/3/replication_mode = 1
 
-[node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH", "player_input", "player_ui", "camera", "arms_animation_player")]
+[node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH", "player_input", "player_ui", "camera", "arms_animation_player", "weapon_manager")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 script = ExtResource("1_0t4e8")
 default_reticle = "res://addons/fpc/reticles/reticle_1.tscn"
@@ -426,6 +429,9 @@ player_input = NodePath("PlayerInput")
 player_ui = NodePath("UserInterface")
 camera = NodePath("Head/Camera")
 arms_animation_player = NodePath("Head/Sketchfab_Scene/AnimationPlayer")
+weapon_manager = NodePath("Head/Camera/WeaponsManager")
+
+[node name="ProjectileSystem" parent="." instance=ExtResource("6_gv6je")]
 
 [node name="PlayerInput" type="Node" parent="."]
 script = ExtResource("2_bx7cj")
@@ -451,8 +457,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="Sketchfab_Scene" parent="Head" instance=ExtResource("3_bx7cj")]
 transform = Transform3D(-0.7, 0, -1.05697055e-07, 0, 0.7, 0, 1.05697055e-07, 0, -0.7, 0, -3.5394692, 0)
+visible = false
 
 [node name="Camera" type="Camera3D" parent="Head"]
+
+[node name="WeaponsManager" parent="Head/Camera" node_paths=PackedStringArray("player", "player_input") instance=ExtResource("5_qaoyu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16951324, 0.120731115, 0.44076085)
+max_weapons = 0
+player = NodePath("../../..")
+player_input = NodePath("../../../PlayerInput")
+weapons_list = Array[ExtResource("5_4fv23")]([])
+weapons_owned = Array[ExtResource("5_4fv23")]([])
+weapon_index = 0
 
 [node name="HeadbobAnimation" type="AnimationPlayer" parent="Head"]
 libraries = {
@@ -500,3 +516,4 @@ target_position = Vector3(0, 0.5, 0)
 replication_config = SubResource("SceneReplicationConfig_bupmj")
 
 [editable path="Head/Sketchfab_Scene"]
+[editable path="Head/Camera/WeaponsManager"]
