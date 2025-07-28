@@ -1,8 +1,7 @@
-[gd_scene load_steps=22 format=3 uid="uid://3o00hq8ytpai"]
+[gd_scene load_steps=21 format=3 uid="uid://3o00hq8ytpai"]
 
-[ext_resource type="Script" uid="uid://hxohhat02ubx" path="res://addons/bad.multiplayer/bad_match_handler.gd" id="1_k7f6b"]
 [ext_resource type="Material" uid="uid://dpuau02nlxdgb" path="res://game/world/floor_material.tres" id="1_vn0wg"]
-[ext_resource type="PackedScene" uid="uid://cc1m2a1obsyn4" path="res://addons/fpc/character.tscn" id="2_4adp2"]
+[ext_resource type="Script" uid="uid://bdf0fok3q1l6c" path="res://game/world/world.gd" id="1_we8ss"]
 [ext_resource type="Texture2D" uid="uid://3bbhh1hy8wyv" path="res://assets/textures/NightSkyHDRI008_2K-TONEMAPPED.jpg" id="3_dess5"]
 [ext_resource type="Texture2D" uid="uid://cxjxvqmf4boxq" path="res://assets/textures/green.png" id="3_k7f6b"]
 [ext_resource type="Texture2D" uid="uid://pe7a4weirj2g" path="res://assets/textures/dark.png" id="5_uynus"]
@@ -68,13 +67,9 @@ size = Vector2(150, 150)
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_tvmmn"]
 
-[node name="World" type="Node3D"]
-
-[node name="BADMatchHandler" type="Node" parent="." node_paths=PackedStringArray("player_spawn_point", "player_spawn_random")]
-script = ExtResource("1_k7f6b")
-player_scene = ExtResource("2_4adp2")
-player_spawn_point = NodePath("../PlayerContainer")
-player_spawn_random = NodePath("../SpawnPoints")
+[node name="World" type="Node3D" node_paths=PackedStringArray("player_container")]
+script = ExtResource("1_we8ss")
+player_container = NodePath("PlayerContainer")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_dess5")
@@ -86,6 +81,10 @@ shadow_enabled = true
 directional_shadow_mode = 1
 
 [node name="PlayerContainer" type="Node3D" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://cc1m2a1obsyn4")
+spawn_path = NodePath("../PlayerContainer")
 
 [node name="TestTerrain" type="Node3D" parent="."]
 
@@ -209,16 +208,3 @@ skeleton = NodePath("../../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TestTerrain/Floor"]
 shape = SubResource("WorldBoundaryShape3D_tvmmn")
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://cc1m2a1obsyn4")
-spawn_path = NodePath("../PlayerContainer")
-
-[node name="SpawnPoints" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9467144, 0)
-
-[node name="Marker3D" type="Marker3D" parent="SpawnPoints"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6762977, 4.1718044)
-
-[node name="Marker3D2" type="Marker3D" parent="SpawnPoints"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3436141, -5.3050785)

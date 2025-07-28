@@ -15,14 +15,6 @@ run/main_scene="uid://coipmkwg135us"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="uid://er7ks6c1nypb"
 
-[autoload]
-
-BADMultiplayerManager="*res://addons/bad.multiplayer/autoloads/bad_multiplayer_manager.gd"
-BADNetworkManager="*res://addons/bad.multiplayer/autoloads/bad_network_manager.gd"
-BADNetworkEvents="*res://addons/bad.multiplayer/autoloads/bad_network_events.gd"
-BADSceneManager="*res://addons/bad.multiplayer/autoloads/bad_scene_manager.gd"
-BADMP="*res://addons/bad.multiplayer/autoloads/bad_mp.gd"
-
 [display]
 
 window/size/viewport_width=1920
@@ -32,22 +24,18 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/stretch/scale=1.5
 
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/bad.multiplayer/plugin.cfg")
-
 [file_customization]
 
 folder_colors={
 "res://assets/": "purple",
 "res://game/": "green",
 "res://menus/": "red",
-"res://scripts/": "yellow"
+"res://scripts/": "yellow",
+"res://shaders/": "orange"
 }
 
 [global_group]
 
-game=""
 ProjectileSystem=""
 
 [gui]

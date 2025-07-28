@@ -1,21 +1,17 @@
 extends Node3D
 class_name WeaponsManager
 
-
-# TODO: This should be a true StateMachine (RewindableStateMachine?) and each WeaponResource a state within
+# TODO: This should be a true StateMachine WeaponResource a state within
 # TODO: Enter and exit animations, updating ammo, etc.
 # TODO: If you have a that weapon in posession, you can travel to it.
-# TODO: This could be fully incorporated into the existing statemachine, with lots of enter, exit, display, etc.
-
 
 @export var animation_player: AnimationPlayer
+@export var bullet_point: Marker3D
 @export var melee_hitbox: ShapeCast3D
 @export var max_weapons: int # not used
 #@export var player_hud: PlayerUI
 @export var player: Player
 @export var player_input: PlayerInput
-
-@onready var bullet_point = $BulletPoint
 
 # CRTL + Click on these to update weapon properties & stats
 var blasterL: WeaponResource = preload("res://game/weapon_manager/scripts/Weapon_State_Machine/Weapon_Resources/blasterL.tres")
@@ -49,14 +45,18 @@ var busy = false
 @onready var projectile_system: ProjectileSystem = get_tree().get_first_node_in_group("ProjectileSystem")
 
 func _ready() -> void:
-	
 	# Prevent clients from doing anything with their weapons.
 	# This should never happen, but just in case.
 	# NOTE: Weapons being invoked on clients sourced many bugs.
 	##### SERVER ONLY ######
 	##### SERVER ONLY ######
 	##### SERVER ONLY ######
-
+	
+	print('I am: ', multiplayer.get_unique_id(), ' and: ', get_multiplayer_authority())
+	if multiplayer.get_unique_id() != get_multiplayer_authority():
+		return
+	
+	
 	# ATTENTION: If you add weapons using the UI, you must set it be a local to scene resource.
 	# Otherwise, scenes will share (and secretly deduct ammo from other players on the server).
 	create_slot(blasterL)
@@ -64,21 +64,22 @@ func _ready() -> void:
 
 	# TODO: Make sure we can handle dropping, picking up new weapons, from the overall list
 	weapons_owned = [WEAPONS.blasterL, WEAPONS.blasterN]
-
+#
 	# This listens for the end of shooting to continue shooting Auto Fire
 	# Also handles updating ammo after a reload. Must not be connected on clients.
-	animation_player.animation_finished.connect(_on_animation_finished)
-	
-	# Await for the multiplayer syncronizer to come online before changing to our first weapon	
-	await get_tree().create_timer(0.1).timeout
-	if weapons_owned.size() != 0:
-		animation_player.play(get_weapon(weapons_owned.front()).pick_up_animation)
-		update_weapon()
-		update_ammo()
-		if weapons_owned.size() > 1:
-			update_previous_weapon(weapons_owned[1])
-			update_previous_ammo(weapons_owned[1])
-	
+	if animation_player:
+		animation_player.animation_finished.connect(_on_animation_finished)
+		
+		# Await for the multiplayer syncronizer to come online before changing to our first weapon	
+		await get_tree().create_timer(0.1).timeout
+		if weapons_owned.size() != 0:
+			animation_player.play(get_weapon(weapons_owned.front()).pick_up_animation)
+			update_weapon()
+			update_ammo()
+			if weapons_owned.size() > 1:
+				update_previous_weapon(weapons_owned[1])
+				update_previous_ammo(weapons_owned[1])
+		#
 func create_slot(weapon_to_create: WeaponResource):
 	var new_slot = WeaponSlot.new()
 	new_slot.weapon = weapon_to_create
@@ -201,7 +202,7 @@ func shoot():
 		reload()
 		return 
 	
-	if not animation_player.is_playing():
+	if animation_player and not animation_player.is_playing():
 		var current_weapon = get_weapon(weapon_index)
 		var current_slot = get_slot(weapon_index)
 		
@@ -304,13 +305,7 @@ func melee() -> void:
 					var damage_successful = heath_system.damage(current_weapon.melee_damage, int(player.name))
 					if damage_successful:
 						projectile_system.hit_signal.emit(int(player.name))
-	
-				# WARNING: DEPRECATED MELEE CODE. REMOVE.
-				#if target.is_in_group("targets") and target.has_method("hit"):
-					#player_hud.hit_signal.emit()
-					#var dir = (target.global_transform.origin - owner.global_transform.origin).normalized()
-					#var pos =  melee_hitbox.get_collision_point(col)
-					#target.hit(current_weapon.melee_damage, dir, pos)
+
 
 ######## HUD Helpers ########
 ######## HUD Helpers ########

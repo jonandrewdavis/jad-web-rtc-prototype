@@ -2,6 +2,10 @@
 # TODO: This entire part of the code-base needs a complete refactor.
 # TODO: This entire part of the code-base needs a complete refactor.
 
+# TODO: This could all go in Weapon_State_Machine
+
+
+
 extends Node3D
 class_name Projectile
 
@@ -26,7 +30,6 @@ var Projectiles_Spawned = []
 var hit_objects: Array = []
 
 func _ready() -> void:
-	print('source: AUTHORITY:', get_multiplayer_authority())
 	pass
 
 func _Set_Projectile(_damage: int = 0, _spread:Vector2 = Vector2.ZERO, _Range: int = 1000, origin_point: Vector3 = Vector3.ZERO):
@@ -111,13 +114,6 @@ func Launch_Rigid_Body_Projectile(collision_data, projectile: PackedScene, origi
 		'damage': damage,
 		'source': source
 	}
-	
-	#print('tree: ',  !is_inside_tree(), ' has peer: ', ' is auth: ', !is_multiplayer_authority())
-	print('authority: : ', get_multiplayer_authority())
-
-	print('auth: ', is_multiplayer_authority())
-	print('tree: ',  is_inside_tree())
-	print('peer:', multiplayer.has_multiplayer_peer())
 	
 	projectile_system.spawner.spawn(projectile_data)
 

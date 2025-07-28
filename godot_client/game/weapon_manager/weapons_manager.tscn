@@ -829,15 +829,15 @@ properties/6/replication_mode = 1
 properties/7/path = NodePath("Weapons_Models/blasterN:visible")
 properties/7/spawn = true
 properties/7/replication_mode = 1
+properties/8/path = NodePath(".:weapon_index")
+properties/8/spawn = true
+properties/8/replication_mode = 1
 
-[node name="WeaponsManager" type="Node3D" node_paths=PackedStringArray("animation_player", "melee_hitbox")]
+[node name="WeaponsManager" type="Node3D" node_paths=PackedStringArray("animation_player", "bullet_point", "melee_hitbox")]
 script = ExtResource("1_doyh4")
 animation_player = NodePath("Weapons_Models/WeaponsPlayer")
+bullet_point = NodePath("BulletPoint")
 melee_hitbox = NodePath("Melee_Hitbox")
-max_weapons = null
-weapons_list = null
-weapons_owned = null
-weapon_index = null
 
 [node name="Weapons_Models" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.54919, 0)

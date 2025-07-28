@@ -2,6 +2,7 @@ class_name LobbyMenu
 extends CanvasLayer
 
 @onready var LobbyItemScene: PackedScene = preload("res://menus/lobby_menu/lobby_list_item.tscn") 
+@onready var GameWorldScene: PackedScene = preload("res://game/world/world.tscn")
 
 const WEB_SOCKET_SECRET_KEY = "9317e4d6-83b3-4188-94c4-353a2798d3c1"
 
@@ -102,18 +103,6 @@ func _on_ws_disconnect():
 func _close_ws_connection():
 	if _is_web_socket_connected():
 		webSocketPeer.close(1000, 'User closed the app')
-
-func _on_game_started():
-	webRTCPeer = WebRTCMultiplayerPeer.new()
-	# Currently, we are using `create_mesh`, but we may want server authority.
-	webRTCPeer.create_mesh(current_web_id)
-	multiplayer.multiplayer_peer = webRTCPeer
-
-	# NOTE: This timeout is required for some reason... TODO: remove or shorten it.
-	await get_tree().create_timer(2.0).timeout	
-	var configs = BADNetworkConnectionConfigs.new(BADMP.AvailableNetworks.WEB_RTC, '')
-	BADMP.join_game(configs)
-	hide()
 
 func ready_input_connections():
 	%UsernameInput.text_changed.connect(func (text): username_input = text)
@@ -348,29 +337,28 @@ func render_lobby_message(message_payload):
 #############
 
 #region WebRTCMultiplayerPeer
-func ready_rtc_peer():
-	multiplayer.connected_to_server.connect(RTCServerConnected)
-	multiplayer.peer_connected.connect(RTCPeerConnected)
-	multiplayer.peer_disconnected.connect(RTCPeerDisconnected)
 
-func RTCServerConnected():
-	print("RTC server connected")
+func _on_game_started():
+	webRTCPeer = WebRTCMultiplayerPeer.new()
+	# Currently, we are using `create_mesh`, but we may want server authority.
+	webRTCPeer.create_mesh(current_web_id)
+	multiplayer.multiplayer_peer = webRTCPeer
+	# Game world. Scripts within take care of adding players.
+	var new_game_world = GameWorldScene.instantiate()
+	add_child(new_game_world)
 	
-func RTCPeerConnected(id):
-	print("rtc peer connected " + str(id))
-	
-func RTCPeerDisconnected(id):
-	print("rtc peer disconnected " + str(id))
+	await get_tree().create_timer(1.0).timeout
+	hide()
 
+	
 # NOTE: The server will send a candidate, offer, and answer for each peer in the lobby
 func create_multiplayer_peer_connection(id: int):
-	print('?????', id)
 	if id != current_web_id:
 		var new_peer_connection: WebRTCPeerConnection = WebRTCPeerConnection.new()
 		new_peer_connection.initialize({
 			"iceServers" : [{ "urls": ["stun:stun.l.google.com:19302"] }]
 		})
-		print("binding id " + str(id) + " my id is " + str(current_web_id))
+		#print("binding id " + str(id) + " my id is " + str(current_web_id))
 
 		new_peer_connection.session_description_created.connect(self.offerCreated.bind(id))
 		new_peer_connection.ice_candidate_created.connect(self.iceCandidateCreated.bind(id))
@@ -379,7 +367,6 @@ func create_multiplayer_peer_connection(id: int):
 			new_peer_connection.create_offer()
 
 func offerCreated(type, data, id):
-	print('offer', id)
 	if !webRTCPeer.has_peer(id):
 		return
 		

@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://chqusw4w4e11"]
+[gd_scene load_steps=6 format=3 uid="uid://chqusw4w4e11"]
 
 [ext_resource type="Script" uid="uid://e1via0bhi4hy" path="res://menus/lobby_menu/lobby_menu.gd" id="1_3p3bs"]
+[ext_resource type="PackedScene" uid="uid://cbw01twgu8g7v" path="res://shaders/background_shader.tscn" id="2_b120b"]
 [ext_resource type="StyleBox" uid="uid://8nr6rb2m1nto" path="res://assets/ui/section_panel_style_box_flat.tres" id="2_urr6r"]
 
 [sub_resource type="Gradient" id="Gradient_urr6r"]
@@ -15,6 +16,9 @@ fill_to = Vector2(1, 1)
 
 [node name="LobbyMenu" type="CanvasLayer"]
 script = ExtResource("1_3p3bs")
+
+[node name="BackgroundShader" parent="." instance=ExtResource("2_b120b")]
+visible = true
 
 [node name="TopCenter" type="MarginContainer" parent="."]
 anchors_preset = 5
@@ -185,9 +189,11 @@ text = "Send"
 
 [node name="DebugContainer" type="FoldableContainer" parent="TopCenter/TopVbox"]
 layout_mode = 2
+folded = true
 title = "Debug"
 
 [node name="Debug" type="VBoxContainer" parent="TopCenter/TopVbox/DebugContainer"]
+visible = false
 layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="TopCenter/TopVbox/DebugContainer/Debug"]

@@ -405,7 +405,6 @@ func on_game_started():
 		#BADMP.host_game(configs)
 	#else:
 	await get_tree().create_timer(2).timeout
-	print(BADMP.get_network_manager().multiplayer)
 	BADMP.join_game(configs)
 	hide()
 
@@ -447,7 +446,7 @@ func create_multiplayer_peer_connection(id: int):
 		new_peer_connection.initialize({
 			"iceServers" : [{ "urls": ["stun:stun.l.google.com:19302"] }]
 		})
-		print("binding id " + str(id) + " my id is " + str(current_web_id))
+		#print("binding id " + str(id) + " my id is " + str(current_web_id))
 
 		new_peer_connection.session_description_created.connect(self.offerCreated.bind(id))
 		new_peer_connection.ice_candidate_created.connect(self.iceCandidateCreated.bind(id))

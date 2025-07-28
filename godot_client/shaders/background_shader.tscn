@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://cbw01twgu8g7v"]
+
+[ext_resource type="Shader" uid="uid://d8hbewvob8f6" path="res://shaders/nebula.gdshader" id="1_jo48o"]
+[ext_resource type="FastNoiseLite" uid="uid://s5s6uy8lpt7q" path="res://shaders/nebula_fast_lite_cubic_noise.tres" id="2_y86rq"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_lquwl"]
+noise = ExtResource("2_y86rq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
+shader = ExtResource("1_jo48o")
+shader_parameter/stars_on = true
+shader_parameter/stars_flicker = true
+shader_parameter/timeScaleFactor = 0.02999999999883584
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_lquwl")
+shader_parameter/colour_muiltiplier = Color(0.41884705, 0.7190553, 1, 1)
+shader_parameter/colour_muiltiplier2 = Color(0.07450981, 1, 1, 1)
+shader_parameter/brightness = 1.0000000475000002
+shader_parameter/clouds_resolution = 8.000000380000001
+shader_parameter/clouds_intesity = 0.20000001369110004
+shader_parameter/waveyness = 0.5
+shader_parameter/fragmentation = 7.0
+shader_parameter/distortion = 1.5
+shader_parameter/clouds_alpha = 0.5
+shader_parameter/movement = 0.89999999757907
+shader_parameter/blur = 1.4
+shader_parameter/blur2 = 0.01
+shader_parameter/bg_speed = 0.1999999999970896
+shader_parameter/mid_speed = 0.5
+shader_parameter/fg_speed = 1.0
+
+[node name="BackgroundShader" type="ColorRect"]
+visible = false
+material = SubResource("ShaderMaterial_7mycd")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
