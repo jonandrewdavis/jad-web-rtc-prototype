@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=4 uid="uid://blls0k40w45rf"]
 
-[ext_resource type="Material" uid="uid://b5442xcndl6ii" path="res://weapon_manager/Spawnable_Objects/bullet_scenes/bullet_yellow_material_v2.tres" id="1_0ucco"]
+[ext_resource type="Material" uid="uid://b5442xcndl6ii" path="res://game/weapon_manager/Spawnable_Objects/bullet_scenes/bullet_yellow_material_v2.tres" id="1_0ucco"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gqwk5"]
 radius = 0.06

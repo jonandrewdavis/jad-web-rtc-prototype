@@ -2,7 +2,6 @@
 # MIT license
 # Quality Godot First Person Controller v2
 
-
 extends CharacterBody3D
 
 class_name Player
@@ -465,21 +464,20 @@ func handle_interact():
 		pass
 
 func handle_weapon_manager():
-	if multiplayer.get_unique_id() != get_multiplayer_authority():
-		return
-
-	if player_input.is_weapon_up:
-		weapon_manager.change_weapon(weapon_manager.CHANGE_DIR.UP)
-	elif player_input.is_weapon_down:
-		weapon_manager.change_weapon(weapon_manager.CHANGE_DIR.UP)
-	elif player_input.is_weapon_shoot:
-		weapon_manager.shoot()
-	elif player_input.is_weapon_melee:
-		weapon_manager.melee()
-	elif player_input.is_weapon_reload:
-		weapon_manager.reload()
-	elif player_input.is_weapon_aim:
-		pass
-		#weapon_manager.aim
+	# TODO: Is this necessary? Seems to be to prevent firing weapons too much.
+	if is_multiplayer_authority():
+		if player_input.is_weapon_up:
+			weapon_manager.change_weapon(weapon_manager.CHANGE_DIR.UP)
+		elif player_input.is_weapon_down:
+			weapon_manager.change_weapon(weapon_manager.CHANGE_DIR.UP)
+		elif player_input.is_weapon_shoot:
+			weapon_manager.shoot()
+		elif player_input.is_weapon_melee:
+			weapon_manager.melee()
+		elif player_input.is_weapon_reload:
+			weapon_manager.reload()
+		elif player_input.is_weapon_aim:
+			pass
+			#weapon_manager.aim
 
 #endregion

@@ -1,6 +1,12 @@
 extends Node3D
 class_name WeaponsManager
 
+# NOTE: Added late
+# NOTE: Added late
+# NOTE: Added late
+@onready var projectile_system: ProjectileSystem = get_tree().get_first_node_in_group("ProjectileSystem")
+@onready var projectile_spawner: MultiplayerSpawner = projectile_system.spawner
+
 # TODO: This should be a true StateMachine WeaponResource a state within
 # TODO: Enter and exit animations, updating ammo, etc.
 # TODO: If you have a that weapon in posession, you can travel to it.
@@ -42,8 +48,6 @@ var spray_profiles: Dictionary = {}
 var player_camera_3D: Camera3D
 var busy = false
 
-@onready var projectile_system: ProjectileSystem = get_tree().get_first_node_in_group("ProjectileSystem")
-
 func _ready() -> void:
 	# Prevent clients from doing anything with their weapons.
 	# This should never happen, but just in case.
@@ -52,11 +56,8 @@ func _ready() -> void:
 	##### SERVER ONLY ######
 	##### SERVER ONLY ######
 	
-	print('I am: ', multiplayer.get_unique_id(), ' and: ', get_multiplayer_authority())
-	if multiplayer.get_unique_id() != get_multiplayer_authority():
-		return
-	
-	
+	print('WEAPON MANAGER: I am: ', multiplayer.get_unique_id(), ' and i am owned by: ', get_multiplayer_authority())
+
 	# ATTENTION: If you add weapons using the UI, you must set it be a local to scene resource.
 	# Otherwise, scenes will share (and secretly deduct ammo from other players on the server).
 	create_slot(blasterL)
@@ -96,10 +97,6 @@ func get_slot(index: int) -> WeaponSlot:
 
 # TODO: Could use signals here to update multiple things, like HUD, etc.
 func change_weapon(dir: CHANGE_DIR) -> void:
-	#if not multiplayer.is_server():
-		#push_error('Tried to change weapons on the client')
-		#return
-		
 	if busy: 
 		return
 
@@ -163,25 +160,54 @@ func prepare_spray_pattern(weapon_to_prepare: WeaponResource):
 	if weapon_to_prepare.weapon_spray:
 		spray_profiles[weapon_to_prepare.weapon_name] = weapon_to_prepare.weapon_spray.instantiate()
 
+@rpc('call_local', 'any_peer')
 func load_projectile(spread):
+	if is_multiplayer_authority() == false:
+		return
+
 	var current_weapon = get_weapon(weapon_index)
-	var _projectile: Projectile = current_weapon.projectile_to_load.instantiate()
+	var camera_collision = camera_ray_cast(spread, current_weapon.fire_range)
+		
+	#var _projectile: Projectile = current_weapon.projectile_to_load.instantiate()
+	var projectile_name = current_weapon.projectile_to_load.get_state().get_node_name(0)
+	var bullet_point_origin = bullet_point.global_position
+	var damage = current_weapon.damage
+	var source = int(player.name)
+
+	var projectile_data = { 
+		'projectile_name': projectile_name,
+		'origin_point': bullet_point_origin,
+		'target_point': camera_collision[1],
+		'projectile_velocity': 100,
+		'normal': camera_collision[2],
+		'damage': damage,
+		'source': source
+	}
 	
-	#_projectile._Camera = player_camera_3D
-	_projectile.position = bullet_point.global_position
-	_projectile.rotation = owner.rotation
-	_projectile.source = int(player.name)
-	_projectile.set_multiplayer_authority(int(player.name))
+	projectile_system.spawner.spawn(projectile_data)
 
 	############
 	# TODO: Document how I connected the signals in code.
+	# TODO: Document how I ripped apart "Projectile" loading... ugh.
+	# TODO: Move over the other properties: Decal, Type, Velocity, Pass Through? They could all be weapon ones
 	############
-	#_projectile.hit_signal.connect(hit_signal_stub)
+
+	#match Projectile_Type:
+		#"Hitscan":
+			#Hit_Scan_Collision(Camera_Collision, damage, origin_point)
+		#"Rigidbody_Projectile":
+			#Launch_Rigid_Body_Projectile(Camera_Collision, rigid_body_projectile, origin_point)
+		#"over_ride":
+			#_over_ride_collision(Camera_Collision, damage)
 	
 	# NOTE: added true
-	bullet_point.add_child(_projectile, true)
-	var bullet_point_origin = bullet_point.global_position
-	_projectile._Set_Projectile(current_weapon.damage, spread, current_weapon.fire_range, bullet_point_origin)
+	#bullet_point.add_child(_projectile, true)
+
+
+
+
+
+	#_projectile._Set_Projectile(current_weapon.damage, spread, current_weapon.fire_range, bullet_point_origin)
 
 # Calls directly to the parent HUD.	
 # When using signals, tended to emit on other players
@@ -189,12 +215,6 @@ func load_projectile(spread):
 	#player_hud._on_weapons_manager_hit_signal()
 
 func shoot():
-	# TODO: Use the rollback syncronizer and "is_fresh".
-	# Note: Usually not possible with our RPC rules, but warn about the client using this.
-	#if not multiplayer.is_server():
-		#push_warning("A client tried to call locally to shoot: ", multiplayer.get_unique_id())
-		#return
-	
 	if can_fire() == false:
 		return
 
@@ -210,15 +230,13 @@ func shoot():
 		if current_weapon.has_ammo:
 			current_slot.current_ammo -= 1
 		
-		var Spread = Vector2.ZERO
+		var spread = Vector2.ZERO
 		
-		# TODO: Could change animation speed scale to reward non-zoom shots, or not.
 		if current_weapon.weapon_spray and not player_input.is_weapon_aim:
 			count = count + 1
-			# if player_input.aim == false:
-			Spread = spray_profiles[current_weapon.weapon_name].Get_Spray(count, current_weapon.magazine)
+			spread = spray_profiles[current_weapon.weapon_name].Get_Spray(count, current_weapon.magazine)
 
-		load_projectile(Spread)
+		load_projectile.rpc(spread)
 		# play sound
 		update_ammo(weapon_index, true)
 
@@ -243,10 +261,6 @@ func _auto_fire_shoot():
 		shoot()
 
 func reload() -> void:
-	#if not multiplayer.is_server():
-		#push_warning('Tried to reload on the client: ', multiplayer.get_unique_id())
-		#return
-
 	# Added
 	var current_weapon_slot = get_slot(weapon_index)
 	
@@ -300,8 +314,8 @@ func melee() -> void:
 				var body: Node3D = melee_hitbox.get_collider(col)
 				if not body:
 					return
-				if body.is_in_group('targets') or body.is_in_group('players'):
-					var heath_system: HealthSystem = body.health_system
+				if body.is_in_group('targets'):
+					var heath_system: HealthSystem = body.get_node("HealthSystem")
 					var damage_successful = heath_system.damage(current_weapon.melee_damage, int(player.name))
 					if damage_successful:
 						projectile_system.hit_signal.emit(int(player.name))
@@ -326,3 +340,26 @@ func update_previous_weapon(given_index: int):
 func update_previous_ammo(given_index: int):
 	var weapon = get_slot(given_index)
 	update_ammo_prev_signal.emit(weapon.current_ammo, weapon.reserve_ammo)
+
+######## Pulled off of Projectile ########
+######## Pulled off of Projectile ########
+######## Pulled off of Projectile ########
+
+func camera_ray_cast(_spread: Vector2 = Vector2.ZERO, _range: float = 1000) -> Array:
+	var viewport_size = get_viewport().get_visible_rect().size
+	var Ray_Origin = get_viewport().get_camera_3d().project_ray_origin(viewport_size/2)
+	var Ray_End = (Ray_Origin + get_viewport().get_camera_3d().project_ray_normal((viewport_size/2)+Vector2(_spread)) * _range)
+	var new_intersection:PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(Ray_Origin,Ray_End)
+	new_intersection.set_collision_mask(0b11101111) # 15? 
+	new_intersection.set_hit_from_inside(false) # In Jolt this is set to true by defualt
+	
+	# 0: The colliding object
+	# 1: The colliding object's ID.
+	# 2: The object's surface normal at the intersection point or Vector3.ZERO
+	# 3: position: The intersection point.
+	var intersection = get_world_3d().direct_space_state.intersect_ray(new_intersection)
+	
+	if intersection.is_empty():
+		return [null, Ray_End, null]	
+	
+	return [intersection.collider, intersection.position, intersection.normal]

@@ -1,9 +1,11 @@
-[gd_scene load_steps=24 format=3 uid="uid://cc1m2a1obsyn4"]
+[gd_scene load_steps=26 format=3 uid="uid://cc1m2a1obsyn4"]
 
 [ext_resource type="Script" uid="uid://cisejjtyctybh" path="res://addons/fpc/character.gd" id="1_0t4e8"]
 [ext_resource type="Script" uid="uid://b444whi1t4ggg" path="res://addons/fpc/player_input.gd" id="2_bx7cj"]
 [ext_resource type="PackedScene" uid="uid://cf6jco7ctb45m" path="res://game/weapon_manager/weapons_manager.tscn" id="4_bx7cj"]
-[ext_resource type="PackedScene" uid="uid://crep3klgx68p5" path="res://game/systems/projectile_system.tscn" id="6_gv6je"]
+[ext_resource type="PackedScene" uid="uid://qsh5m8pulul5" path="res://scripts/health_system.tscn" id="4_qaoyu"]
+[ext_resource type="Script" uid="uid://cyuq81eounly0" path="res://scripts/gameplay.gd" id="5_qaoyu"]
+[ext_resource type="PackedScene" uid="uid://crep3klgx68p5" path="res://scripts/projectile_system.tscn" id="6_gv6je"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bx7cj"]
 properties/0/path = NodePath(".:input_dir")
@@ -21,152 +23,6 @@ properties/3/replication_mode = 1
 properties/4/path = NodePath(".:is_interacting")
 properties/4/spawn = true
 properties/4/replication_mode = 1
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kp17n"]
-albedo_color = Color(0.909804, 0.596078, 0, 1)
-clearcoat_enabled = true
-clearcoat_roughness = 0.2
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_jw1de"]
-material = SubResource("StandardMaterial3D_kp17n")
-radius = 0.2
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uy03j"]
-radius = 0.2
-
-[sub_resource type="Animation" id="Animation_j8cx7"]
-resource_name = "RESET"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Mesh:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Collision:position")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Head:position")
-tracks/2/interp = 2
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1.5, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Mesh:mesh:height")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [2.0]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Collision:shape:height")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [2.0]
-}
-
-[sub_resource type="Animation" id="Animation_5ec5e"]
-resource_name = "crouch"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Mesh:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 1, 0), Vector3(0, 0.75, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Collision:position")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 1, 0), Vector3(0, 0.75, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Head:position")
-tracks/2/interp = 2
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector3(0, 1.5, 0), Vector3(0, 1.12508, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Mesh:mesh:height")
-tracks/3/interp = 2
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [2.0, 1.5]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Collision:shape:height")
-tracks/4/interp = 2
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [2.0, 1.5]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_5e5t5"]
-_data = {
-&"RESET": SubResource("Animation_j8cx7"),
-&"crouch": SubResource("Animation_5ec5e")
-}
 
 [sub_resource type="Animation" id="Animation_gh776"]
 resource_name = "RESET"
@@ -392,6 +248,152 @@ _data = {
 &"land_right": SubResource("Animation_vsknp")
 }
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kp17n"]
+albedo_color = Color(0.909804, 0.596078, 0, 1)
+clearcoat_enabled = true
+clearcoat_roughness = 0.2
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jw1de"]
+material = SubResource("StandardMaterial3D_kp17n")
+radius = 0.1
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uy03j"]
+radius = 0.3
+
+[sub_resource type="Animation" id="Animation_j8cx7"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerMesh:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerCollision:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Head:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.5, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PlayerMesh:mesh:height")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PlayerCollision:shape:height")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+
+[sub_resource type="Animation" id="Animation_5ec5e"]
+resource_name = "crouch"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerMesh:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1, 0), Vector3(0, 0.75, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerCollision:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1, 0), Vector3(0, 0.75, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Head:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5, 0), Vector3(0, 1.12508, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("PlayerMesh:mesh:height")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [2.0, 1.5]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("PlayerCollision:shape:height")
+tracks/4/interp = 2
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [2.0, 1.5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5e5t5"]
+_data = {
+&"RESET": SubResource("Animation_j8cx7"),
+&"crouch": SubResource("Animation_5ec5e")
+}
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_k4wwl"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bupmj"]
@@ -404,6 +406,15 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("Head:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath(".:visible")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("HealthSystem:max_health")
+properties/4/spawn = true
+properties/4/replication_mode = 2
+properties/5/path = NodePath("HealthSystem:health")
+properties/5/spawn = true
+properties/5/replication_mode = 2
 
 [node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH", "player_input", "camera", "weapon_manager")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
@@ -414,31 +425,16 @@ CAMERA = NodePath("Head/Camera")
 HEADBOB_ANIMATION = NodePath("Head/HeadbobAnimation")
 JUMP_ANIMATION = NodePath("Head/JumpAnimation")
 CROUCH_ANIMATION = NodePath("CrouchAnimation")
-COLLISION_MESH = NodePath("Collision")
+COLLISION_MESH = NodePath("PlayerCollision")
 player_input = NodePath("PlayerInput")
 camera = NodePath("Head/Camera")
 weapon_manager = NodePath("Head/Camera/WeaponsManager")
-
-[node name="ProjectileSystem" parent="." instance=ExtResource("6_gv6je")]
 
 [node name="PlayerInput" type="Node" parent="."]
 script = ExtResource("2_bx7cj")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="PlayerInput"]
 replication_config = SubResource("SceneReplicationConfig_bx7cj")
-
-[node name="Mesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh = SubResource("CapsuleMesh_jw1de")
-
-[node name="Collision" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_uy03j")
-
-[node name="CrouchAnimation" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_5e5t5")
-}
 
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -462,12 +458,31 @@ libraries = {
 }
 speed_scale = 4.0
 
+[node name="PlayerMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_jw1de")
+
+[node name="PlayerCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_uy03j")
+
+[node name="CrouchAnimation" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_5e5t5")
+}
+
 [node name="CrouchCeilingDetection" type="ShapeCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+enabled = false
 shape = SubResource("SphereShape3D_k4wwl")
 target_position = Vector3(0, 0.5, 0)
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_bupmj")
 
-[editable path="Head/Camera/WeaponsManager"]
+[node name="Gameplay" type="Node" parent="."]
+script = ExtResource("5_qaoyu")
+
+[node name="HealthSystem" parent="." instance=ExtResource("4_qaoyu")]
+
+[node name="ProjectileSystem" parent="." instance=ExtResource("6_gv6je")]

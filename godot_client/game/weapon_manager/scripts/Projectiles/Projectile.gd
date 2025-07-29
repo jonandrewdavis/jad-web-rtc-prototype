@@ -4,8 +4,6 @@
 
 # TODO: This could all go in Weapon_State_Machine
 
-
-
 extends Node3D
 class_name Projectile
 
@@ -27,6 +25,10 @@ var source: int = 1
 
 var damage: int = 0
 var Projectiles_Spawned = []
+
+#func _enter_tree() -> void:
+	#set_multiplayer_authority(str(name).to_int())
+
 var hit_objects: Array = []
 
 func _ready() -> void:
@@ -76,7 +78,7 @@ func Hit_Scan_Collision(Collision: Array,_damage: float, origin_point: Vector3):
 		
 		projectile_system.create_debug_decal(bullet_point, Collision[2])
 
-		if Collision[0].is_in_group("targets") or Collision[0].is_in_group("players"):
+		if Collision[0].is_in_group("targets"):
 			var Bullet = get_world_3d().direct_space_state
 
 			var Bullet_Direction = (bullet_point - origin_point).normalized()
@@ -98,7 +100,7 @@ func Hit_Scan_Collision(Collision: Array,_damage: float, origin_point: Vector3):
 
 func check_pass_through(collider: Node3D, rid: RID)-> bool:
 	var valid_pass_though: bool = false
-	if collider.is_in_group("targets") or collider.is_in_group("players"):
+	if collider.is_in_group("targets"):
 		hit_objects.append(rid)
 		valid_pass_though = true
 	return valid_pass_though
@@ -117,9 +119,9 @@ func Launch_Rigid_Body_Projectile(collision_data, projectile: PackedScene, origi
 	
 	projectile_system.spawner.spawn(projectile_data)
 
-	
+
 func Hit_Scan_damage(collision, _direction, _position, _damage):
-	if collision.is_in_group("targets") or collision.is_in_group("players"):
+	if collision.is_in_group("targets"):
 		var heath_system: HealthSystem = collision.health_system
 		var damage_successful = heath_system.damage(damage, source)
 		if damage_successful:
