@@ -140,9 +140,10 @@ var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity") 
 
 @export_group("Multiplayer")
 @export var player_input: PlayerInput
-@export var player_ui: Control
+@export var player_ui: PlayerUI
 @export var camera: Camera3D
 @export var weapon_manager: WeaponsManager
+@export var health_system: HealthSystem
 
 func _enter_tree():
 	# With mesh type, be client authority.
@@ -174,7 +175,6 @@ func _process(_delta):
 	if pausing_enabled:
 		handle_pausing()
 
-
 func _physics_process(delta): # Most things happen here.
 	# Gravity
 	if dynamic_gravity:
@@ -188,8 +188,8 @@ func _physics_process(delta): # Most things happen here.
 	var input_dir = player_input.input_dir
 	
 	# TODO: restore
-	#if not immobile: # Immobility works by interrupting user input, so other forces can still be applied to the player
-		#player_input.input_dir = Input.get_vector(controls.LEFT, controls.RIGHT, controls.FORWARD, controls.BACKWARD)
+	if immobile: # Immobility works by interrupting user input, so other forces can still be applied to the player
+		input_dir = Vector2.ZERO
 
 	handle_movement(delta, input_dir)
 	handle_interact()
@@ -316,10 +316,11 @@ func check_controls(): # If you add a control, you might want to add a check for
 
 #region State Handling
 
+# TODO: Replace with a more traditional state machine.
 func handle_state(moving):
 	if sprint_enabled:
 		if sprint_mode == 0:
-			if player_input.is_sprinting and state != "crouching":
+			if player_input.is_sprinting and state != "crouching" and player_input.is_weapon_aim == false:
 				if moving:
 					if state != "sprinting":
 						enter_sprint_state()
@@ -477,7 +478,7 @@ func handle_weapon_manager():
 		elif player_input.is_weapon_reload:
 			weapon_manager.reload()
 		elif player_input.is_weapon_aim:
+			# TODO: Slow speed?
 			pass
-			#weapon_manager.aim
 
 #endregion

@@ -13,10 +13,12 @@ func _ready() -> void:
 	
 func _on_death():
 	player.hide()
+	player.immobile = true
 	await get_tree().create_timer(2.0).timeout
 	_respawn()
 	
 func _respawn():
 	health_system.heal(health_system.max_health)
+	player.immobile = false
 	player.show()
 	player.position = Vector3(randi_range(-2, 2), 0.8, randi_range(-2, 2)) * 8

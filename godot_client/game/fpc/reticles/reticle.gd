@@ -1,30 +1,27 @@
-[gd_scene load_steps=2 format=3 uid="uid://3mij3cjhkwsm"]
+extends CenterContainer
 
-[sub_resource type="GDScript" id="GDScript_a8kpl"]
-script/source = "extends CenterContainer
+class_name Reticle
 
-
-@export_category(\"Reticle\")
-@export_group(\"Nodes\")
+@export_category("Reticle")
+@export_group("Nodes")
 @export var reticle_lines : Array[Line2D]
 @export var character : CharacterBody3D
 
-@export_group(\"Animate\")
+@export_group("Animate")
 @export var animated_reticle : bool = true
 @export var reticle_speed : float = 0.5
 @export var reticle_spread : float = 4.0
 
-@export_group(\"Dot Settings\")
+@export_group("Dot Settings")
 @export var dot_size : int = 1
 @export var dot_color : Color = Color.WHITE
 
-@export_group(\"Line Settings\")
+@export_group("Line Settings")
 @export var line_color : Color = Color.WHITE
 @export var line_width : int = 2
 @export var line_length : int = 10
 @export var line_distance : int = 5
-@export_enum(\"None\", \"Round\") var cap_mode : int = 0
-
+@export_enum("None", "Round") var cap_mode : int = 0
 
 func _process(_delta):
 	if visible: # If the reticle is disabled (not visible), don't bother updating it
@@ -34,6 +31,9 @@ func _process(_delta):
 
 
 func animate_reticle_lines():
+	if !character:
+		return 
+		
 	var vel = character.get_real_velocity()
 	var origin = Vector3(0,0,0)
 	var pos = Vector2(0,0)
@@ -71,34 +71,3 @@ func update_reticle_settings():
 	reticle_lines[2].points[1].x = line_length + line_distance
 	reticle_lines[3].points[0].y = line_distance
 	reticle_lines[3].points[1].y = line_length + line_distance
-"
-
-[node name="Reticle" type="CenterContainer" node_paths=PackedStringArray("reticle_lines")]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-script = SubResource("GDScript_a8kpl")
-reticle_lines = [NodePath("top"), NodePath("left"), NodePath("right"), NodePath("bottom")]
-
-[node name="dot" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-1, -1, 1, -1, 1, 1, -1, 1)
-
-[node name="top" type="Line2D" parent="."]
-points = PackedVector2Array(0, -5, 0, -15)
-width = 2.0
-
-[node name="left" type="Line2D" parent="."]
-points = PackedVector2Array(-5, 0, -15, 0)
-width = 2.0
-
-[node name="right" type="Line2D" parent="."]
-points = PackedVector2Array(5, 0, 15, 0)
-width = 2.0
-
-[node name="bottom" type="Line2D" parent="."]
-points = PackedVector2Array(0, 5, 0, 15)
-width = 2.0

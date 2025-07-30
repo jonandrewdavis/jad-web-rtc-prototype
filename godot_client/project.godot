@@ -29,6 +29,7 @@ window/stretch/scale=1.5
 folder_colors={
 "res://assets/": "purple",
 "res://game/": "green",
+"res://game/fpc/": "blue",
 "res://menus/": "red",
 "res://scripts/": "yellow",
 "res://shaders/": "orange"

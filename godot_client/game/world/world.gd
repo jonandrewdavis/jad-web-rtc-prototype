@@ -1,6 +1,6 @@
 extends Node3D
 
-var player_scene = preload("res://addons/fpc/character.tscn")
+var player_scene = preload("res://game/fpc/character.tscn")
 
 @export var player_container: Node3D
 

@@ -31,7 +31,7 @@ var last_damage_source := 0
 #@onready var sync = $MultiplayerSynchronizer
 
 func _ready() -> void:
-	# NOTE: Changed from `is_server()` to `is_multiplayer_authority`y.
+	# NOTE: Changed from `is_server()` to `is_multiplayer_authority`.
 	# NOTE: Added health to syncronizer to display to other clients (for health bars to be visible) 
 
 	if is_multiplayer_authority():

@@ -1,11 +1,12 @@
-[gd_scene load_steps=26 format=3 uid="uid://cc1m2a1obsyn4"]
+[gd_scene load_steps=27 format=3 uid="uid://cc1m2a1obsyn4"]
 
-[ext_resource type="Script" uid="uid://cisejjtyctybh" path="res://addons/fpc/character.gd" id="1_0t4e8"]
-[ext_resource type="Script" uid="uid://b444whi1t4ggg" path="res://addons/fpc/player_input.gd" id="2_bx7cj"]
+[ext_resource type="Script" uid="uid://cisejjtyctybh" path="res://game/fpc/character.gd" id="1_0t4e8"]
+[ext_resource type="Script" uid="uid://b444whi1t4ggg" path="res://game/fpc/player_input.gd" id="2_bx7cj"]
 [ext_resource type="PackedScene" uid="uid://cf6jco7ctb45m" path="res://game/weapon_manager/weapons_manager.tscn" id="4_bx7cj"]
 [ext_resource type="PackedScene" uid="uid://qsh5m8pulul5" path="res://scripts/health_system.tscn" id="4_qaoyu"]
 [ext_resource type="Script" uid="uid://cyuq81eounly0" path="res://scripts/gameplay.gd" id="5_qaoyu"]
 [ext_resource type="PackedScene" uid="uid://crep3klgx68p5" path="res://scripts/projectile_system.tscn" id="6_gv6je"]
+[ext_resource type="PackedScene" uid="uid://bodmr74jwgi5g" path="res://game/fpc/player_ui.tscn" id="7_eunu3"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bx7cj"]
 properties/0/path = NodePath(".:input_dir")
@@ -416,10 +417,9 @@ properties/5/path = NodePath("HealthSystem:health")
 properties/5/spawn = true
 properties/5/replication_mode = 2
 
-[node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH", "player_input", "camera", "weapon_manager")]
+[node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH", "player_input", "player_ui", "camera", "weapon_manager", "health_system")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 script = ExtResource("1_0t4e8")
-default_reticle = "res://addons/fpc/reticles/reticle_1.tscn"
 HEAD = NodePath("Head")
 CAMERA = NodePath("Head/Camera")
 HEADBOB_ANIMATION = NodePath("Head/HeadbobAnimation")
@@ -427,8 +427,10 @@ JUMP_ANIMATION = NodePath("Head/JumpAnimation")
 CROUCH_ANIMATION = NodePath("CrouchAnimation")
 COLLISION_MESH = NodePath("PlayerCollision")
 player_input = NodePath("PlayerInput")
+player_ui = NodePath("PlayerUI")
 camera = NodePath("Head/Camera")
 weapon_manager = NodePath("Head/Camera/WeaponsManager")
+health_system = NodePath("HealthSystem")
 
 [node name="PlayerInput" type="Node" parent="."]
 script = ExtResource("2_bx7cj")
@@ -486,3 +488,6 @@ script = ExtResource("5_qaoyu")
 [node name="HealthSystem" parent="." instance=ExtResource("4_qaoyu")]
 
 [node name="ProjectileSystem" parent="." instance=ExtResource("6_gv6je")]
+
+[node name="PlayerUI" parent="." node_paths=PackedStringArray("player") instance=ExtResource("7_eunu3")]
+player = NodePath("..")

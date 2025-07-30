@@ -1,0 +1,90 @@
+[gd_scene load_steps=6 format=3 uid="uid://bodmr74jwgi5g"]
+
+[ext_resource type="Script" uid="uid://sod1rkvjxdxk" path="res://game/fpc/player_ui.gd" id="1_721h2"]
+
+[sub_resource type="Gradient" id="Gradient_yswgc"]
+offsets = PackedFloat32Array(0.5034188, 0.9008547)
+colors = PackedColorArray(0, 0, 0, 0, 1, 0.23137257, 0.20784314, 0.34901962)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_721h2"]
+gradient = SubResource("Gradient_yswgc")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yswgc"]
+bg_color = Color(1, 1, 1, 0.19607843)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_721h2"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(4.0309505e-06, 0.5212108, 0.03029696, 0.8039216)
+
+[node name="PlayerUI" type="CanvasLayer"]
+script = ExtResource("1_721h2")
+default_reticle = "uid://3mij3cjhkwsm"
+
+[node name="HurtTexture" type="TextureRect" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_721h2")
+
+[node name="BottomLeft" type="MarginContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -59.0
+offset_right = 50.0
+grow_vertical = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Vbox" type="VBoxContainer" parent="BottomLeft"]
+layout_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="BottomLeft/Vbox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(700, 45)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_yswgc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_721h2")
+value = 50.0
+show_percentage = false
+
+[node name="BottomRight" type="MarginContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="BottomRight"]
+layout_mode = 2
+
+[node name="AmmoLabel" type="Label" parent="BottomRight/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "300 / 300"
+
+[node name="HurtTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.1
+one_shot = true
+autostart = true
