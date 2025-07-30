@@ -92,8 +92,10 @@ func rpc_update_health(next_health):
 func allow_damage_from_source(_source: int):
 	# TODO: More rules. Teams?
 	
+	print(_source)
+
 	# NOTE: Prevent self damage
-	if is_multiplayer_authority() and get_multiplayer_authority() == _source:
+	if is_multiplayer_authority() and multiplayer.get_unique_id() == _source:
 		return false
 		
 	return true

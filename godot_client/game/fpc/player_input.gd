@@ -5,6 +5,7 @@ extends Node
 @export var is_jumping: bool = false
 @export var is_sprinting: bool = false
 @export var is_interacting: bool = false
+@export var is_crouching: bool = false
 @export var mouseInput : Vector2 = Vector2(0,0)
 
 @export var is_weapon_up: bool = false
@@ -19,6 +20,7 @@ func _physics_process(_delta: float) -> void:
 	is_jumping = Input.is_action_pressed("jump")
 	is_sprinting = Input.is_action_pressed("sprint")
 	is_interacting = Input.is_action_pressed("interact")
+	is_crouching = Input.is_action_pressed("crouch")
 	
 	is_weapon_up = Input.is_action_pressed("weapon_up")
 	is_weapon_down = Input.is_action_pressed("weapon_down")

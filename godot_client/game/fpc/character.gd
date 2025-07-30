@@ -144,6 +144,8 @@ var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity") 
 @export var camera: Camera3D
 @export var weapon_manager: WeaponsManager
 @export var health_system: HealthSystem
+@export var master: Master
+@export var look_at_target: Marker3D
 
 func _enter_tree():
 	# With mesh type, be client authority.
@@ -157,8 +159,15 @@ func _is_client_player():
 	#return not multiplayer.is_server() and str(name).to_int() == player_input.get_multiplayer_authority()
 
 func _ready():
+	#floor_max_angle = 50.0
+	
 	if _is_client_player():
 		camera.make_current()
+		master.cast_shadow_only()
+
+	if not is_multiplayer_authority():
+		set_process(false)
+		set_physics_process(false)
 
 	#It is safe to comment this line if your game doesn't start with the mouse captured
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -170,6 +179,8 @@ func _ready():
 	initialize_animations()
 	check_controls()
 	enter_normal_state()
+	
+	
 
 func _process(_delta):
 	if pausing_enabled:
@@ -258,8 +269,10 @@ func handle_head_rotation():
 	
 	if invert_camera_x_axis:
 		HEAD.rotation_degrees.y -= local_mouse_input.x * mouse_sensitivity * -1
+		master.rotation_degrees.y -= local_mouse_input.x * mouse_sensitivity * -1
 	else:
 		HEAD.rotation_degrees.y -= local_mouse_input.x * mouse_sensitivity
+		master.rotation_degrees.y -= local_mouse_input.x * mouse_sensitivity
 
 	if invert_camera_y_axis:
 		HEAD.rotation_degrees.x -= local_mouse_input.y * mouse_sensitivity * -1
@@ -278,7 +291,7 @@ func handle_head_rotation():
 		else:
 			HEAD.rotation.y += controller_view_rotation.y
 	
-	# AD: NOTE: this might not work...
+	# AD: NOTE: this might not work... It attempts to clear the input after the look.
 	if _is_client_player():
 		player_input.mouseInput = Vector2(0,0)
 
@@ -329,6 +342,8 @@ func handle_state(moving):
 						enter_normal_state()
 			elif state == "sprinting":
 				enter_normal_state()
+
+		# TODO: This method requires just_pressed, so it might not work.
 		elif sprint_mode == 1:
 			if moving:
 				# If the player is holding sprint before moving, handle that scenario
@@ -345,13 +360,15 @@ func handle_state(moving):
 
 	if crouch_enabled:
 		if crouch_mode == 0:
-			if Input.is_action_pressed(controls.CROUCH) and state != "sprinting":
+			if player_input.is_crouching and state != "sprinting":
 				if state != "crouching":
 					enter_crouch_state()
 			elif state == "crouching" and !$CrouchCeilingDetection.is_colliding():
 				enter_normal_state()
+
+		# TODO: This method requires just_pressed, so it might not work.
 		elif crouch_mode == 1:
-			if Input.is_action_just_pressed(controls.CROUCH):
+			if player_input.is_crouching:
 				match state:
 					"normal":
 						enter_crouch_state()
