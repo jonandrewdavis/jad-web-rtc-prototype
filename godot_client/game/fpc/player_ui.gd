@@ -8,11 +8,6 @@ class_name PlayerUI
 var RETICLE: Control
 
 func _ready() -> void:
-	if not is_multiplayer_authority():
-		hide()
-		set_process(false)
-		return
-
 	if !player:
 		player = get_parent()
 	

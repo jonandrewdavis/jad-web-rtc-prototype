@@ -11,16 +11,16 @@ class_name Player
 ## The settings for the character's movement and feel.
 @export_category("Character")
 ## The speed that the character moves at without crouching or sprinting.
-@export var base_speed : float = 3.0
+@export var base_speed : float = 2.6
 ## The speed that the character moves at when sprinting.
-@export var sprint_speed : float = 6.0
+@export var sprint_speed : float = 5.5
 ## The speed that the character moves at when crouching.
-@export var crouch_speed : float = 1.0
+@export var crouch_speed : float = 2.0
 
 ## How fast the character speeds up and slows down when Motion Smoothing is on.
 @export var acceleration : float = 10.0
 ## How high the player jumps.
-@export var jump_velocity : float = 4.5
+@export var jump_velocity : float = 7.5
 ## How far the player turns when the mouse is moved.
 @export var mouse_sensitivity : float = 0.1
 ## Invert the X axis input for the camera.
@@ -121,8 +121,12 @@ class_name Player
 # These are variables used in this script that don't need to be exposed in the editor.
 var speed : float = base_speed
 var current_speed : float = 0.0
+
+
+# TODO: Put these into an ENUM
 # States: normal, crouching, sprinting
 var state : String = "normal"
+
 var low_ceiling : bool = false # This is for when the ceiling is too low and the player needs to crouch.
 var was_on_floor : bool = true # Was the player on the floor last frame (for landing animation)
 
@@ -142,7 +146,7 @@ var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity") 
 @export var player_input: PlayerInput
 @export var player_ui: PlayerUI
 @export var camera: Camera3D
-@export var weapon_manager: WeaponsManager
+@export var weapon_manager: WeaponManager
 @export var health_system: HealthSystem
 @export var master: Master
 @export var look_at_target: Marker3D
@@ -160,10 +164,7 @@ func _is_client_player():
 
 func _ready():
 	#floor_max_angle = 50.0
-	
-	if _is_client_player():
-		camera.make_current()
-		master.cast_shadow_only()
+	#master.cast_shadow_only()
 
 	if not is_multiplayer_authority():
 		set_process(false)
@@ -463,6 +464,8 @@ func play_jump_animation():
 func update_camera_fov():
 	if state == "sprinting":
 		CAMERA.fov = lerp(CAMERA.fov, 85.0, 0.3)
+	elif player_input.is_weapon_aim:
+		CAMERA.fov = lerp(CAMERA.fov, 60.0, 0.3)
 	else:
 		CAMERA.fov = lerp(CAMERA.fov, 75.0, 0.3)
 

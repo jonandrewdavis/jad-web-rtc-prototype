@@ -1,11 +1,13 @@
+# TODO: Careful with this...
+@tool
+
 extends Node3D
-class_name WeaponsManager
+class_name WeaponManager
 
 # NOTE: Added late
 # NOTE: Added late
 # NOTE: Added late
 @onready var projectile_system: ProjectileSystem = get_tree().get_first_node_in_group("ProjectileSystem")
-@onready var projectile_spawner: MultiplayerSpawner = projectile_system.spawner
 
 # TODO: This should be a true StateMachine WeaponResource a state within
 # TODO: Enter and exit animations, updating ammo, etc.
@@ -55,8 +57,10 @@ func _ready() -> void:
 	##### SERVER ONLY ######
 	##### SERVER ONLY ######
 	##### SERVER ONLY ######
+	if Engine.is_editor_hint():
+		animation_player.play("Global/blasterL Activate")
 	
-	print('WEAPON MANAGER: I am: ', multiplayer.get_unique_id(), ' and i am owned by: ', get_multiplayer_authority())
+	#print('WEAPON MANAGER: I am: ', multiplayer.get_unique_id(), ' and i am owned by: ', get_multiplayer_authority())
 
 	# ATTENTION: If you add weapons using the UI, you must set it be a local to scene resource.
 	# Otherwise, scenes will share (and secretly deduct ammo from other players on the server).

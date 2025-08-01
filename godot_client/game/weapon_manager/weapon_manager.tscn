@@ -1,14 +1,41 @@
-[gd_scene load_steps=31 format=4 uid="uid://cf6jco7ctb45m"]
+[gd_scene load_steps=38 format=4 uid="uid://cf6jco7ctb45m"]
 
-[ext_resource type="Script" uid="uid://cwoo1b16el33m" path="res://game/weapon_manager/scripts/Weapon_State_Machine/Weapon_State_Machine.gd" id="1_doyh4"]
-[ext_resource type="PackedScene" uid="uid://7i2x4ihbqkke" path="res://assets/weapons/awp/awp.glb" id="5_e4dbp"]
-[ext_resource type="ArrayMesh" uid="uid://ba32nqx1sd8w5" path="res://assets/weapons/poly_weapons_saved/sci_fi_smg.res" id="5_hpq73"]
-[ext_resource type="AnimationLibrary" uid="uid://uybino34n0sj" path="res://game/weapon_manager/weapon_animation.res" id="8_jok0v"]
-[ext_resource type="ArrayMesh" uid="uid://msm283ivq167" path="res://assets/weapons/weapons_saved_meshes/smg_green.res" id="9_e4dbp"]
-[ext_resource type="ArrayMesh" uid="uid://coj4khqco02qe" path="res://assets/weapons/weapons_saved_meshes/rifle.res" id="9_ygyma"]
-[ext_resource type="ArrayMesh" uid="uid://cpunjc0iguaex" path="res://assets/weapons/weapons_saved_meshes/pistol_yellow.res" id="10_e4dbp"]
-[ext_resource type="ArrayMesh" uid="uid://bc8u3d8edjkp8" path="res://assets/weapons/weapons_saved_meshes/smg.res" id="12_138mc"]
-[ext_resource type="ArrayMesh" uid="uid://oti3spl6xbsy" path="res://assets/weapons/weapons_saved_meshes/rocket.res" id="12_nh1ok"]
+[ext_resource type="Script" uid="uid://cwoo1b16el33m" path="res://game/weapon_manager/scripts/Weapon_State_Machine/Weapon_State_Machine.gd" id="1_l6kmm"]
+[ext_resource type="Script" uid="uid://dphmvwbbu21nt" path="res://game/weapon_manager/scripts/Weapon_State_Machine/WeaponSlot.gd" id="2_y0hop"]
+[ext_resource type="Resource" uid="uid://bwrs8ensewkgc" path="res://game/weapon_manager/scripts/Weapon_State_Machine/Weapon_Resources/blasterL.tres" id="3_s1orv"]
+[ext_resource type="Resource" uid="uid://c1jg0ifn7yvve" path="res://game/weapon_manager/scripts/Weapon_State_Machine/Weapon_Resources/blasterN.tres" id="4_gvvqh"]
+[ext_resource type="ArrayMesh" uid="uid://coj4khqco02qe" path="res://assets/weapons/weapons_saved_meshes/rifle.res" id="5_cvbmy"]
+[ext_resource type="ArrayMesh" uid="uid://ba32nqx1sd8w5" path="res://assets/weapons/poly_weapons_saved/sci_fi_smg.res" id="6_htfnw"]
+[ext_resource type="PackedScene" uid="uid://7i2x4ihbqkke" path="res://assets/weapons/awp/awp.glb" id="7_5kl8c"]
+[ext_resource type="AnimationLibrary" uid="uid://uybino34n0sj" path="res://game/weapon_manager/weapon_animation.res" id="8_67cmm"]
+[ext_resource type="ArrayMesh" uid="uid://bc8u3d8edjkp8" path="res://assets/weapons/weapons_saved_meshes/smg.res" id="9_v3nej"]
+[ext_resource type="ArrayMesh" uid="uid://cpunjc0iguaex" path="res://assets/weapons/weapons_saved_meshes/pistol_yellow.res" id="10_wnv08"]
+[ext_resource type="ArrayMesh" uid="uid://msm283ivq167" path="res://assets/weapons/weapons_saved_meshes/smg_green.res" id="11_i3ufo"]
+[ext_resource type="ArrayMesh" uid="uid://oti3spl6xbsy" path="res://assets/weapons/weapons_saved_meshes/rocket.res" id="12_7agio"]
+
+[sub_resource type="Resource" id="Resource_dgdys"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("3_s1orv")
+current_ammo = 24
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_x2ke1"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("4_gvvqh")
+current_ammo = 4
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_6xevd"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("3_s1orv")
+current_ammo = 24
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_ce1ns"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("4_gvvqh")
+current_ammo = 4
+reserve_ammo = 9999
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ccmxt"]
 resource_name = "dark"
@@ -833,11 +860,13 @@ properties/8/path = NodePath(".:weapon_index")
 properties/8/spawn = true
 properties/8/replication_mode = 1
 
-[node name="WeaponsManager" type="Node3D" node_paths=PackedStringArray("animation_player", "bullet_point", "melee_hitbox")]
-script = ExtResource("1_doyh4")
+[node name="WeaponManager" type="Node3D" node_paths=PackedStringArray("animation_player", "bullet_point", "melee_hitbox")]
+script = ExtResource("1_l6kmm")
 animation_player = NodePath("Weapons_Models/WeaponsPlayer")
 bullet_point = NodePath("BulletPoint")
 melee_hitbox = NodePath("Melee_Hitbox")
+weapons_list = Array[ExtResource("2_y0hop")]([SubResource("Resource_dgdys"), SubResource("Resource_x2ke1"), SubResource("Resource_6xevd"), SubResource("Resource_ce1ns")])
+weapons_owned = Array[int]([0, 1])
 
 [node name="Weapons_Models" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.54919, 0)
@@ -848,11 +877,11 @@ visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Weapons_Models/blasterL"]
 visible = false
-mesh = ExtResource("9_ygyma")
+mesh = ExtResource("5_cvbmy")
 
 [node name="smg" type="MeshInstance3D" parent="Weapons_Models/blasterL"]
 transform = Transform3D(-1.79217e-06, 41, 1.79217e-06, 0, -1.79217e-06, 41, 41, 1.79217e-06, 7.83381e-14, 1.04308e-07, -0.0828908, -0.0425421)
-mesh = ExtResource("5_hpq73")
+mesh = ExtResource("6_htfnw")
 
 [node name="blasterN" type="Node3D" parent="Weapons_Models"]
 transform = Transform3D(-1, 0, 2.5351817e-06, 0, 1, 0, -2.5351817e-06, 0, -1, 0.193, 1.255, -0.643)
@@ -862,13 +891,13 @@ visible = false
 visible = false
 mesh = SubResource("ArrayMesh_2ccy7")
 
-[node name="awp2" parent="Weapons_Models/blasterN" instance=ExtResource("5_e4dbp")]
+[node name="awp2" parent="Weapons_Models/blasterN" instance=ExtResource("7_5kl8c")]
 transform = Transform3D(-7.43094e-08, 0, -1.7, 0, 1.7, 0, 1.7, 0, -7.43094e-08, 0.115687, -0.256563, 0.159666)
 
 [node name="WeaponsPlayer" type="AnimationPlayer" parent="Weapons_Models"]
 libraries = {
 &"": SubResource("AnimationLibrary_ys4uk"),
-&"Global": ExtResource("8_jok0v")
+&"Global": ExtResource("8_67cmm")
 }
 
 [node name="BulletPoint" type="Marker3D" parent="."]
@@ -892,24 +921,24 @@ transform = Transform3D(-1, 0, -2.5351817e-06, 0, 1, 0, 2.5351817e-06, 0, -1, -0
 visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="HIDDEN_WEAPONS_MODELS/blasterI"]
-mesh = ExtResource("12_138mc")
+mesh = ExtResource("9_v3nej")
 
 [node name="blasterM" type="Node3D" parent="HIDDEN_WEAPONS_MODELS"]
 visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="HIDDEN_WEAPONS_MODELS/blasterM"]
-mesh = ExtResource("10_e4dbp")
+mesh = ExtResource("10_wnv08")
 
 [node name="blasterP2" type="Node3D" parent="HIDDEN_WEAPONS_MODELS"]
 transform = Transform3D(-0.97236997, -0.23340762, -0.0040748655, 0, 0.01745548, -0.999848, 0.23344313, -0.97222215, -0.016973201, 0.32, 1.014, -0.35)
 visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="HIDDEN_WEAPONS_MODELS/blasterP2"]
-mesh = ExtResource("9_e4dbp")
+mesh = ExtResource("11_i3ufo")
 
 [node name="blasterQ2" type="Node3D" parent="HIDDEN_WEAPONS_MODELS"]
 transform = Transform3D(-1, 0, 2.5351817e-06, 0, 1, 0, -2.5351817e-06, 0, -1, 0, 0, 0)
 visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="HIDDEN_WEAPONS_MODELS/blasterQ2"]
-mesh = ExtResource("12_nh1ok")
+mesh = ExtResource("12_7agio")

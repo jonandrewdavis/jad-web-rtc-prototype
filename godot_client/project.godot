@@ -124,6 +124,11 @@ weapon_aim={
 ]
 }
 
+[physics]
+
+3d/physics_engine="Jolt Physics"
+3d/default_gravity=11.800000000000004
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

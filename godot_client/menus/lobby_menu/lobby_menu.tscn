@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://chqusw4w4e11"]
+[gd_scene load_steps=11 format=3 uid="uid://chqusw4w4e11"]
 
 [ext_resource type="Script" uid="uid://e1via0bhi4hy" path="res://menus/lobby_menu/lobby_menu.gd" id="1_3p3bs"]
 [ext_resource type="PackedScene" uid="uid://cbw01twgu8g7v" path="res://shaders/background_shader.tscn" id="2_b120b"]
 [ext_resource type="StyleBox" uid="uid://8nr6rb2m1nto" path="res://assets/ui/section_panel_style_box_flat.tres" id="2_urr6r"]
+[ext_resource type="ButtonGroup" uid="uid://d0agga0yyv3w2" path="res://menus/lobby_menu/color_button_group.tres" id="4_07jv1"]
 
 [sub_resource type="Gradient" id="Gradient_urr6r"]
 offsets = PackedFloat32Array(0.56650245, 0.591133)
@@ -13,6 +14,70 @@ gradient = SubResource("Gradient_urr6r")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b120b"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wkj3s"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_07jv1"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 0.29803923, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x0ybd"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.70980394, 0, 1, 0.6)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
 
 [node name="LobbyMenu" type="CanvasLayer"]
 script = ExtResource("1_3p3bs")
@@ -80,6 +145,26 @@ size_flags_horizontal = 3
 placeholder_text = "Username"
 max_length = 12
 emoji_menu_enabled = false
+
+[node name="ColorGrid" type="GridContainer" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Button" type="Button" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin/ColorGrid"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_b120b")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_wkj3s")
+toggle_mode = true
+button_group = ExtResource("4_07jv1")
+
+[node name="Button2" type="Button" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin/ColorGrid"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_07jv1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x0ybd")
+toggle_mode = true
+button_group = ExtResource("4_07jv1")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin"]
 layout_mode = 2
