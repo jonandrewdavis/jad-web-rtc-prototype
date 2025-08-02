@@ -12,12 +12,22 @@ func _ready() -> void:
 	health_system.death.connect(_on_death)	
 	
 func _on_death():
-	player.hide()
+	player.set_collision_layer_value(1, false)
+	player.set_collision_layer_value(16, true)
+	player.master.bones.physical_bones_start_simulation()
+	player.master.animation_player.active = false
+	#player.master.%a
+	#player.hide()
 	player.immobile = true
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(10.0).timeout
 	_respawn()
 	
 func _respawn():
+	player.set_collision_layer_value(1, true)
+	player.set_collision_layer_value(16, false)
+	player.master.bones.physical_bones_stop_simulation()
+	player.master.animation_player.active = true
+
 	health_system.heal(health_system.max_health)
 	player.immobile = false
 	player.show()

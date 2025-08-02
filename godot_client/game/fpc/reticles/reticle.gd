@@ -5,7 +5,7 @@ class_name Reticle
 @export_category("Reticle")
 @export_group("Nodes")
 @export var reticle_lines : Array[Line2D]
-@export var character : CharacterBody3D
+@export var character : Player
 
 @export_group("Animate")
 @export var animated_reticle : bool = true
@@ -29,7 +29,6 @@ func _process(_delta):
 		if animated_reticle:
 			animate_reticle_lines()
 
-
 func animate_reticle_lines():
 	if !character:
 		return 
@@ -38,6 +37,9 @@ func animate_reticle_lines():
 	var origin = Vector3(0,0,0)
 	var pos = Vector2(0,0)
 	var speed = origin.distance_to(vel)
+
+	if character.player_input.is_weapon_aim:
+		speed = 1.6
 	
 	reticle_lines[0].position = lerp(reticle_lines[0].position, pos + Vector2(0, -speed * reticle_spread), reticle_speed)
 	reticle_lines[1].position = lerp(reticle_lines[1].position, pos + Vector2(-speed * reticle_spread, 0), reticle_speed)
@@ -45,8 +47,7 @@ func animate_reticle_lines():
 	reticle_lines[3].position = lerp(reticle_lines[3].position, pos + Vector2(0, speed * reticle_spread), reticle_speed)
 
 
-func update_reticle_settings():
-	# Dot
+func update_reticle_settings():	# Dot
 	$dot.scale.x = dot_size
 	$dot.scale.y = dot_size
 	$dot.color = dot_color

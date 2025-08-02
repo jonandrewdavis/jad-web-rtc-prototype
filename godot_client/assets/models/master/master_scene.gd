@@ -2,6 +2,8 @@ extends Node3D
 
 class_name Master
 
+@export var animation_player: AnimationPlayer
+@export var bones: PhysicalBoneSimulator3D
 @export var weapon_manager: WeaponManager
 @onready var player: Player = get_parent()
 var _player_input: PlayerInput
@@ -13,8 +15,15 @@ func _ready() -> void:
 		set_physics_process(false)
 	
 	_player_input = player.player_input
+	
+	weapon_manager.player = player
+	weapon_manager.player_input = player.player_input
+	
+	if not animation_player:
+		animation_player = $AnimationPlayer
 	$AnimationPlayer.speed_scale = 0.7
 	$AnimationPlayer.playback_default_blend_time = 0.8
+	%AnimationPlayer.set_method_call_mode(AnimationPlayer.ANIMATION_METHOD_CALL_IMMEDIATE)	
 	
 	if player.look_at_target.get_path():
 		$Armature/GeneralSkeleton/RightLower.target_node = player.look_at_target.get_path()
@@ -105,7 +114,6 @@ func on_animation_check():
 
 	match player.state:
 		(&'normal'):
-			$AnimationPlayer.speed_scale = 0.7 
 			if _dir.y == 0.0 and _dir.x == 0.0:
 				_play('idle aiming')
 			elif _dir.y == 0:
@@ -123,7 +131,6 @@ func on_animation_check():
 				elif _dir.x > 0.4: _play(MOVES.DIAGONAL.SLOW[3])
 				else: _play(MOVES.WALK.SLOW[1])
 		(&'sprinting'):
-			$AnimationPlayer.speed_scale = 0.55
 			if _dir.y == 0.0 and _dir.x == 0.0:
 				_play('idle aiming')
 			elif _dir.y == 0:
@@ -141,7 +148,6 @@ func on_animation_check():
 				elif _dir.x > 0.4: _play(MOVES.DIAGONAL.FAST[3]) 
 				else: _play(MOVES.WALK.FAST[1])
 		(&'crouching'):
-			$AnimationPlayer.speed_scale = 0.7
 			if _dir.y == 0.0 and _dir.x == 0.0:
 				_play('idle crouching aiming')
 			elif _dir.y == 0:

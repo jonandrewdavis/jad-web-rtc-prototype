@@ -17,9 +17,6 @@ class_name Projectile
 @export var rigid_body_projectile: PackedScene
 @export var pass_through: bool = false
 
-@onready var projectile_system: ProjectileSystem = get_tree().get_first_node_in_group("ProjectileSystem")
-@onready var projectile_spawner: MultiplayerSpawner = projectile_system.spawner
-
 var debug_bullet
 var source: int = 1
 
@@ -76,7 +73,7 @@ func Hit_Scan_Collision(Collision: Array,_damage: float, origin_point: Vector3):
 	var bullet_point = Collision[1]
 	if Collision[0]:
 		
-		projectile_system.create_debug_decal(bullet_point, Collision[2])
+		#projectile_system.create_debug_decal(bullet_point, Collision[2])
 
 		if Collision[0].is_in_group("targets"):
 			var Bullet = get_world_3d().direct_space_state
@@ -117,7 +114,7 @@ func Launch_Rigid_Body_Projectile(collision_data, projectile: PackedScene, origi
 		'source': source
 	}
 	
-	projectile_system.spawner.spawn(projectile_data)
+	#projectile_system.spawner.spawn(projectile_data)
 
 
 func Hit_Scan_damage(collision, _direction, _position, _damage):
@@ -125,4 +122,5 @@ func Hit_Scan_damage(collision, _direction, _position, _damage):
 		var heath_system: HealthSystem = collision.health_system
 		var damage_successful = heath_system.damage(damage, source)
 		if damage_successful:
-			projectile_system.hit_signal.emit(source)
+			pass
+			#projectile_system.hit_signal.emit(source)

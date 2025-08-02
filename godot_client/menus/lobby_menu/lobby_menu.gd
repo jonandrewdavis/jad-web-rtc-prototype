@@ -13,8 +13,8 @@ const WEB_SOCKET_SECRET_KEY = "9317e4d6-83b3-4188-94c4-353a2798d3c1"
 const WEB_SOCKET_SERVER_URL = 'ws-lobby-worker.jonandrewdavis.workers.dev'
 
 var current_username : String = ""
-var webSocketPeer : WebSocketPeer
-var webRTCPeer: WebRTCMultiplayerPeer
+var webSocketPeer : WebSocketPeer 
+var webRTCPeer: WebRTCMultiplayerPeer 
 
 var current_web_id: int 
 var is_lobby_host = false
@@ -82,6 +82,16 @@ func _ready():
 	ready_input_connections()
 	ready_render_connections()
 	ready_timers()
+	
+	#for colorButton in %ColorGrid.get_children():
+		#var _button: Button = colorButton
+		#var _style: StyleBoxFlat = StyleBoxFlat.new()
+		#_style.bg_color = _button.get_theme_stylebox('theme_override_styles/normal').bg_color
+		#_style.bg_color.a = 0.5
+		#_button.set_stylebox('theme_override_styles/pressed', '', _style)
+		#pressed.bg_color.a = 0.5
+		#var getTheme: = colorButton.
+		#theme_override_styles/pressed
 
 func ready_required_connections():
 	signal_connection_confirmed.connect(_on_ws_connection_confirmed)
@@ -342,6 +352,13 @@ func _on_game_started():
 	webRTCPeer = WebRTCMultiplayerPeer.new()
 	# Currently, we are using `create_mesh`, but we may want server authority.
 	webRTCPeer.create_mesh(current_web_id)
+	
+	# CRITICAL: Use server authority.
+	#if is_lobby_host:
+		#webRTCPeer.create_server()
+	#else:
+		#webRTCPeer.create_client(current_web_id)
+
 	multiplayer.multiplayer_peer = webRTCPeer
 	# Game world. Scripts within take care of adding players.
 	var new_game_world = GameWorldScene.instantiate()
@@ -365,6 +382,19 @@ func create_multiplayer_peer_connection(id: int):
 		webRTCPeer.add_peer(new_peer_connection, id)
 		if id < webRTCPeer.get_unique_id():
 			new_peer_connection.create_offer()
+
+#var connection_list: Array[WebRTCPeerConnection]= []
+#func alternate_peer_connection(id):
+	#if connection_list.has(id):
+		#return
+	#var connection := WebRTCPeerConnection.new()
+	#connection.initialize({"iceServers": [ { "urls": ["stun:stun.l.google.com:19302"]}]})
+	#connection.session_description_created.connect(self.offerCreated.bind(id))
+	#connection.ice_candidate_created.connect(self.iceCandidateCreated.bind(id))
+	#connection_list[id] = connection
+	#webRTCPeer.add_peer(connection, id) # Comment to disable ENet
+
+
 
 func offerCreated(type, data, id):
 	if !webRTCPeer.has_peer(id):

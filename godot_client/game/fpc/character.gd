@@ -11,9 +11,9 @@ class_name Player
 ## The settings for the character's movement and feel.
 @export_category("Character")
 ## The speed that the character moves at without crouching or sprinting.
-@export var base_speed : float = 2.6
+@export var base_speed : float = 3.5
 ## The speed that the character moves at when sprinting.
-@export var sprint_speed : float = 5.5
+@export var sprint_speed : float = 6.0
 ## The speed that the character moves at when crouching.
 @export var crouch_speed : float = 2.0
 
@@ -145,7 +145,6 @@ var gravity : float = ProjectSettings.get_setting("physics/3d/default_gravity") 
 @export_group("Multiplayer")
 @export var player_input: PlayerInput
 @export var player_ui: PlayerUI
-@export var camera: Camera3D
 @export var weapon_manager: WeaponManager
 @export var health_system: HealthSystem
 @export var master: Master
@@ -163,12 +162,15 @@ func _is_client_player():
 	#return not multiplayer.is_server() and str(name).to_int() == player_input.get_multiplayer_authority()
 
 func _ready():
-	#floor_max_angle = 50.0
-	#master.cast_shadow_only()
-
 	if not is_multiplayer_authority():
 		set_process(false)
 		set_physics_process(false)
+
+	if is_multiplayer_authority():
+		CAMERA.current = true
+		weapon_manager = master.weapon_manager
+
+		#master.cast_shadow_only()
 
 	#It is safe to comment this line if your game doesn't start with the mouse captured
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -180,10 +182,13 @@ func _ready():
 	initialize_animations()
 	check_controls()
 	enter_normal_state()
-	
-	
 
 func _process(_delta):
+	handle_weapon_manager()
+
+	if player_input.is_debug_b:
+		Hub.world.add_new_ball.rpc()
+
 	if pausing_enabled:
 		handle_pausing()
 
@@ -206,7 +211,6 @@ func _physics_process(delta): # Most things happen here.
 	handle_movement(delta, input_dir)
 	handle_interact()
 	handle_head_rotation()
-	handle_weapon_manager()
 
 	# The player is not able to stand up if the ceiling is too low
 	low_ceiling = $CrouchCeilingDetection.is_colliding()
@@ -241,9 +245,10 @@ func handle_jumping():
 				if jump_animation:
 					JUMP_ANIMATION.play("jump", 0.25)
 				velocity.y += jump_velocity
+	
 
 
-func handle_movement(delta, input_dir):
+func handle_movement(delta, input_dir):	
 	var direction = input_dir.rotated(-HEAD.rotation.y)
 	direction = Vector3(direction.x, 0, direction.y)
 	move_and_slide()
@@ -465,7 +470,7 @@ func update_camera_fov():
 	if state == "sprinting":
 		CAMERA.fov = lerp(CAMERA.fov, 85.0, 0.3)
 	elif player_input.is_weapon_aim:
-		CAMERA.fov = lerp(CAMERA.fov, 60.0, 0.3)
+		CAMERA.fov = lerp(CAMERA.fov, 50.0, 0.3)
 	else:
 		CAMERA.fov = lerp(CAMERA.fov, 75.0, 0.3)
 
@@ -485,20 +490,18 @@ func handle_interact():
 		pass
 
 func handle_weapon_manager():
-	# TODO: Is this necessary? Seems to be to prevent firing weapons too much.
-	if is_multiplayer_authority():
-		if player_input.is_weapon_up:
-			weapon_manager.change_weapon(weapon_manager.CHANGE_DIR.UP)
-		elif player_input.is_weapon_down:
-			weapon_manager.change_weapon(weapon_manager.CHANGE_DIR.UP)
-		elif player_input.is_weapon_shoot:
-			weapon_manager.shoot()
-		elif player_input.is_weapon_melee:
-			weapon_manager.melee()
-		elif player_input.is_weapon_reload:
-			weapon_manager.reload()
-		elif player_input.is_weapon_aim:
-			# TODO: Slow speed?
-			pass
+	if player_input.is_weapon_up:
+		weapon_manager.change_weapon(weapon_manager.CHANGE_DIR.UP)
+	elif player_input.is_weapon_down:
+		weapon_manager.change_weapon(weapon_manager.CHANGE_DIR.DOWN)
+	elif player_input.is_weapon_shoot:
+		weapon_manager.shoot()
+	elif player_input.is_weapon_melee:
+		weapon_manager.melee()
+	elif player_input.is_weapon_reload:
+		weapon_manager.reload()
+	elif player_input.is_weapon_aim:
+		# TODO: Slow speed?
+		pass
 
 #endregion

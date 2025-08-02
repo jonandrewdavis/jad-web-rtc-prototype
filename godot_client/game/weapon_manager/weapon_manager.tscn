@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=4 uid="uid://cf6jco7ctb45m"]
+[gd_scene load_steps=56 format=4 uid="uid://cf6jco7ctb45m"]
 
 [ext_resource type="Script" uid="uid://cwoo1b16el33m" path="res://game/weapon_manager/scripts/Weapon_State_Machine/Weapon_State_Machine.gd" id="1_l6kmm"]
 [ext_resource type="Script" uid="uid://dphmvwbbu21nt" path="res://game/weapon_manager/scripts/Weapon_State_Machine/WeaponSlot.gd" id="2_y0hop"]
@@ -32,6 +32,114 @@ current_ammo = 24
 reserve_ammo = 9999
 
 [sub_resource type="Resource" id="Resource_ce1ns"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("4_gvvqh")
+current_ammo = 4
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_l6kmm"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("3_s1orv")
+current_ammo = 24
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_y0hop"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("4_gvvqh")
+current_ammo = 4
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_s1orv"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("3_s1orv")
+current_ammo = 24
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_gvvqh"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("4_gvvqh")
+current_ammo = 4
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_cvbmy"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("3_s1orv")
+current_ammo = 24
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_htfnw"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("4_gvvqh")
+current_ammo = 4
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_5kl8c"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("3_s1orv")
+current_ammo = 24
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_67cmm"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("4_gvvqh")
+current_ammo = 4
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_v3nej"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("3_s1orv")
+current_ammo = 24
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_wnv08"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("4_gvvqh")
+current_ammo = 4
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_i3ufo"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("3_s1orv")
+current_ammo = 24
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_7agio"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("4_gvvqh")
+current_ammo = 4
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_a8be0"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("3_s1orv")
+current_ammo = 24
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_se3w2"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("4_gvvqh")
+current_ammo = 4
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_xxbyf"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("3_s1orv")
+current_ammo = 24
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_wt0n2"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("4_gvvqh")
+current_ammo = 4
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_3s8e0"]
+script = ExtResource("2_y0hop")
+weapon = ExtResource("3_s1orv")
+current_ammo = 24
+reserve_ammo = 9999
+
+[sub_resource type="Resource" id="Resource_7d68f"]
 script = ExtResource("2_y0hop")
 weapon = ExtResource("4_gvvqh")
 current_ammo = 4
@@ -398,18 +506,6 @@ tracks/17/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
-}
-tracks/18/type = "value"
-tracks/18/imported = false
-tracks/18/enabled = true
-tracks/18/path = NodePath("../BulletPoint:position")
-tracks/18/interp = 1
-tracks/18/loop_wrap = true
-tracks/18/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0.106668, -0.331405, -1.41838)]
 }
 
 [sub_resource type="Animation" id="Animation_gqwbi"]
@@ -865,7 +961,7 @@ script = ExtResource("1_l6kmm")
 animation_player = NodePath("Weapons_Models/WeaponsPlayer")
 bullet_point = NodePath("BulletPoint")
 melee_hitbox = NodePath("Melee_Hitbox")
-weapons_list = Array[ExtResource("2_y0hop")]([SubResource("Resource_dgdys"), SubResource("Resource_x2ke1"), SubResource("Resource_6xevd"), SubResource("Resource_ce1ns")])
+weapons_list = Array[ExtResource("2_y0hop")]([SubResource("Resource_dgdys"), SubResource("Resource_x2ke1"), SubResource("Resource_6xevd"), SubResource("Resource_ce1ns"), SubResource("Resource_l6kmm"), SubResource("Resource_y0hop"), SubResource("Resource_s1orv"), SubResource("Resource_gvvqh"), SubResource("Resource_cvbmy"), SubResource("Resource_htfnw"), SubResource("Resource_5kl8c"), SubResource("Resource_67cmm"), SubResource("Resource_v3nej"), SubResource("Resource_wnv08"), SubResource("Resource_i3ufo"), SubResource("Resource_7agio"), SubResource("Resource_a8be0"), SubResource("Resource_se3w2"), SubResource("Resource_xxbyf"), SubResource("Resource_wt0n2"), SubResource("Resource_3s8e0"), SubResource("Resource_7d68f")])
 weapons_owned = Array[int]([0, 1])
 
 [node name="Weapons_Models" type="Node3D" parent="."]
@@ -901,7 +997,7 @@ libraries = {
 }
 
 [node name="BulletPoint" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.106668, -0.331405, -1.41838)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.120270886, -0.30483803, -1.0120125)
 gizmo_extents = 0.21
 
 [node name="Melee_Hitbox" type="ShapeCast3D" parent="."]

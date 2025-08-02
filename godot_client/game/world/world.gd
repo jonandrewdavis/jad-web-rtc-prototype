@@ -1,10 +1,19 @@
 extends Node3D
 
 var player_scene = preload("res://game/fpc/character.tscn")
+var ball = preload("res://assets/ball.tscn")
+
+var rifle_round = preload("res://game/weapon_manager/Spawnable_Objects/bullet_scenes/rifle_round.tscn")
+var orange_bullet = preload("res://game/weapon_manager/Spawnable_Objects/bullet_scenes/orange_bullet.tscn")
+var pink_bullet = preload("res://game/weapon_manager/Spawnable_Objects/bullet_scenes/pink_bullet.tscn")
+var rifle_round_decal = preload("res://game/weapon_manager/Spawnable_Objects/bullet_scenes/rifle_round_decal.tscn")
+var bullet_list = [orange_bullet, rifle_round, pink_bullet, rifle_round_decal]
 
 @export var player_container: Node3D
 
 func _ready() -> void:
+	Hub.world = self
+	
 	multiplayer.connected_to_server.connect(RTCServerConnected)
 	multiplayer.peer_connected.connect(RTCPeerConnected)
 	multiplayer.peer_disconnected.connect(RTCPeerDisconnected)
@@ -42,3 +51,8 @@ func remove_player_from_game(id: int):
 		var player_to_remove = player_container.get_children().filter(func(node): int(node.name))
 		if player_to_remove:
 			player_to_remove.queue_free()
+
+@rpc('any_peer', 'call_local')
+func add_new_ball():
+	var _new_ball = ball.instantiate()
+	player_container.add_child(_new_ball, true)

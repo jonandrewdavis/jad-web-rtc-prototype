@@ -24,3 +24,4 @@ can_be_dropped = true
 weapon_drop = ExtResource("3_c38hr")
 weapon_spray = ExtResource("4_rk8dx")
 projectile_to_load = ExtResource("1_xr7bm")
+projectile_type = 0

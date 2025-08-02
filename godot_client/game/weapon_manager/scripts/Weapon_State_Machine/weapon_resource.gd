@@ -53,3 +53,13 @@ class_name WeaponResource
 ## Incremental Reload is for shotgun or sigle item loaded weapons where you can interupt the reload process. If true the Calculate_Reload function on the weapon_state_machine must be called indepently. 
 ## For Example: at each step of a shotgun reload the function is called via the animation player.
 @export var incremental_reload: bool = false
+
+
+# These used to be part of a different Resource, "Projectile", but moved here for easier use
+# TODO: This might need to be re-split up.
+@export_group("Projectile")
+
+@export_enum ("hitscan","rigidbody","override") var projectile_type = 'rigidbody'
+@export var display_decal: bool = true
+@export var projectile_velocity: int = 20
+@export var pass_through: bool = false

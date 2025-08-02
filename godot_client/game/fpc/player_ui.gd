@@ -14,7 +14,8 @@ func _ready() -> void:
 	if default_reticle:
 		change_reticle(default_reticle)
 
-	player.weapon_manager.update_ammo_signal.connect(_on_update_ammo)
+	if player.weapon_manager:
+		player.weapon_manager.update_ammo_signal.connect(_on_update_ammo)
 	player.health_system.health_updated.connect(_on_health_updated)
 	player.health_system.hurt.connect(_on_hurt)
 	

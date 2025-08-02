@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://chqusw4w4e11"]
+[gd_scene load_steps=10 format=3 uid="uid://chqusw4w4e11"]
 
 [ext_resource type="Script" uid="uid://e1via0bhi4hy" path="res://menus/lobby_menu/lobby_menu.gd" id="1_3p3bs"]
 [ext_resource type="PackedScene" uid="uid://cbw01twgu8g7v" path="res://shaders/background_shader.tscn" id="2_b120b"]
@@ -57,22 +57,6 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x0ybd"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.70980394, 0, 1, 0.6)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -162,7 +146,6 @@ button_group = ExtResource("4_07jv1")
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_07jv1")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_x0ybd")
 toggle_mode = true
 button_group = ExtResource("4_07jv1")
 

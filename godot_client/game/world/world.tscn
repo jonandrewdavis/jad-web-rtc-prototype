@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://3o00hq8ytpai"]
+[gd_scene load_steps=8 format=3 uid="uid://3o00hq8ytpai"]
 
 [ext_resource type="Script" uid="uid://bdf0fok3q1l6c" path="res://game/world/world.gd" id="1_we8ss"]
 [ext_resource type="Texture2D" uid="uid://3bbhh1hy8wyv" path="res://assets/textures/NightSkyHDRI008_2K-TONEMAPPED.jpg" id="3_dess5"]
 [ext_resource type="PackedScene" uid="uid://c6jrmtywe86ko" path="res://assets/environment/BattleCreekClean/battle_creek_scene.tscn" id="3_k7f6b"]
+[ext_resource type="PackedScene" uid="uid://crep3klgx68p5" path="res://scripts/projectile_system.tscn" id="4_4adp2"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_uynus"]
 panorama = ExtResource("3_dess5")
@@ -37,8 +38,10 @@ shadow_enabled = true
 [node name="PlayerContainer" type="Node3D" parent="."]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://cc1m2a1obsyn4")
+_spawnable_scenes = PackedStringArray("uid://cc1m2a1obsyn4", "uid://clkawa2tv4ko1", "uid://blls0k40w45rf", "uid://d3kpd7uoxot8p")
 spawn_path = NodePath("../PlayerContainer")
 
 [node name="BattleCreekScene" parent="." instance=ExtResource("3_k7f6b")]
 transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0, 0, 0)
+
+[node name="ProjectileSystem" parent="." instance=ExtResource("4_4adp2")]

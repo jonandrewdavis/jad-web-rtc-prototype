@@ -46,6 +46,8 @@ func damage(value: int, source: int = 0) -> bool:
 	if allow_damage_from_source(source) == false:
 		return false
 
+
+
 	# Do not allow damage when dead.
 	if health == 0:
 		return false
@@ -92,12 +94,10 @@ func rpc_update_health(next_health):
 func allow_damage_from_source(_source: int):
 	# TODO: More rules. Teams?
 	
-	print(_source)
-
 	# NOTE: Prevent self damage
-	if is_multiplayer_authority() and multiplayer.get_unique_id() == _source:
+	if int(get_parent().name) == _source:
 		return false
-		
+
 	return true
 
 func heal(value):

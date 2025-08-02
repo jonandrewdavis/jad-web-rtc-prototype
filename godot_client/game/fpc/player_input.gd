@@ -15,6 +15,8 @@ extends Node
 @export var is_weapon_reload: bool = false
 @export var is_weapon_aim: bool = false
 
+@export var is_debug_b: bool = false
+
 func _physics_process(_delta: float) -> void:
 	input_dir = Input.get_vector("left", "right", "up", "down")
 	is_jumping = Input.is_action_pressed("jump")
@@ -28,6 +30,11 @@ func _physics_process(_delta: float) -> void:
 	is_weapon_melee = Input.is_action_pressed("weapon_melee")
 	is_weapon_reload = Input.is_action_pressed("weapon_reload")
 	is_weapon_aim = Input.is_action_pressed("weapon_aim")
+	
+	is_debug_b = Input.is_action_pressed("debug_b")
+	
+	if Input.is_action_pressed("weapon_shoot") and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:

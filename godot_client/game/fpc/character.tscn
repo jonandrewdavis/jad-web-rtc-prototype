@@ -1,14 +1,9 @@
-[gd_scene load_steps=35 format=3 uid="uid://cc1m2a1obsyn4"]
+[gd_scene load_steps=26 format=3 uid="uid://cc1m2a1obsyn4"]
 
 [ext_resource type="Script" uid="uid://cisejjtyctybh" path="res://game/fpc/character.gd" id="1_0t4e8"]
 [ext_resource type="Script" uid="uid://b444whi1t4ggg" path="res://game/fpc/player_input.gd" id="2_bx7cj"]
-[ext_resource type="Script" uid="uid://dphmvwbbu21nt" path="res://game/weapon_manager/scripts/Weapon_State_Machine/WeaponSlot.gd" id="4_016t6"]
-[ext_resource type="PackedScene" uid="uid://cf6jco7ctb45m" path="res://game/weapon_manager/weapon_manager.tscn" id="4_bx7cj"]
 [ext_resource type="PackedScene" uid="uid://qsh5m8pulul5" path="res://scripts/health_system.tscn" id="4_qaoyu"]
-[ext_resource type="Resource" uid="uid://bwrs8ensewkgc" path="res://game/weapon_manager/scripts/Weapon_State_Machine/Weapon_Resources/blasterL.tres" id="5_edx8p"]
 [ext_resource type="Script" uid="uid://cyuq81eounly0" path="res://scripts/gameplay.gd" id="5_qaoyu"]
-[ext_resource type="Resource" uid="uid://c1jg0ifn7yvve" path="res://game/weapon_manager/scripts/Weapon_State_Machine/Weapon_Resources/blasterN.tres" id="6_42ikc"]
-[ext_resource type="PackedScene" uid="uid://crep3klgx68p5" path="res://scripts/projectile_system.tscn" id="6_gv6je"]
 [ext_resource type="PackedScene" uid="uid://bodmr74jwgi5g" path="res://game/fpc/player_ui.tscn" id="7_eunu3"]
 [ext_resource type="PackedScene" uid="uid://0by3fcnl3a5n" path="res://assets/models/master/master_scene.tscn" id="8_8x10l"]
 
@@ -28,30 +23,6 @@ properties/3/replication_mode = 1
 properties/4/path = NodePath(".:is_interacting")
 properties/4/spawn = true
 properties/4/replication_mode = 1
-
-[sub_resource type="Resource" id="Resource_dgdys"]
-script = ExtResource("4_016t6")
-weapon = ExtResource("5_edx8p")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_x2ke1"]
-script = ExtResource("4_016t6")
-weapon = ExtResource("6_42ikc")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_hfbmo"]
-script = ExtResource("4_016t6")
-weapon = ExtResource("5_edx8p")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_8j0ye"]
-script = ExtResource("4_016t6")
-weapon = ExtResource("6_42ikc")
-current_ammo = 4
-reserve_ammo = 9999
 
 [sub_resource type="Animation" id="Animation_gh776"]
 resource_name = "RESET"
@@ -449,47 +420,19 @@ properties/6/spawn = true
 properties/6/replication_mode = 1
 properties/7/path = NodePath("master/AnimationPlayer:current_animation")
 properties/7/spawn = true
-properties/7/replication_mode = 2
+properties/7/replication_mode = 1
 
-[node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH", "player_input", "player_ui", "camera", "health_system", "master", "look_at_target")]
+[node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH", "player_input", "player_ui", "health_system", "master", "look_at_target")]
 floor_max_angle = 0.9599311
 script = ExtResource("1_0t4e8")
-base_speed = null
-sprint_speed = null
-crouch_speed = null
-acceleration = null
-jump_velocity = null
-mouse_sensitivity = null
-invert_camera_x_axis = null
-invert_camera_y_axis = null
-immobile = null
 HEAD = NodePath("Head")
 CAMERA = NodePath("Head/Camera2")
 HEADBOB_ANIMATION = NodePath("Head/HeadbobAnimation")
 JUMP_ANIMATION = NodePath("Head/JumpAnimation")
 CROUCH_ANIMATION = NodePath("CrouchAnimation")
 COLLISION_MESH = NodePath("PlayerCollision")
-controls = null
-controller_support = null
-controller_controls = null
-look_sensitivity = null
-jumping_enabled = null
-in_air_momentum = null
-motion_smoothing = null
-sprint_enabled = null
-sprint_mode = null
-crouch_enabled = null
-crouch_mode = null
-dynamic_fov = null
-continuous_jumping = null
-view_bobbing = null
-jump_animation = null
-pausing_enabled = null
-gravity_enabled = null
-dynamic_gravity = null
 player_input = NodePath("PlayerInput")
 player_ui = NodePath("PlayerUI")
-camera = NodePath("Head/Camera")
 health_system = NodePath("HealthSystem")
 master = NodePath("master")
 look_at_target = NodePath("Head/Camera2/LookAtTarget2")
@@ -500,26 +443,17 @@ script = ExtResource("2_bx7cj")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="PlayerInput"]
 replication_config = SubResource("SceneReplicationConfig_bx7cj")
 
-[node name="WeaponsManager" parent="." node_paths=PackedStringArray("player", "player_input") instance=ExtResource("4_bx7cj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07332338, 1.5966332, 0.13118458)
-player = NodePath("..")
-player_input = NodePath("../PlayerInput")
-weapons_list = Array[ExtResource("4_016t6")]([SubResource("Resource_dgdys"), SubResource("Resource_x2ke1"), SubResource("Resource_hfbmo"), SubResource("Resource_8j0ye")])
-
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="Camera" type="Camera3D" parent="Head"]
-
-[node name="LookAtTarget" type="Marker3D" parent="Head/Camera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3206498, 0.040700197, -2.2493565)
+visible = false
 
 [node name="Camera2" type="Camera3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, 0.96595293, 0.2587179, 0, -0.2587179, 0.96595293, 0.7488229, 0.3185017, 1.2546629)
-current = true
+transform = Transform3D(1, 0, 0, 0, 0.96595293, 0.2587179, 0, -0.2587179, 0.96595293, 1.0209669, 0.64103246, 1.9029751)
 
 [node name="LookAtTarget2" type="Marker3D" parent="Head/Camera2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.014069796, 0.6966903, -2.519112)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.47830868, 0.9143326, -5.1393647)
 
 [node name="HeadbobAnimation" type="AnimationPlayer" parent="Head"]
 libraries = {
@@ -560,8 +494,6 @@ replication_config = SubResource("SceneReplicationConfig_bupmj")
 script = ExtResource("5_qaoyu")
 
 [node name="HealthSystem" parent="." instance=ExtResource("4_qaoyu")]
-
-[node name="ProjectileSystem" parent="." instance=ExtResource("6_gv6je")]
 
 [node name="PlayerUI" parent="." node_paths=PackedStringArray("player") instance=ExtResource("7_eunu3")]
 player = NodePath("..")
