@@ -1,15 +1,11 @@
-[gd_scene load_steps=92 format=4 uid="uid://0by3fcnl3a5n"]
+[gd_scene load_steps=28 format=4 uid="uid://0by3fcnl3a5n"]
 
 [ext_resource type="PackedScene" uid="uid://cauerln6usbkh" path="res://assets/models/master/master.glb" id="1_kyomj"]
 [ext_resource type="Script" path="res://assets/models/master/master_bones.gd" id="2_2kf8t"]
 [ext_resource type="Script" uid="uid://bfjt2kvgql1g1" path="res://assets/models/master/master_scene.gd" id="2_ji8ob"]
 [ext_resource type="Texture2D" uid="uid://dayp6w1ratysj" path="res://assets/models/master/master_vanguard_diffuse1_desaturated.png" id="2_rwaq7"]
 [ext_resource type="Texture2D" uid="uid://rtjdynhji7kb" path="res://assets/models/master/master_vanguard_normal.png" id="3_c11qx"]
-[ext_resource type="PackedScene" uid="uid://cf6jco7ctb45m" path="res://game/weapon_manager/weapon_manager.tscn" id="7_bmp62"]
 [ext_resource type="AnimationLibrary" uid="uid://dioayttfjd456" path="res://assets/models/master/master_3_animations_path/master_3.res" id="7_ji8ob"]
-[ext_resource type="Script" uid="uid://dphmvwbbu21nt" path="res://game/weapon_manager/scripts/Weapon_State_Machine/WeaponSlot.gd" id="8_54efd"]
-[ext_resource type="Resource" uid="uid://bwrs8ensewkgc" path="res://game/weapon_manager/scripts/Weapon_State_Machine/Weapon_Resources/blasterL.tres" id="9_i40b2"]
-[ext_resource type="Resource" uid="uid://c1jg0ifn7yvve" path="res://game/weapon_manager/scripts/Weapon_State_Machine/Weapon_Resources/blasterN.tres" id="10_ldtow"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ji8ob"]
 resource_name = "VanguardBodyMat"
@@ -114,370 +110,10 @@ height = 0.44493
 radius = 0.02
 height = 0.2
 
-[sub_resource type="Resource" id="Resource_bvi1k"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_mp808"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_afu2g"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_8li15"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_54efd"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_i40b2"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_ldtow"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_3tg88"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_4bwi1"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_ty1sm"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_mpsfe"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_8bux2"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_cj02n"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_lo0m3"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_niqx0"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_3k27r"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_bj6k5"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_c3djx"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_rr6ak"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_qi24u"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_wk87h"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_ad4ml"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_vnhei"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_hrud8"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_a881j"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_bnlhj"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_uyaxg"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_abred"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_lsa8a"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_hr623"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_17s01"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_xsmtq"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_moy5a"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_7ghro"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_xk86a"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_y4tvs"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_xlk5m"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_q84jd"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_3fdls"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_esqau"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_2yeyx"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_xtq8r"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_jvsnr"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_cko56"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_3cthl"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_e8chf"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_jaw06"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_h8esb"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_m6ptc"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_e44mw"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_w37cm"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_i6dgg"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_jrcb0"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_gd5fy"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_px4wp"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_4xyd5"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_156qj"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_m07od"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_ra0hl"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("9_i40b2")
-current_ammo = 24
-reserve_ammo = 9999
-
-[sub_resource type="Resource" id="Resource_wa1c7"]
-script = ExtResource("8_54efd")
-weapon = ExtResource("10_ldtow")
-current_ammo = 4
-reserve_ammo = 9999
-
-[node name="master" node_paths=PackedStringArray("bones", "weapon_manager") instance=ExtResource("1_kyomj")]
+[node name="master" node_paths=PackedStringArray("animation_player", "bones") instance=ExtResource("1_kyomj")]
 script = ExtResource("2_ji8ob")
+animation_player = NodePath("AnimationPlayer")
 bones = NodePath("Armature/GeneralSkeleton/PhysicalBoneSimulator3D")
-weapon_manager = NodePath("BoneAttachment3D/WeaponManager")
 
 [node name="GeneralSkeleton" parent="Armature" index="0"]
 bones/1/position = Vector3(-1.1641532e-10, 0.46790886, -1.0244548e-08)
@@ -731,10 +367,10 @@ transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_m4h5v")
 
 [node name="Physical Bone LeftShoulder" type="PhysicalBone3D" parent="Armature/GeneralSkeleton/PhysicalBoneSimulator3D" index="5"]
-transform = Transform3D(-0.47052047, -0.022175279, -0.8821104, -0.5174059, 0.81672156, 0.2554545, 0.7147738, 0.57660574, -0.39575785, 0.120002314, 0.8832906, 0.07875517)
+transform = Transform3D(-0.47052047, -0.022175279, -0.88211036, -0.5174059, 0.81672156, 0.2554545, 0.7147738, 0.57660574, -0.39575782, 0.120002314, 0.8832906, 0.07875517)
 joint_type = 1
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.527516e-06, 1.7415732e-07, 0.072244726)
-body_offset = Transform3D(0.99982655, -0.01816383, -0.0040993392, 1.2516975e-06, 0.22020988, -0.9754525, 0.01862064, 0.9752835, 0.22017165, 0.00029063225, 0.07047126, -0.015906513)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5274286e-06, 1.7136335e-07, 0.072244726)
+body_offset = Transform3D(0.99982655, -0.01816383, -0.0040993392, 1.2516975e-06, 0.22020988, -0.97545254, 0.01862064, 0.9752835, 0.22017169, 0.00029063225, 0.07047126, -0.015906513)
 bone_name = "LeftShoulder"
 joint_constraints/bias = 0.3
 joint_constraints/damping = 1.0
@@ -773,10 +409,10 @@ transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_r3n6t")
 
 [node name="Physical Bone LeftHand" type="PhysicalBone3D" parent="Armature/GeneralSkeleton/PhysicalBoneSimulator3D" index="8"]
-transform = Transform3D(0.2600628, -0.86112434, 0.43684357, -0.8485184, -0.41973007, -0.32224733, 0.46085137, -0.28686523, -0.83983594, -0.04231926, 0.74910223, 0.40398532)
+transform = Transform3D(0.2600628, -0.86112434, 0.4368435, -0.8485184, -0.41973007, -0.32224733, 0.46085137, -0.28686523, -0.8398359, -0.04231926, 0.74910223, 0.40398532)
 joint_type = 1
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6289136e-06, 2.7823262e-06, 0.024194065)
-body_offset = Transform3D(-0.7872442, 0.53193206, 0.3119221, -5.2154064e-06, 0.50583434, -0.86263067, -0.6166416, -0.6791024, -0.3982125, -0.007543713, 0.020869136, 0.00963974)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.629845e-06, 2.7837232e-06, 0.024194065)
+body_offset = Transform3D(-0.7872442, 0.53193206, 0.3119221, -5.2154064e-06, 0.50583434, -0.8626307, -0.6166416, -0.6791024, -0.39821246, -0.007543713, 0.020869136, 0.00963974)
 bone_name = "LeftHand"
 joint_constraints/bias = 0.3
 joint_constraints/damping = 1.0
@@ -857,10 +493,10 @@ transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_d477k")
 
 [node name="Physical Bone RightLowerLeg" type="PhysicalBone3D" parent="Armature/GeneralSkeleton/PhysicalBoneSimulator3D" index="14"]
-transform = Transform3D(-0.8335369, -0.44419038, -0.3284984, 0.54712754, -0.74614906, -0.3793588, -0.07660125, -0.49594006, 0.8649716, -0.20236638, 0.11374445, -0.18794633)
+transform = Transform3D(-0.83356416, -0.4442683, -0.32832378, 0.5471289, -0.74602544, -0.37959984, -0.07629371, -0.49605623, 0.8649321, -0.20236638, 0.11374445, -0.18794633)
 joint_type = 1
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.9094156e-05, -3.691949e-05, 0.2224716)
-body_offset = Transform3D(-0.99999976, -0.0002181828, 0.00038107485, -0.00040007383, 0.093943596, -0.9955774, 0.00018152595, -0.99557745, -0.09394351, -5.6922436e-06, 0.22149116, 0.02086299)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00014016138, -6.4006075e-05, 0.22247152)
+body_offset = Transform3D(-0.9999996, -0.00035972148, 0.0006555021, -0.0006866008, 0.09406477, -0.99556583, 0.00029655173, -0.99556595, -0.09406486, -5.6922436e-06, 0.22149116, 0.02086299)
 bone_name = "RightLowerLeg"
 joint_constraints/bias = 0.3
 joint_constraints/damping = 1.0
@@ -913,10 +549,10 @@ transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_kfdpx")
 
 [node name="Physical Bone LeftFoot" type="PhysicalBone3D" parent="Armature/GeneralSkeleton/PhysicalBoneSimulator3D" index="18"]
-transform = Transform3D(-0.9796505, -0.10454831, -0.17133226, -0.19297208, 0.7253708, 0.6607564, 0.055198453, 0.68037266, -0.7307847, 0.13080296, 0.06710601, 0.38924226)
+transform = Transform3D(-0.9796505, -0.10454831, -0.17133226, -0.19297208, 0.7253708, 0.6607564, 0.055198453, 0.68037266, -0.7307847, 0.13080007, 0.06723589, 0.38924608)
 joint_type = 1
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.7591904e-05, -0.00013912097, 0.09987976)
-body_offset = Transform3D(0.98123, 0.1425634, 0.12985952, -3.5315752e-06, 0.6734143, -0.73926544, -0.19284141, 0.725389, 0.6607745, -0.01298739, 0.07393134, -0.065889835)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9603713e-05, -0.00023622066, 0.09979623)
+body_offset = Transform3D(0.98123, 0.1425634, 0.12985952, -3.5315752e-06, 0.6734143, -0.73926544, -0.19284141, 0.725389, 0.6607745, -0.012984298, 0.07393497, -0.06575996)
 bone_name = "LeftFoot"
 joint_constraints/bias = 0.3
 joint_constraints/damping = 1.0
@@ -990,14 +626,3 @@ animation_path = NodePath("../AnimationPlayer")
 
 [node name="Marker3D" type="Marker3D" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25824332, 1.1939498, 4.479712)
-
-[node name="BoneAttachment3D" type="BoneAttachment3D" parent="." index="4"]
-transform = Transform3D(0.55407286, 0.015517369, 0.83232355, 0.8252492, 0.12114772, -0.5516223, -0.10939373, 0.99251324, 0.054319035, -0.32658195, 0.6604132, 0.10866909)
-bone_name = "RightHand"
-bone_idx = 35
-use_external_skeleton = true
-external_skeleton = NodePath("../Armature/GeneralSkeleton")
-
-[node name="WeaponManager" parent="BoneAttachment3D" index="0" instance=ExtResource("7_bmp62")]
-transform = Transform3D(-0.37015003, 0.90723336, 0.19979024, -0.05316409, 0.19402578, -0.9795533, -0.9274484, -0.37320462, -0.023586776, 0.56988955, -0.27209997, -0.030807137)
-weapons_list = Array[ExtResource("8_54efd")]([SubResource("Resource_bvi1k"), SubResource("Resource_mp808"), SubResource("Resource_afu2g"), SubResource("Resource_8li15"), SubResource("Resource_54efd"), SubResource("Resource_i40b2"), SubResource("Resource_ldtow"), SubResource("Resource_3tg88"), SubResource("Resource_4bwi1"), SubResource("Resource_ty1sm"), SubResource("Resource_mpsfe"), SubResource("Resource_8bux2"), SubResource("Resource_cj02n"), SubResource("Resource_lo0m3"), SubResource("Resource_niqx0"), SubResource("Resource_3k27r"), SubResource("Resource_bj6k5"), SubResource("Resource_c3djx"), SubResource("Resource_rr6ak"), SubResource("Resource_qi24u"), SubResource("Resource_wk87h"), SubResource("Resource_ad4ml"), SubResource("Resource_vnhei"), SubResource("Resource_hrud8"), SubResource("Resource_a881j"), SubResource("Resource_bnlhj"), SubResource("Resource_uyaxg"), SubResource("Resource_abred"), SubResource("Resource_lsa8a"), SubResource("Resource_hr623"), SubResource("Resource_17s01"), SubResource("Resource_xsmtq"), SubResource("Resource_moy5a"), SubResource("Resource_7ghro"), SubResource("Resource_xk86a"), SubResource("Resource_y4tvs"), SubResource("Resource_xlk5m"), SubResource("Resource_q84jd"), SubResource("Resource_3fdls"), SubResource("Resource_esqau"), SubResource("Resource_2yeyx"), SubResource("Resource_xtq8r"), SubResource("Resource_jvsnr"), SubResource("Resource_cko56"), SubResource("Resource_3cthl"), SubResource("Resource_e8chf"), SubResource("Resource_jaw06"), SubResource("Resource_h8esb"), SubResource("Resource_m6ptc"), SubResource("Resource_e44mw"), SubResource("Resource_w37cm"), SubResource("Resource_i6dgg"), SubResource("Resource_jrcb0"), SubResource("Resource_gd5fy"), SubResource("Resource_px4wp"), SubResource("Resource_4xyd5"), SubResource("Resource_156qj"), SubResource("Resource_m07od"), SubResource("Resource_ra0hl"), SubResource("Resource_wa1c7")])

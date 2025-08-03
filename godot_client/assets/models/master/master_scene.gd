@@ -4,8 +4,7 @@ class_name Master
 
 @export var animation_player: AnimationPlayer
 @export var bones: PhysicalBoneSimulator3D
-@export var weapon_manager: WeaponManager
-@onready var player: Player = get_parent()
+@onready var player: PlayerCharacter = get_parent()
 var _player_input: PlayerInput
 
 # Called when the node enters the scene tree for the first time.
@@ -14,10 +13,13 @@ func _ready() -> void:
 		set_process(false)
 		set_physics_process(false)
 	
+	if is_multiplayer_authority():
+		cast_shadow_only()
+		
 	_player_input = player.player_input
 	
-	weapon_manager.player = player
-	weapon_manager.player_input = player.player_input
+	#weapon_manager.player = player
+	#weapon_manager.player_input = player.player_input
 	
 	if not animation_player:
 		animation_player = $AnimationPlayer
@@ -25,21 +27,20 @@ func _ready() -> void:
 	$AnimationPlayer.playback_default_blend_time = 0.8
 	%AnimationPlayer.set_method_call_mode(AnimationPlayer.ANIMATION_METHOD_CALL_IMMEDIATE)	
 	
-	if player.look_at_target.get_path():
-		$Armature/GeneralSkeleton/RightLower.target_node = player.look_at_target.get_path()
-		$Armature/GeneralSkeleton/LeftLower.target_node = player.look_at_target.get_path()
-
-		$Armature/GeneralSkeleton/LeftUpper.target_node = player.look_at_target.get_path()
-
-		$Armature/GeneralSkeleton/RightHand.target_node = player.look_at_target.get_path()
-		$Armature/GeneralSkeleton/LeftHand.target_node = player.look_at_target.get_path()
+	#if player.look_at_target.get_path():
+		#$Armature/GeneralSkeleton/RightLower.target_node = player.look_at_target.get_path()
+		#$Armature/GeneralSkeleton/LeftLower.target_node = player.look_at_target.get_path()
+		#$Armature/GeneralSkeleton/LeftUpper.target_node = player.look_at_target.get_path()
+		#$Armature/GeneralSkeleton/RightHand.target_node = player.look_at_target.get_path()
+		#$Armature/GeneralSkeleton/LeftHand.target_node = player.look_at_target.get_path()
 
 func cast_shadow_only():
 	%vanguard_Mesh.cast_shadow = 3
 	%vanguard_visor.cast_shadow = 3
 
 func _process(_delta):
-	on_animation_check()
+	pass
+	#on_animation_check()
 
 # Set up a map. This could be better, but it works for now
 #  

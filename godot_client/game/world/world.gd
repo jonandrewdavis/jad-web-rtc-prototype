@@ -1,6 +1,8 @@
 extends Node3D
 
 var player_scene = preload("res://game/fpc/character.tscn")
+var player_scene_new = preload("res://addons/PlayerCharacter/Scenes/PlayerCharacterScene.tscn")
+
 var ball = preload("res://assets/ball.tscn")
 
 var rifle_round = preload("res://game/weapon_manager/Spawnable_Objects/bullet_scenes/rifle_round.tscn")
@@ -38,7 +40,9 @@ func add_player_to_game(id: int):
 	if has_id == true:
 		return
 		
-	var player_to_add = player_scene.instantiate()
+	#var player_to_add = player_scene.instantiate()
+	var player_to_add = player_scene_new.instantiate()
+	
 	player_to_add.name = str(id)
 	player_to_add.position = Vector3(randi_range(-2, 2), 0.8, randi_range(-2, 2)) * 5
 	player_container.add_child(player_to_add, true)

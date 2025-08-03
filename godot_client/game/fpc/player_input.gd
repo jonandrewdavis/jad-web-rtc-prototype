@@ -18,6 +18,7 @@ extends Node
 @export var is_debug_b: bool = false
 
 func _physics_process(_delta: float) -> void:
+	#	cR.inputDirection = Input.get_vector(cR.moveLeftAction, cR.moveRightAction, cR.moveForwardAction, cR.moveBackwardAction)
 	input_dir = Input.get_vector("left", "right", "up", "down")
 	is_jumping = Input.is_action_pressed("jump")
 	is_sprinting = Input.is_action_pressed("sprint")
