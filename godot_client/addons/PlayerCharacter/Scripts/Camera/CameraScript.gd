@@ -52,6 +52,10 @@ var mouseFree : bool = false
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) #set mouse as captured
 
+	if not is_multiplayer_authority():
+		set_process(false)
+		set_physics_process(false)
+		
 func _unhandled_input(event):
 	#this function manage camera rotation (360 on x axis, blocked at <= -60 and >= 60 on y axis, to not having the character do a complete head turn, which will be kinda weird)
 	if event is InputEventMouseMotion:
@@ -59,12 +63,13 @@ func _unhandled_input(event):
 		camera.rotate_x(-event.relative.y * (YAxisSens / 10))
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(maxUpAngleView), deg_to_rad(maxDownAngleView))
 		mouseInput = event.relative #get position of the mouse in a 2D sceen, so save it in a Vector2 
-		
+
+		# ADDED:
+		playChar.player_model.rotate_y(-event.relative.x * (XAxisSens / 10))
+
 func _process(delta):
 	applies(delta)
-	
 	cameraBob(delta)
-	
 	cameraTilt(delta)
 	
 func applies(delta : float):
@@ -85,7 +90,8 @@ func applies(delta : float):
 		position.y = lerp(position.y, 0.715, baseCameraLerpSpeed * delta)
 		rotation.z = lerp(rotation.z, deg_to_rad(baseCamAngle), baseCameraLerpSpeed * delta)
 		camera.fov = lerp(camera.fov, startFOV, fovTransitionSpeed * delta)
-			
+		
+		
 func cameraBob(delta):
 	if enableBob:
 		headBobValue += delta * playChar.velocity.length() * float(playChar.is_on_floor())
@@ -107,8 +113,8 @@ func cameraTilt(delta):
 			if !playChar.is_on_floor(): rotation.z = lerp(rotation.z, -playCharInputDir.x * tiltRotationValue/inAirTiltValDivider, tiltRotationSpeed * delta)
 			else: rotation.z = lerp(rotation.z, -playCharInputDir.x * tiltRotationValue, tiltRotationSpeed * delta)
 
-func mouseMode():
-	#manage the mouse mode (visible = can use mouse on the screen, captured = mouse not visible and locked in at the center of the screen)
-	if playChar.player_input.mouseInput: mouseFree = !mouseFree
-	if !mouseFree: Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	else: Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+#func mouseMode():
+	##manage the mouse mode (visible = can use mouse on the screen, captured = mouse not visible and locked in at the center of the screen)
+	#if playChar.player_input.mouseInput: mouseFree = !mouseFree
+	#if !mouseFree: Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	#else: Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

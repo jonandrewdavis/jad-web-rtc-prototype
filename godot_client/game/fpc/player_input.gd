@@ -17,6 +17,12 @@ extends Node
 
 @export var is_debug_b: bool = false
 
+func _ready():
+	if not is_multiplayer_authority():
+		set_process(false)
+		set_physics_process(false)
+		
+	
 func _physics_process(_delta: float) -> void:
 	#	cR.inputDirection = Input.get_vector(cR.moveLeftAction, cR.moveRightAction, cR.moveForwardAction, cR.moveBackwardAction)
 	input_dir = Input.get_vector("left", "right", "up", "down")
@@ -34,8 +40,20 @@ func _physics_process(_delta: float) -> void:
 	
 	is_debug_b = Input.is_action_pressed("debug_b")
 	
-	if Input.is_action_pressed("weapon_shoot") and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	#if Input.is_action_pressed("weapon_shoot") and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+		#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+	if Input.is_action_just_pressed('ui_cancel'):
+		print('cance', Input.mouse_mode)
+		# You may want another node to handle pausing, because this player may get paused too.
+		match Input.mouse_mode:
+			Input.MOUSE_MODE_CAPTURED:
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+				#get_tree().paused = false
+			Input.MOUSE_MODE_VISIBLE:
+				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+				#get_tree().paused = false
+
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:

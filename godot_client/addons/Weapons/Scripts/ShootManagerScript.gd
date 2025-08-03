@@ -66,6 +66,7 @@ func getCameraPOV():
 	var window : Window = get_window()
 	var viewport : Vector2i
 	
+	# NOTE: Added. AD.
 	#match viewport to window size, to ensure that the raycast goes in the right direction
 	#match window.content_scale_mode:
 		#window.CONTENT_SCALE_MODE_VIEWPORT:
@@ -118,10 +119,12 @@ func hitscanShot(pointOfCollisionHitscan : Vector3):
 		
 		if collider.is_in_group("Enemies") and collider.has_method("hitscanHit"):
 			finalDamage = cW.damagePerProj * cW.damageDropoff.sample(pointOfCollisionHitscan.distance_to(global_position) / cW.maxRange)
+			print('not ', finalDamage)
 			collider.hitscanHit(finalDamage, hitscanBulletDirection, hitscanBulletCollision.position)
 		
 		elif collider.is_in_group("EnemiesHead") and collider.has_method("hitscanHit"):
 				finalDamage = cW.damagePerProj * cW.headshotDamageMult * cW.damageDropoff.sample(pointOfCollisionHitscan.distance_to(global_position) / cW.maxRange)
+				print('head', finalDamage)
 				collider.hitscanHit(finalDamage, hitscanBulletDirection, hitscanBulletCollision.position)
 		
 		elif collider.is_in_group("HitableObjects") and collider.has_method("hitscanHit"): 

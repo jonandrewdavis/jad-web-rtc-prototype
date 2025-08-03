@@ -1,5 +1,7 @@
 extends Node
 
+class_name StateMachinePlayer
+
 @export var initialState : State
 
 var currState : State

@@ -1200,6 +1200,12 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath("CameraHolder/CameraRecoilHolder/Camera/WeaponManager:weaponIndex")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("CameraHolder/CameraRecoilHolder/Camera/WeaponManager/AnimationPlayer:current_animation")
+properties/3/spawn = true
+properties/3/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_vqiv6"]
 properties/0/path = NodePath(".:input_dir")
@@ -1218,7 +1224,7 @@ properties/4/path = NodePath(".:is_interacting")
 properties/4/spawn = true
 properties/4/replication_mode = 1
 
-[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("player_input") groups=["PlayerCharacter"]]
+[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("player_input", "player_model") groups=["PlayerCharacter"]]
 collision_layer = 2
 collision_mask = 97
 floor_block_on_wall = false
@@ -1227,6 +1233,7 @@ floor_snap_length = 0.0
 platform_floor_layers = 4278190081
 script = ExtResource("1_834nb")
 player_input = NodePath("PlayerInput")
+player_model = NodePath("master")
 desiredMoveSpeedCurve = SubResource("Curve_b3kaq")
 maxSpeed = 20.0
 inAirMoveSpeedCurve = SubResource("Curve_8ryj3")
@@ -1236,16 +1243,14 @@ heightChangeSpeed = 10.0
 crouchSpeed = 6.0
 crouchAccel = 9.0
 crouchDeccel = 8.0
-continiousCrouch = true
 crouchHitboxHeight = 1.2
 crouchModelHeight = 0.6
-walkSpeed = 8.0
+walkSpeed = 6.0
 walkAccel = 10.0
 walkDeccel = 9.0
 runSpeed = 11.0
 runAccel = 8.0
 runDeccel = 7.0
-continiousRun = true
 jumpHeight = 1.6
 jumpTimeToPeak = 0.3
 jumpTimeToFall = 0.25
@@ -1294,10 +1299,10 @@ metadata/_custom_type_script = "uid://bh3rdvokmrar1"
 
 [node name="CameraHolder" type="Node3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.540581, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.540581, 0)
 script = ExtResource("2_x12n0")
-XAxisSens = 0.12
-YAxisSens = 0.12
+XAxisSens = 0.04
+YAxisSens = 0.04
 maxUpAngleView = -90.0
 maxDownAngleView = 90.0
 baseCameraLerpSpeed = 8.0
@@ -1362,7 +1367,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.78936e-08, 0.154984, 0.541
 transform = Transform3D(1, 0, -4.54747e-13, 0, 1, 0, 0, 0, 1, -1.19209e-07, 0.065257, 0.568656)
 
 [node name="AssaultRifle" type="Node3D" parent="CameraHolder/CameraRecoilHolder/Camera/WeaponManager/WeaponContainer" node_paths=PackedStringArray("model", "attackPoint", "muzzleFlashSpawner")]
-transform = Transform3D(-0.22, 0, 5.5774e-07, 0, 0.22, 0, -5.5774e-07, 0, -0.22, 0.194412, -0.18, -0.144264)
+transform = Transform3D(-0.14141321, 0.16852982, 5.5773995e-07, 0.16852982, 0.14141321, 0, -3.585082e-07, 4.2725372e-07, -0.22, 0.194, -0.65, -0.144)
 script = ExtResource("24_tyw5b")
 model = NodePath(".")
 weaponId = 2
@@ -1495,6 +1500,7 @@ libraries = {
 shape = SubResource("CapsuleShape3D_5yjma")
 
 [node name="Model" type="MeshInstance3D" parent="."]
+visible = false
 layers = 2
 material_override = ExtResource("25_8ryj3")
 mesh = SubResource("CapsuleMesh_p2iaj")
@@ -1531,11 +1537,11 @@ grow_vertical = 2
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(1152, 648)
+size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="ViewportCam" type="Camera3D" parent="SubViewportContainer/SubViewport"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.540581, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.540581, 0)
 cull_mask = 4
 fov = 90.0
 near = 0.01

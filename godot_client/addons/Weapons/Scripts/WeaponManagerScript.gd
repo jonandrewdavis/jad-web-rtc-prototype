@@ -7,7 +7,9 @@ var weaponList : Dictionary = {} #all weapons available in the game (key = weapo
 
 var cW = null #current weapon
 var cWM = null #current weapon model
-var weaponIndex : int = 0
+
+# NOTE: added export for multiplayer
+@export var weaponIndex : int = 0
 
 #weapon changes variables
 var canChangeWeapons : bool = true
@@ -138,19 +140,17 @@ func _process(_delta : float):
 		
 func weaponInputs():
 	if playChar.player_input.is_weapon_shoot: shootManager.shoot()
-			
 	if playChar.player_input.is_weapon_reload: reloadManager.reload()
 	
-	if playChar.player_input.is_weapon_up:
+	if playChar.player_input.is_weapon_down:
 		if canChangeWeapons and cW.canShoot and cW.canReload:
 			weaponIndex = min(weaponIndex + 1, weaponStack.size() - 1) #from first element of weapon stack to last element 
 			changeWeapon(weaponStack[weaponIndex])
 			
-	if playChar.player_input.is_weapon_down:
+	if playChar.player_input.is_weapon_up:
 		if canChangeWeapons and cW.canShoot and cW.canReload:
 			weaponIndex = max(weaponIndex - 1, 0) #from last element of weapon stack to first element 
 			changeWeapon(weaponStack[weaponIndex])
-
 
 func displayStats():
 	hud.displayWeaponStack(weaponStack.size())

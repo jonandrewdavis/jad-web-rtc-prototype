@@ -7,13 +7,15 @@ class_name Master
 @onready var player: PlayerCharacter = get_parent()
 var _player_input: PlayerInput
 
+var is_first_person = true
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if not is_multiplayer_authority():
 		set_process(false)
 		set_physics_process(false)
 	
-	if is_multiplayer_authority():
+	if is_multiplayer_authority() and is_first_person:
 		cast_shadow_only()
 		
 	_player_input = player.player_input
@@ -23,9 +25,9 @@ func _ready() -> void:
 	
 	if not animation_player:
 		animation_player = $AnimationPlayer
-	$AnimationPlayer.speed_scale = 0.7
-	$AnimationPlayer.playback_default_blend_time = 0.8
-	%AnimationPlayer.set_method_call_mode(AnimationPlayer.ANIMATION_METHOD_CALL_IMMEDIATE)	
+	$AnimationPlayer.speed_scale = 0.8
+	$AnimationPlayer.playback_default_blend_time = 0.5
+	#%AnimationPlayer.set_method_call_mode(AnimationPlayer.ANIMATION_METHOD_CALL_IMMEDIATE)	
 	
 	#if player.look_at_target.get_path():
 		#$Armature/GeneralSkeleton/RightLower.target_node = player.look_at_target.get_path()
@@ -39,8 +41,7 @@ func cast_shadow_only():
 	%vanguard_visor.cast_shadow = 3
 
 func _process(_delta):
-	pass
-	#on_animation_check()
+	on_animation_check()
 
 # Set up a map. This could be better, but it works for now
 #  
@@ -108,13 +109,20 @@ func _play(animation_name):
 func on_animation_check():
 	var _dir = _player_input.input_dir
 	var _slowed = _player_input.is_weapon_aim or _player_input.is_crouching
+	
+	#if player.is_on_floor() == false: 
+		#_play('jump loop')
+		#return
 
-	if player.is_on_floor() == false: 
-		_play('jump loop')
-		return
-
-	match player.state:
-		(&'normal'):
+	match player.stateMachine.currStateName:
+		(&'Jump'):
+			_play('jump loop')
+		(&'Inair'):
+			_play('jump loop')
+		(&'Idle'):
+			if _dir.y == 0.0 and _dir.x == 0.0:
+				_play('idle aiming')
+		(&'Walk'):
 			if _dir.y == 0.0 and _dir.x == 0.0:
 				_play('idle aiming')
 			elif _dir.y == 0:
@@ -131,7 +139,7 @@ func on_animation_check():
 				if _dir.x < -0.4: _play(MOVES.DIAGONAL.SLOW[2])
 				elif _dir.x > 0.4: _play(MOVES.DIAGONAL.SLOW[3])
 				else: _play(MOVES.WALK.SLOW[1])
-		(&'sprinting'):
+		(&'Run'):
 			if _dir.y == 0.0 and _dir.x == 0.0:
 				_play('idle aiming')
 			elif _dir.y == 0:
@@ -148,7 +156,7 @@ func on_animation_check():
 				if _dir.x < -0.4: _play(MOVES.DIAGONAL.FAST[2])
 				elif _dir.x > 0.4: _play(MOVES.DIAGONAL.FAST[3]) 
 				else: _play(MOVES.WALK.FAST[1])
-		(&'crouching'):
+		(&'Crouch'):
 			if _dir.y == 0.0 and _dir.x == 0.0:
 				_play('idle crouching aiming')
 			elif _dir.y == 0:
@@ -163,7 +171,6 @@ func on_animation_check():
 			elif _dir.y > 0.0:
 				# Backwards
 				_play(MOVES.WALK.CROUCH[1])
-
 
 
 		#(&'crouching'):

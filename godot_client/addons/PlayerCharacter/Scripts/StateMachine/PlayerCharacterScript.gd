@@ -4,6 +4,7 @@ class_name PlayerCharacter
 
 @export_group("Multiplayer Added")
 @export var player_input : PlayerInput
+@export var player_model: Master
 
 @export_group("Movement variables")
 var moveSpeed : float
@@ -80,7 +81,7 @@ var coyoteJumpOn : bool = false
 @onready var camHolder : Node3D = $CameraHolder
 @onready var model : MeshInstance3D = $Model
 @onready var hitbox : CollisionShape3D = $Hitbox
-@onready var stateMachine : Node = %StateMachine
+@onready var stateMachine : StateMachinePlayer = %StateMachine
 @onready var hud : CanvasLayer = $HUD
 @onready var ceilingCheck : RayCast3D = $Raycasts/CeilingCheck
 @onready var floorCheck : RayCast3D = $Raycasts/FloorCheck
