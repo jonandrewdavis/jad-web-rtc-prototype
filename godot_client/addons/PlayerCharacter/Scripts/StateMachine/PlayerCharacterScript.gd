@@ -95,7 +95,7 @@ func _enter_tree():
 func _ready():
 	add_to_group("Players")
 	
-	if multiplayer.get_unique_id() == get_multiplayer_authority():
+	if is_multiplayer_authority():
 		%Camera.current = true
 	else:
 		set_process(false)

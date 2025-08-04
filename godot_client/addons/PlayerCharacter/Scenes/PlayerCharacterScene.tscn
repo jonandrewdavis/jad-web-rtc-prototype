@@ -1205,12 +1205,6 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("HealthSystem:health")
 properties/2/spawn = true
 properties/2/replication_mode = 2
-properties/3/path = NodePath("CameraHolder:rotation")
-properties/3/spawn = true
-properties/3/replication_mode = 1
-properties/4/path = NodePath("CameraHolder/CameraRecoilHolder/Camera:rotation")
-properties/4/spawn = true
-properties/4/replication_mode = 1
 
 [node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("player_input", "health_system")]
 collision_layer = 2
