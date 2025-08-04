@@ -5,6 +5,7 @@ class_name Master
 @export var animation_player: AnimationPlayer
 @export var bones: PhysicalBoneSimulator3D
 @onready var player: PlayerCharacter = get_parent()
+
 var _player_input: PlayerInput
 
 var is_first_person = true
@@ -17,8 +18,9 @@ func _ready() -> void:
 	
 	if is_multiplayer_authority() and is_first_person:
 		cast_shadow_only()
-		
+
 	_player_input = player.player_input
+	player.health_system.death.connect(_on_master_death)
 	
 	#weapon_manager.player = player
 	#weapon_manager.player_input = player.player_input
@@ -27,7 +29,6 @@ func _ready() -> void:
 		animation_player = $AnimationPlayer
 	$AnimationPlayer.speed_scale = 0.8
 	$AnimationPlayer.playback_default_blend_time = 0.5
-	#%AnimationPlayer.set_method_call_mode(AnimationPlayer.ANIMATION_METHOD_CALL_IMMEDIATE)	
 	
 	#if player.look_at_target.get_path():
 		#$Armature/GeneralSkeleton/RightLower.target_node = player.look_at_target.get_path()
@@ -42,6 +43,16 @@ func cast_shadow_only():
 
 func _process(_delta):
 	on_animation_check()
+
+func _on_master_death():
+	bones.physical_bones_start_simulation()
+	animation_player.active = false
+
+func _on_master_respawn():
+	player.master.bones.physical_bones_stop_simulation()
+	player.master.animation_player.active = true
+
+
 
 # Set up a map. This could be better, but it works for now
 #  

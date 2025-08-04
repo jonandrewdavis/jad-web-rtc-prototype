@@ -26,7 +26,6 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/energy_saving/keep_screen_on=false
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
 window/stretch/scale=1.5
 
 [file_customization]
@@ -43,6 +42,7 @@ folder_colors={
 [global_group]
 
 ProjectileSystem=""
+Players=""
 
 [gui]
 

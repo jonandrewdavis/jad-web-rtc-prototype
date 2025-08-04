@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=4 uid="uid://bwggrf7sbmkcv"]
+[gd_scene load_steps=90 format=4 uid="uid://bwggrf7sbmkcv"]
 
 [ext_resource type="Script" uid="uid://d3s8yxuvpmekm" path="res://addons/PlayerCharacter/Scripts/StateMachine/PlayerCharacterScript.gd" id="1_834nb"]
 [ext_resource type="Script" uid="uid://sca7ypsol83f" path="res://addons/PlayerCharacter/Scripts/StateMachine/StateMachineScript.gd" id="2_834nb"]
@@ -21,9 +21,11 @@
 [ext_resource type="Script" uid="uid://bcka80usfl4am" path="res://addons/Weapons/Scripts/WeaponSlotScript.gd" id="24_tyw5b"]
 [ext_resource type="Material" uid="uid://f3f1s20quvcb" path="res://addons/PlayerCharacter/Materials/PlayerCharacterMaterial.tres" id="25_8ryj3"]
 [ext_resource type="Texture2D" uid="uid://jwucel52ti1u" path="res://addons/Weapons/Images/Crosshair.png" id="28_msp70"]
-[ext_resource type="Script" uid="uid://b444whi1t4ggg" path="res://game/fpc/player_input.gd" id="30_mdlbe"]
-[ext_resource type="PackedScene" uid="uid://0by3fcnl3a5n" path="res://assets/models/master/master_scene.tscn" id="31_vqiv6"]
+[ext_resource type="PackedScene" uid="uid://qsh5m8pulul5" path="res://scripts/health_system.tscn" id="30_0qb1j"]
+[ext_resource type="Script" uid="uid://b444whi1t4ggg" path="res://scripts/player_input.gd" id="30_mdlbe"]
+[ext_resource type="Script" uid="uid://cyuq81eounly0" path="res://scripts/gameplay.gd" id="31_o0oj7"]
 [ext_resource type="Texture2D" uid="uid://dq6lmmv7chko6" path="res://addons/Addon Assets/Weapon Textures/atlass_1_diffuse.png" id="32_1lhsp"]
+[ext_resource type="PackedScene" uid="uid://0by3fcnl3a5n" path="res://assets/models/master/master_scene.tscn" id="33_o0oj7"]
 [ext_resource type="Script" uid="uid://pufyqjrkl22t" path="res://addons/Weapons/Scripts/ShootManagerScript.gd" id="96_j45p8"]
 [ext_resource type="Script" uid="uid://cfbsp443am2jd" path="res://addons/Weapons/Scripts/ReloadManagerScript.gd" id="97_et5xr"]
 [ext_resource type="Script" uid="uid://b45mr122adhlv" path="res://addons/Weapons/Scripts/Ammunition/AmmunitionManagerScript.gd" id="99_ihy62"]
@@ -1197,34 +1199,20 @@ outline_color = Color(0, 0, 0, 1)
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
+properties/1/path = NodePath("CameraHolder/CameraRecoilHolder/Camera/WeaponManager/AnimationPlayer:current_animation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
-properties/2/path = NodePath("CameraHolder/CameraRecoilHolder/Camera/WeaponManager:weaponIndex")
+properties/2/path = NodePath("HealthSystem:health")
 properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath("CameraHolder/CameraRecoilHolder/Camera/WeaponManager/AnimationPlayer:current_animation")
+properties/2/replication_mode = 2
+properties/3/path = NodePath("CameraHolder:rotation")
 properties/3/spawn = true
 properties/3/replication_mode = 1
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_vqiv6"]
-properties/0/path = NodePath(".:input_dir")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:is_jumping")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath(".:mouseInput")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath(".:is_sprinting")
-properties/3/spawn = true
-properties/3/replication_mode = 1
-properties/4/path = NodePath(".:is_interacting")
+properties/4/path = NodePath("CameraHolder/CameraRecoilHolder/Camera:rotation")
 properties/4/spawn = true
 properties/4/replication_mode = 1
 
-[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("player_input", "player_model") groups=["PlayerCharacter"]]
+[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("player_input", "health_system")]
 collision_layer = 2
 collision_mask = 97
 floor_block_on_wall = false
@@ -1233,9 +1221,9 @@ floor_snap_length = 0.0
 platform_floor_layers = 4278190081
 script = ExtResource("1_834nb")
 player_input = NodePath("PlayerInput")
-player_model = NodePath("master")
+health_system = NodePath("HealthSystem")
 desiredMoveSpeedCurve = SubResource("Curve_b3kaq")
-maxSpeed = 20.0
+maxSpeed = 11.0
 inAirMoveSpeedCurve = SubResource("Curve_8ryj3")
 baseHitboxHeight = 2.0
 baseModelHeight = 1.0
@@ -1245,15 +1233,15 @@ crouchAccel = 9.0
 crouchDeccel = 8.0
 crouchHitboxHeight = 1.2
 crouchModelHeight = 0.6
-walkSpeed = 6.0
+walkSpeed = 5.0
 walkAccel = 10.0
 walkDeccel = 9.0
-runSpeed = 11.0
+runSpeed = 10.0
 runAccel = 8.0
 runDeccel = 7.0
-jumpHeight = 1.6
+jumpHeight = 1.6999999999970896
 jumpTimeToPeak = 0.3
-jumpTimeToFall = 0.25
+jumpTimeToFall = 0.3000000000029104
 jumpCooldown = 0.2
 coyoteJumpCooldown = 0.2
 moveForwardAction = "up"
@@ -1343,7 +1331,7 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.67602e-09, -0.0115472, -0.038343)
 
 [node name="Pistol" type="Node3D" parent="CameraHolder/CameraRecoilHolder/Camera/WeaponManager/WeaponContainer" node_paths=PackedStringArray("model", "attackPoint", "muzzleFlashSpawner")]
-transform = Transform3D(-0.3, 0, -2.18557e-08, 0, 0.3, 0, 2.62268e-08, 0, -0.25, 0.20047, -0.153444, -0.150842)
+transform = Transform3D(-0.3, 0, 6.337954e-07, 0, 0.3, 0, -7.6055454e-07, 0, -0.25, 0.20047, -0.153444, -0.150842)
 script = ExtResource("24_tyw5b")
 model = NodePath(".")
 weaponId = 1
@@ -1390,7 +1378,7 @@ transform = Transform3D(1, 0, -8.52651e-14, 0, 1, 0, 8.52651e-14, 0, 1, -3.57628
 transform = Transform3D(1, 0, -9.9476e-14, 0, 1, 0, 9.9476e-14, 0, 1, -2.98023e-07, 0.122833, 1.95517)
 
 [node name="Shotgun" type="Node3D" parent="CameraHolder/CameraRecoilHolder/Camera/WeaponManager/WeaponContainer" node_paths=PackedStringArray("model", "attackPoint", "muzzleFlashSpawner")]
-transform = Transform3D(-0.256072, 0.113256, 5.28255e-07, 0.113256, 0.256072, -2.31786e-07, -7.02272e-07, 2.06182e-09, -0.23, 0.196569, -0.209086, -0.0802836)
+transform = Transform3D(-0.27999964, 0, 5.830918e-07, 0, 0.27999964, 0, -7.0985e-07, 0, -0.23, 0.196569, -0.209086, -0.0802836)
 script = ExtResource("24_tyw5b")
 model = NodePath(".")
 weaponId = 3
@@ -1760,13 +1748,21 @@ grow_vertical = 2
 texture = ExtResource("28_msp70")
 expand_mode = 1
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_buf4k")
+[node name="WEBRTCPROTOTYPE" type="Node" parent="."]
+
+[node name="WEBRTCPROTOTYPE2" type="Node" parent="."]
+
+[node name="WEBRTCPROTOTYPE3" type="Node" parent="."]
 
 [node name="PlayerInput" type="Node" parent="."]
 script = ExtResource("30_mdlbe")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="PlayerInput"]
-replication_config = SubResource("SceneReplicationConfig_vqiv6")
+[node name="Gameplay" type="Node" parent="."]
+script = ExtResource("31_o0oj7")
 
-[node name="master" parent="." instance=ExtResource("31_vqiv6")]
+[node name="HealthSystem" parent="." instance=ExtResource("30_0qb1j")]
+
+[node name="master" parent="." instance=ExtResource("33_o0oj7")]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_buf4k")

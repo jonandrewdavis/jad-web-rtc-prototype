@@ -1,9 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://0gq5270ogtxu"]
+[gd_scene load_steps=3 format=3 uid="uid://0gq5270ogtxu"]
 
 [ext_resource type="Texture2D" uid="uid://cf1nbn3eqdof8" path="res://addons/Weapons/Images/BulletHoleDecal.png" id="1_d0hng"]
+[ext_resource type="PackedScene" uid="uid://61hry0ayuigx" path="res://assets/particles/shell_particles.tscn" id="2_7xyci"]
 
 [node name="BulletDecal" type="Node3D"]
 
 [node name="Decal" type="Decal" parent="."]
+visible = false
 size = Vector3(0.2, 0.2, 0.2)
 texture_albedo = ExtResource("1_d0hng")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.08, 0, 0.01594162, 0)
+axis = 1
+texture = ExtResource("1_d0hng")
+
+[node name="ShellParticles" parent="." instance=ExtResource("2_7xyci")]

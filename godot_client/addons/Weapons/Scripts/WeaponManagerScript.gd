@@ -42,7 +42,8 @@ var rng = RandomNumberGenerator.new()
 @onready var linkComponent : Node3D = %LinkComponent
 
 func _ready():
-	initialize()
+	if is_multiplayer_authority():
+		initialize()
 	
 func initialize():
 	for weapon in weaponResources:
@@ -180,9 +181,9 @@ func displayBulletHole(colliderPoint : Vector3, colliderNormal : Vector3):
 	#create a muzzle flash instance, and display it at the indicated point
 	var bulletDecalInstance = bulletDecal.instantiate()
 	get_tree().get_root().add_child(bulletDecalInstance)
-	bulletDecalInstance.global_position = colliderPoint
-	#bulletDecalInstance.look_at(colliderPoint - colliderNormal, Vector3.UP)
-	bulletDecalInstance.rotate_object_local(Vector3(1.0, 0.0, 0.0), 90)
+	bulletDecalInstance.global_position = colliderPoint + (Vector3(colliderNormal) * 0.001)
+	bulletDecalInstance.look_at(colliderPoint - colliderNormal  * 0.001, Vector3.UP)
+	bulletDecalInstance.get_node('Sprite3D').axis = 2
 	
 func weaponSoundManagement(soundName : AudioStream, soundSpeed : float):
 	var audioIns : AudioStreamPlayer3D = audioManager.instantiate()

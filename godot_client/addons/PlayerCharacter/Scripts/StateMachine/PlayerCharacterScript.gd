@@ -4,7 +4,8 @@ class_name PlayerCharacter
 
 @export_group("Multiplayer Added")
 @export var player_input : PlayerInput
-@export var player_model: Master
+@export var health_system: HealthSystem
+@export var immobile: bool = false
 
 @export_group("Movement variables")
 var moveSpeed : float
@@ -91,18 +92,24 @@ func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
 	#player_input.set_multiplayer_authority(str(name).to_int())
 
-func _is_client_player():
-	return multiplayer.get_unique_id() == str(name).to_int()
-
 func _ready():
-	if not _is_client_player():
+	add_to_group("Players")
+	
+	if multiplayer.get_unique_id() == get_multiplayer_authority():
+		%Camera.current = true
+	else:
 		set_process(false)
 		set_physics_process(false)
+		%CameraHolder.set_process(false)
+		%CameraHolder.set_physics_process(false)
+		%Camera.set_process(false)
+		%WeaponManager.set_process(false)
+		%WeaponManager.set_physics_process(false)
+		%ShootManager.set_process(false)
+		%ShootManager.set_physics_process(false)
 		%HUD.hide()
+		$SubViewportContainer.queue_free()
 
-	if _is_client_player():
-		%Camera.current = true
-		
 	#set move variables, and value references
 	moveSpeed = walkSpeed
 	moveAccel = walkAccel

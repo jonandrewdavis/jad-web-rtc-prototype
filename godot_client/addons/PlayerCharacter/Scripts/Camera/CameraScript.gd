@@ -49,23 +49,21 @@ var mouseFree : bool = false
 @onready var playChar : PlayerCharacter = $".."
 @onready var weaponManager : Node3D = %WeaponManager
 
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) #set mouse as captured
-
-	if not is_multiplayer_authority():
-		set_process(false)
-		set_physics_process(false)
-		
+	
 func _unhandled_input(event):
 	#this function manage camera rotation (360 on x axis, blocked at <= -60 and >= 60 on y axis, to not having the character do a complete head turn, which will be kinda weird)
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion and is_multiplayer_authority():
 		rotate_y(-event.relative.x * (XAxisSens / 10))
 		camera.rotate_x(-event.relative.y * (YAxisSens / 10))
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(maxUpAngleView), deg_to_rad(maxDownAngleView))
 		mouseInput = event.relative #get position of the mouse in a 2D sceen, so save it in a Vector2 
 
 		# ADDED:
-		playChar.player_model.rotate_y(-event.relative.x * (XAxisSens / 10))
+		#if playChar.player_model:
+			#playChar.player_model.rotate_y(-event.relative.x * (XAxisSens / 10))
 
 func _process(delta):
 	applies(delta)

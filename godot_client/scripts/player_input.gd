@@ -1,36 +1,40 @@
 class_name PlayerInput
 extends Node
 
+@onready var player: PlayerCharacter = get_parent()
+
 @export var input_dir : Vector2
 @export var is_jumping: bool = false
 @export var is_sprinting: bool = false
 @export var is_interacting: bool = false
 @export var is_crouching: bool = false
-@export var mouseInput : Vector2 = Vector2(0,0)
-
 @export var is_weapon_up: bool = false
 @export var is_weapon_down: bool = false
 @export var is_weapon_shoot: bool = false
 @export var is_weapon_melee: bool = false
 @export var is_weapon_reload: bool = false
 @export var is_weapon_aim: bool = false
-
 @export var is_debug_b: bool = false
+
+@export var mouseInput : Vector2 = Vector2(0,0)
+
+# NOTE: If using in server authoratitive, this needs a multiplayer syncronizer inside. or an RPC.
 
 func _ready():
 	if not is_multiplayer_authority():
 		set_process(false)
 		set_physics_process(false)
 		
-	
 func _physics_process(_delta: float) -> void:
 	#	cR.inputDirection = Input.get_vector(cR.moveLeftAction, cR.moveRightAction, cR.moveForwardAction, cR.moveBackwardAction)
+	if player.immobile:
+		return
+		
 	input_dir = Input.get_vector("left", "right", "up", "down")
 	is_jumping = Input.is_action_pressed("jump")
 	is_sprinting = Input.is_action_pressed("sprint")
 	is_interacting = Input.is_action_pressed("interact")
 	is_crouching = Input.is_action_pressed("crouch")
-	
 	is_weapon_up = Input.is_action_pressed("weapon_up")
 	is_weapon_down = Input.is_action_pressed("weapon_down")
 	is_weapon_shoot = Input.is_action_pressed("weapon_shoot")
@@ -44,16 +48,12 @@ func _physics_process(_delta: float) -> void:
 		#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 	if Input.is_action_just_pressed('ui_cancel'):
-		print('cance', Input.mouse_mode)
 		# You may want another node to handle pausing, because this player may get paused too.
 		match Input.mouse_mode:
 			Input.MOUSE_MODE_CAPTURED:
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-				#get_tree().paused = false
 			Input.MOUSE_MODE_VISIBLE:
 				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-				#get_tree().paused = false
-
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:

@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://61hry0ayuigx"]
+[gd_scene load_steps=5 format=3 uid="uid://61hry0ayuigx"]
+
+[ext_resource type="Script" uid="uid://cvk38y4jrm3sf" path="res://assets/particles/shell_particles.gd" id="1_dta6o"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_e0rtm"]
 direction = Vector3(0, 0.7, 1)
@@ -17,7 +19,6 @@ material = SubResource("StandardMaterial3D_1hvr5")
 size = Vector3(0.04, 0.04, 0.03)
 
 [node name="ShellParticles" type="GPUParticles3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.956054)
 emitting = false
 lifetime = 0.5
 one_shot = true
@@ -25,3 +26,4 @@ explosiveness = 1.0
 randomness = 0.2
 process_material = SubResource("ParticleProcessMaterial_e0rtm")
 draw_pass_1 = SubResource("BoxMesh_m846d")
+script = ExtResource("1_dta6o")

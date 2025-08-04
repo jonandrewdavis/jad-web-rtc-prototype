@@ -1,15 +1,8 @@
 extends Node3D
 
-var player_scene = preload("res://game/fpc/character.tscn")
+#var player_scene = preload("res://game/fpc/character.tscn")
 var player_scene_new = preload("res://addons/PlayerCharacter/Scenes/PlayerCharacterScene.tscn")
-
 var ball = preload("res://assets/ball.tscn")
-
-var rifle_round = preload("res://game/weapon_manager/Spawnable_Objects/bullet_scenes/rifle_round.tscn")
-var orange_bullet = preload("res://game/weapon_manager/Spawnable_Objects/bullet_scenes/orange_bullet.tscn")
-var pink_bullet = preload("res://game/weapon_manager/Spawnable_Objects/bullet_scenes/pink_bullet.tscn")
-var rifle_round_decal = preload("res://game/weapon_manager/Spawnable_Objects/bullet_scenes/rifle_round_decal.tscn")
-var bullet_list = [orange_bullet, rifle_round, pink_bullet, rifle_round_decal]
 
 @export var player_container: Node3D
 

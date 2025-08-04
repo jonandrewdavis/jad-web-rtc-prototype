@@ -82,7 +82,11 @@ func _ready():
 	ready_input_connections()
 	ready_render_connections()
 	ready_timers()
-	
+
+	signal_lobby_updated.connect(quick_join_seek_lobby)
+	await get_tree().create_timer(1.0).timeout
+	connect_to_server()
+
 	#for colorButton in %ColorGrid.get_children():
 		#var _button: Button = colorButton
 		#var _style: StyleBoxFlat = StyleBoxFlat.new()
@@ -296,11 +300,14 @@ func send_message_start_game(idLobby: String):
 func render_user_list(users):
 	for child in %UserList.get_children():
 		child.queue_free()
+		
+	print(users)
 	for single_user in users:
-		var user_label = Label.new()
-		user_label.name = str(int(single_user.id))
-		user_label.text = single_user.username
-		%UserList.add_child(user_label, true)
+		if single_user.has('username'):
+			var user_label = Label.new()
+			user_label.name = str(int(single_user.id))
+			user_label.text = single_user.username
+			%UserList.add_child(user_label, true)
 
 func render_lobby_list(lobbies):
 	for child in %LobbyList.get_children():
