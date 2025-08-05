@@ -84,9 +84,13 @@ func _ready():
 	ready_timers()
 
 	signal_lobby_updated.connect(quick_join_seek_lobby)
-	await get_tree().create_timer(1.0).timeout
-	connect_to_server()
-
+	var rand = randi_range(0, 10)
+	if rand % 2 == 0:
+		await get_tree().create_timer(1.0).timeout
+		connect_to_server()
+	else: 
+		await get_tree().create_timer(2.0).timeout
+		connect_to_server()
 	#for colorButton in %ColorGrid.get_children():
 		#var _button: Button = colorButton
 		#var _style: StyleBoxFlat = StyleBoxFlat.new()

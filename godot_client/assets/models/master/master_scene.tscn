@@ -114,15 +114,15 @@ height = 0.2
 properties/0/path = NodePath("AnimationPlayer:current_animation")
 properties/0/spawn = true
 properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
+properties/1/path = NodePath("AnimationPlayer:active")
 properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("AnimationPlayer:active")
+properties/1/replication_mode = 2
+properties/2/path = NodePath("Armature/GeneralSkeleton/PhysicalBoneSimulator3D:active")
 properties/2/spawn = true
 properties/2/replication_mode = 2
-properties/3/path = NodePath("Armature/GeneralSkeleton/PhysicalBoneSimulator3D:active")
+properties/3/path = NodePath(".:rotation:y")
 properties/3/spawn = true
-properties/3/replication_mode = 2
+properties/3/replication_mode = 1
 
 [node name="master" node_paths=PackedStringArray("animation_player", "bones") instance=ExtResource("1_kyomj")]
 script = ExtResource("2_ji8ob")
@@ -538,12 +538,12 @@ transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_d477k")
 
 [node name="Physical Bone RightLowerLeg" type="PhysicalBone3D" parent="Armature/GeneralSkeleton/PhysicalBoneSimulator3D" index="14"]
-transform = Transform3D(-0.0766239, -0.95936704, -0.27155802, 0.22914286, -0.28201252, 0.93164504, -0.97037226, 0.009160698, 0.241441, -0.19242953, 0.32807958, -0.17295249)
+transform = Transform3D(-0.0766239, -0.95936704, -0.27155802, 0.22914286, -0.28201252, 0.93164504, -0.97037226, 0.009160698, 0.241441, -0.19242342, 0.32793424, -0.17296186)
 collision_layer = 0
 collision_mask = 16384
 joint_type = 1
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.002851706, -0.003988754, 0.23593524)
-body_offset = Transform3D(-0.99999857, -0.00085982494, 0.0014484823, -0.0015233159, 0.09444338, -0.9955292, 0.0007192604, -0.99552995, -0.09444462, 0.0025065243, 0.23526147, 0.01830984)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.002876376, -0.0040237997, 0.23607457)
+body_offset = Transform3D(-0.99999857, -0.00085982494, 0.0014484823, -0.0015233159, 0.09444338, -0.9955292, 0.0007192604, -0.99552995, -0.09444462, 0.0025309622, 0.23540351, 0.01828809)
 bone_name = "RightLowerLeg"
 joint_constraints/bias = 0.3
 joint_constraints/damping = 1.0

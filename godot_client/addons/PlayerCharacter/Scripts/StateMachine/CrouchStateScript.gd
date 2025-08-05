@@ -4,7 +4,7 @@ class_name CrouchState
 
 var stateName : String = "Crouch"
 
-var cR : CharacterBody3D
+var cR : PlayerCharacter
 
 func enter(charRef : CharacterBody3D):
 	cR = charRef
@@ -48,23 +48,42 @@ func applies(delta : float):
 	cR.hitbox.shape.height = lerp(cR.hitbox.shape.height, cR.crouchHitboxHeight, cR.heightChangeSpeed * delta)
 	cR.model.scale.y = lerp(cR.model.scale.y, cR.crouchModelHeight, cR.heightChangeSpeed * delta)
 	
+#func inputManagement():
+	#if Input.is_action_just_pressed(cR.jumpAction):
+		#if !raycastVerification(): #if nothing block the player character when it will leaves the crouch state
+			#transitioned.emit(self, "JumpState")
+			#
+	#if cR.continiousCrouch: 
+		##has to press run button once to run
+		#if Input.is_action_just_pressed(cR.crouchAction):
+			#if !raycastVerification():
+				#cR.walkOrRun = "WalkState"
+				#transitioned.emit(self, "WalkState")
+	#else:
+		##has to continuously press crouch button to crouch
+		#if !Input.is_action_pressed(cR.crouchAction):
+			#if !raycastVerification():
+				#cR.walkOrRun = "WalkState"
+				#transitioned.emit(self, "WalkState")
+
 func inputManagement():
-	if Input.is_action_just_pressed(cR.jumpAction):
+	if cR.player_input.is_jumping:
 		if !raycastVerification(): #if nothing block the player character when it will leaves the crouch state
 			transitioned.emit(self, "JumpState")
 			
 	if cR.continiousCrouch: 
 		#has to press run button once to run
-		if Input.is_action_just_pressed(cR.crouchAction):
+		if cR.player_input.is_crouching:
 			if !raycastVerification():
 				cR.walkOrRun = "WalkState"
 				transitioned.emit(self, "WalkState")
 	else:
 		#has to continuously press crouch button to crouch
-		if !Input.is_action_pressed(cR.crouchAction):
+		if !cR.player_input.is_crouching:
 			if !raycastVerification():
 				cR.walkOrRun = "WalkState"
 				transitioned.emit(self, "WalkState")
+
 			
 func raycastVerification():
 	#check if the raycast used to check ceilings is colliding or not

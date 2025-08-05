@@ -39,7 +39,7 @@ func applies(delta : float):
 	cR.model.scale.y = lerp(cR.model.scale.y, cR.baseModelHeight, cR.heightChangeSpeed * delta)
 	
 func inputManagement():
-	if Input.is_action_just_pressed(cR.jumpAction):
+	if cR.player_input.is_jumping:
 		jump()
 		
 func checkIfFloor():

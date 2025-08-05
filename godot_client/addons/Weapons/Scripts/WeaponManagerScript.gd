@@ -177,15 +177,18 @@ func displayMuzzleFlash():
 		return
 		
 func displayBulletHole(colliderPoint : Vector3, colliderNormal : Vector3):
-	#create a muzzle flash instance, and display it at the indicated point
-	var bulletDecalInstance = bulletDecal.instantiate()
-	get_tree().get_root().add_child(bulletDecalInstance)
-	bulletDecalInstance.global_position = colliderPoint + (Vector3(colliderNormal) * 0.001)
-	if !colliderNormal.is_equal_approx(Vector3.UP):
-		bulletDecalInstance.look_at(colliderPoint - colliderNormal  * 0.01, Vector3.UP)
-		bulletDecalInstance.get_node('Sprite3D').axis = 2
-	else:
-		bulletDecalInstance.get_node('Sprite3D').axis = 1
+	Hub.projectile_system.add_new_decal.rpc(colliderPoint, colliderNormal)
+
+	# NOTE: Moved to projectiles system to spawn.  
+	
+	#var bulletDecalInstance = bulletDecal.instantiate()
+	#get_tree().get_root().add_child(bulletDecalInstance)
+	#bulletDecalInstance.global_position = colliderPoint + (Vector3(colliderNormal) * 0.001)
+	#if !colliderNormal.is_equal_approx(Vector3.UP):
+		#bulletDecalInstance.look_at(colliderPoint - colliderNormal  * 0.01, Vector3.UP)
+		#bulletDecalInstance.get_node('Sprite3D').axis = 2
+	#else:
+		#bulletDecalInstance.get_node('Sprite3D').axis = 1
 
 	
 func weaponSoundManagement(soundName : AudioStream, soundSpeed : float):

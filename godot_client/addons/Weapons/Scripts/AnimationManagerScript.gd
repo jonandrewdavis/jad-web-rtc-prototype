@@ -48,11 +48,10 @@ func weaponBob(vel : float, delta):
 	cWM.position.y = lerp(cWM.position.y, cW.bobPos[0].y + sin(Time.get_ticks_msec() * bobFreq) * cW.bobAmount * vel / 10, cW.bobSpeed * delta)
 	cWM.position.x = lerp(cWM.position.x, cW.bobPos[0].x + sin(Time.get_ticks_msec() * bobFreq * 0.5) * cW.bobAmount * vel / 10, cW.bobSpeed * delta)
 
-func playModelAnimation(animName : String, animSpeed : float, hasToRestartAnim : bool):
+func playModelAnimation(animName : String, animSpeed : float, hasToRestartAnim : bool = false):
 	if cW != null and animPlayer != null:
 		#restart current anim if needed (for example restart shoot animation while still playing)
 		if hasToRestartAnim and animPlayer.current_animation == animName:
 			animPlayer.seek(0, true)
 		#play animation
 		animPlayer.play("%s" % animName, -1, animSpeed)
-		

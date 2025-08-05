@@ -4,7 +4,7 @@ class_name RunState
 
 var stateName : String = "Run"
 
-var cR : CharacterBody3D
+var cR : PlayerCharacter
 
 func enter(charRef : CharacterBody3D):
 	cR = charRef
@@ -50,24 +50,42 @@ func applies(delta : float):
 	cR.hitbox.shape.height = lerp(cR.hitbox.shape.height, cR.baseHitboxHeight, cR.heightChangeSpeed * delta)
 	cR.model.scale.y = lerp(cR.model.scale.y, cR.baseModelHeight, cR.heightChangeSpeed * delta)
 	
+#func inputManagement():
+	#if Input.is_action_just_pressed(cR.jumpAction):
+		#transitioned.emit(self, "JumpState")
+		#
+	#if Input.is_action_just_pressed(cR.crouchAction):
+		#transitioned.emit(self, "CrouchState")
+		#
+	#if cR.continiousRun:
+		##has to press run button once to run
+		#if Input.is_action_just_pressed(cR.runAction):
+			#cR.walkOrRun = "WalkState"
+			#transitioned.emit(self, "WalkState")
+	#else:
+		##has to continuously press run button to run
+		#if !Input.is_action_pressed(cR.runAction):
+			#cR.walkOrRun = "WalkState"
+			#transitioned.emit(self, "WalkState")
+
 func inputManagement():
-	if Input.is_action_just_pressed(cR.jumpAction):
+	if cR.player_input.is_jumping:
 		transitioned.emit(self, "JumpState")
 		
-	if Input.is_action_just_pressed(cR.crouchAction):
+	if cR.player_input.is_crouching:
 		transitioned.emit(self, "CrouchState")
 		
 	if cR.continiousRun:
 		#has to press run button once to run
-		if Input.is_action_just_pressed(cR.runAction):
+		if cR.player_input.is_sprinting:
 			cR.walkOrRun = "WalkState"
 			transitioned.emit(self, "WalkState")
 	else:
 		#has to continuously press run button to run
-		if !Input.is_action_pressed(cR.runAction):
+		if !cR.player_input.is_sprinting:
 			cR.walkOrRun = "WalkState"
 			transitioned.emit(self, "WalkState")
-		
+
 		
 func move(delta : float):
 	cR.inputDirection = cR.player_input.input_dir

@@ -116,30 +116,49 @@ func hitscanShot(pointOfCollisionHitscan : Vector3):
 		var colliderPoint = hitscanBulletCollision.position
 		var colliderNormal = hitscanBulletCollision.normal 
 		var finalDamage : int
-		print(collider)
+	
+		# NOTE: Added
+		var source = get_multiplayer_authority()
 
 		if collider.is_in_group("Enemies") and collider.has_method("hitscanHit"):
 			finalDamage = cW.damagePerProj * cW.damageDropoff.sample(pointOfCollisionHitscan.distance_to(global_position) / cW.maxRange)
-			collider.hitscanHit(finalDamage, hitscanBulletDirection, hitscanBulletCollision.position)
+			collider.hitscanHit(finalDamage, hitscanBulletDirection, hitscanBulletCollision.position, source)
 		
 		elif collider.is_in_group("EnemiesHead") and collider.has_method("hitscanHit"):
-				finalDamage = cW.damagePerProj * cW.headshotDamageMult * cW.damageDropoff.sample(pointOfCollisionHitscan.distance_to(global_position) / cW.maxRange)
-				collider.hitscanHit(finalDamage, hitscanBulletDirection, hitscanBulletCollision.position)
+			finalDamage = cW.damagePerProj * cW.headshotDamageMult * cW.damageDropoff.sample(pointOfCollisionHitscan.distance_to(global_position) / cW.maxRange)
+			collider.hitscanHit(finalDamage, hitscanBulletDirection, hitscanBulletCollision.position, source)
 		
 		elif collider.is_in_group("HitableObjects") and collider.has_method("hitscanHit"): 
 			finalDamage = cW.damagePerProj * cW.damageDropoff.sample(pointOfCollisionHitscan.distance_to(global_position) / cW.maxRange)
-			collider.hitscanHit(finalDamage/6.0, hitscanBulletDirection, hitscanBulletCollision.position)
-			weapM.displayBulletHole(colliderPoint, colliderNormal)
-		
-		elif collider.is_in_group("Players"):
-			finalDamage = cW.damagePerProj
-			var heath_system: HealthSystem = collider.get_node('HealthSystem')
-			var damage_successful = heath_system.damage(finalDamage, get_multiplayer_authority())
-			#if damage_successful:
-				#hit_signal.emit(data.source)
-		else:
+			collider.hitscanHit(finalDamage/6.0, hitscanBulletDirection, hitscanBulletCollision.position, source)
 			weapM.displayBulletHole(colliderPoint, colliderNormal)
 			
+		else:
+			weapM.displayBulletHole(colliderPoint, colliderNormal)
+
+# NOTE: Unchanged legacy version			
+#func projectileShot(pointOfCollisionProjectile : Vector3):
+	##set up weapon shot sprad 
+	#var spread = Vector3(weapM.rng.randf_range(cW.minSpread, cW.maxSpread), weapM.rng.randf_range(cW.minSpread, cW.maxSpread), weapM.rng.randf_range(cW.minSpread, cW.maxSpread))
+	#
+	##Calculate direction of the projectile
+	#var projectileDirection = ((pointOfCollisionProjectile - cW.weSl.attackPoint.get_global_transform().origin).normalized() + spread)
+	#
+	##Instantiate projectile
+	#var projInstance = cW.projRef.instantiate()
+	#
+	##set projectile properties 
+	#projInstance.global_transform = cW.weSl.attackPoint.global_transform
+	#projInstance.direction = projectileDirection
+	#projInstance.damage = cW.damagePerProj
+	#projInstance.timeBeforeVanish = cW.projTimeBeforeVanish
+	#projInstance.gravity_scale = cW.projGravityVal
+	#projInstance.isExplosive = cW.isProjExplosive
+	#
+	#get_tree().get_root().add_child(projInstance)
+	#
+	#projInstance.set_linear_velocity(projectileDirection * cW.projMoveSpeed)
+
 func projectileShot(pointOfCollisionProjectile : Vector3):
 	#set up weapon shot sprad 
 	var spread = Vector3(weapM.rng.randf_range(cW.minSpread, cW.maxSpread), weapM.rng.randf_range(cW.minSpread, cW.maxSpread), weapM.rng.randf_range(cW.minSpread, cW.maxSpread))
@@ -149,15 +168,16 @@ func projectileShot(pointOfCollisionProjectile : Vector3):
 	
 	#Instantiate projectile
 	var projInstance = cW.projRef.instantiate()
+	var projInstanceName = cW.projRef.get_state().get_node_name(0)
+
+	#projInstance.global_transform = cW.weSl.attackPoint.global_transform
+	#projInstance.damage = cW.damagePerProj
+	#projInstance.timeBeforeVanish = cW.projTimeBeforeVanish
+	#projInstance.gravity_scale = cW.projGravityVal
+	#projInstance.isExplosive = cW.isProjExplosive
+	# Movespeed
+	var cWArray = [cW.weSl.attackPoint.global_transform,  cW.damagePerProj, cW.projTimeBeforeVanish, cW.projGravityVal, cW.isProjExplosive, cW.projMoveSpeed]
 	
-	#set projectile properties 
-	projInstance.global_transform = cW.weSl.attackPoint.global_transform
-	projInstance.direction = projectileDirection
-	projInstance.damage = cW.damagePerProj
-	projInstance.timeBeforeVanish = cW.projTimeBeforeVanish
-	projInstance.gravity_scale = cW.projGravityVal
-	projInstance.isExplosive = cW.isProjExplosive
+	Hub.projectile_system.add_new_projectile.rpc(cWArray, projectileDirection, projInstanceName)
+
 	
-	get_tree().get_root().add_child(projInstance)
-	
-	projInstance.set_linear_velocity(projectileDirection * cW.projMoveSpeed)

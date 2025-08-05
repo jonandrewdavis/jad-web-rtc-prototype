@@ -106,11 +106,11 @@ func _ready():
 		%Camera.set_process(false)
 		%WeaponManager.set_process(false)
 		%ShootManager.set_process(false)
-		%AnimationManager.set_process(false)
-		
+		#%AnimationManager.set_process(false)		
 		%HUD.hide()
 		$SubViewportContainer.queue_free()
-		%WeaponManager.hide()
+		#%WeaponManager.hide()
+		add_to_group("Enemies")
 
 	#set move variables, and value references
 	moveSpeed = walkSpeed
@@ -149,4 +149,14 @@ func gravityApply(delta : float):
 	#otherwise, apply fall gravity
 	if velocity.y >= 0.0: velocity.y += jumpGravity * delta
 	elif velocity.y < 0.0: velocity.y += fallGravity * delta
-	
+
+func hitscanHit(damageVal : float, hitscanDir : Vector3, hitscanPos : Vector3, source):
+	var damage_successful = health_system.damage(damageVal, source)
+	if damage_successful:
+		DamageNumberScript.displayNumber(damageVal, global_position + Vector3.UP, 110, DamageNumberScript.DamageType.NORMAL)
+
+func projectileHit(damageVal : float, _hitscanDir : Vector3):
+	# TODO: Projectile source
+	var damage_successful = health_system.damage(damageVal, 1)
+	if damage_successful:
+		DamageNumberScript.displayNumber(damageVal, global_position + Vector3.UP, 110, DamageNumberScript.DamageType.NORMAL)

@@ -1,0 +1,162 @@
+[gd_scene load_steps=9 format=3 uid="uid://bodmr74jwgi5g"]
+
+[ext_resource type="Script" uid="uid://dbkd33tkoa5no" path="res://game/player/player_ui.gd" id="1_721h2"]
+[ext_resource type="Script" uid="uid://wbnqar1hyhh8" path="res://shaders/progress-bar/Scripts/progress_bar.gd" id="2_2npwm"]
+[ext_resource type="Shader" uid="uid://qeyffruxo18f" path="res://shaders/progress-bar/progress_bar.gdshader" id="2_k8gwt"]
+
+[sub_resource type="Gradient" id="Gradient_yswgc"]
+offsets = PackedFloat32Array(0.5034188, 0.9008547)
+colors = PackedColorArray(0, 0, 0, 0, 1, 0.23137257, 0.20784314, 0.34901962)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_721h2"]
+gradient = SubResource("Gradient_yswgc")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_587s8"]
+shader = ExtResource("2_k8gwt")
+shader_parameter/bar_mode = 2
+shader_parameter/fill_mode = 2
+shader_parameter/segment_count = 12
+shader_parameter/discrete_fill_amount = 12
+shader_parameter/fade_fill_amount = 1.0
+shader_parameter/pour_fill_amount = 1.0
+shader_parameter/animation_speed = 1.0
+shader_parameter/flash_type = 3
+shader_parameter/flash_segment = 0
+shader_parameter/flash_intensity = 0.5000000237500001
+shader_parameter/single_segment_previous_fill = 1.0
+shader_parameter/single_segment_current_fill = 1.0
+shader_parameter/single_segment_flash_intensity = 0.5000000237500001
+shader_parameter/flash_from_segment = 0
+shader_parameter/flash_to_segment = 0
+shader_parameter/single_segment_fade_from = 1.0
+shader_parameter/single_segment_fade_to = 1.0
+shader_parameter/single_segment_fade_progress = 0.0
+shader_parameter/drain_previous_fill = 1.0
+shader_parameter/drain_current_fill = 1.0
+shader_parameter/drain_time_progress = 0.0
+shader_parameter/background_color = Color(0.1, 0.1, 0.1, 1)
+shader_parameter/filled_color = Color(1, 0.85, 0, 1)
+shader_parameter/border_color = Color(0, 0, 0, 1)
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/drain_flash_color = Color(1, 1, 1, 1)
+shader_parameter/custom_frame = false
+shader_parameter/frame_trim = 0.0
+shader_parameter/alpha_threshold = 0.69
+shader_parameter/scan_steps = 15
+shader_parameter/edge_smoothness = 0.02
+shader_parameter/mask_expansion = 0.0
+shader_parameter/frame_edge_opacity = 0.9
+shader_parameter/fluid_base_color = Color(0.2, 0.6, 1, 1)
+shader_parameter/fluid_highlight_color = Color(0.8, 0.9, 1, 1)
+shader_parameter/fluid_shadow_color = Color(0.1, 0.3, 0.6, 1)
+shader_parameter/fluid_flow_speed = 1.5
+shader_parameter/fluid_turbulence = 1.0
+shader_parameter/fluid_noise_scale = 6.0
+shader_parameter/gas_mode = false
+shader_parameter/gas_intensity = 0.8
+shader_parameter/effect_mode = 0
+shader_parameter/effect_strength = 0.3
+shader_parameter/effect_speed = 1.5000000679901202
+shader_parameter/wave_thickness = 0.1
+shader_parameter/bubbles_aspect_ratio = 1.0
+shader_parameter/vertical_gradient = true
+shader_parameter/V_gradient_strength = 0.6
+shader_parameter/horizontal_gradient = true
+shader_parameter/H_gradient_strength = 0.41000001947500003
+shader_parameter/segment_gap = 0.050000002375000005
+shader_parameter/universal_border_size = 0.050000002375000005
+shader_parameter/horizontal_border_size = 1.0
+shader_parameter/inner_border_thickness_multiplier = 1.0
+shader_parameter/outer_border_size = 1.1000000000058208
+shader_parameter/slant_amount = -0.024999977437499987
+shader_parameter/scale = -0.02799995382999998
+shader_parameter/slant_clip_margin = 0.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yswgc"]
+bg_color = Color(1, 1, 1, 0.19607843)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_721h2"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(4.0309505e-06, 0.5212108, 0.03029696, 0.8039216)
+
+[node name="PlayerUI" type="CanvasLayer"]
+script = ExtResource("1_721h2")
+
+[node name="HurtTexture" type="TextureRect" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_721h2")
+
+[node name="BottomLeft" type="MarginContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -59.0
+offset_right = 50.0
+grow_vertical = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Vbox" type="VBoxContainer" parent="BottomLeft"]
+layout_mode = 2
+
+[node name="Health" type="ColorRect" parent="BottomLeft/Vbox"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_587s8")
+custom_minimum_size = Vector2(500, 50)
+layout_mode = 2
+script = ExtResource("2_2npwm")
+effect_type = "Flash"
+
+[node name="HealthBar" type="ProgressBar" parent="BottomLeft/Vbox"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(700, 45)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_yswgc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_721h2")
+value = 50.0
+show_percentage = false
+
+[node name="BottomRight" type="MarginContainer" parent="."]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="BottomRight"]
+layout_mode = 2
+
+[node name="AmmoLabel" type="Label" parent="BottomRight/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "300 / 300"
+
+[node name="HurtTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.1
+one_shot = true
+autostart = true

@@ -37,12 +37,17 @@ func _ready() -> void:
 	# NOTE: Added health to syncronizer to display to other clients (for health bars to be visible) 
 
 	if is_multiplayer_authority():
+		# Allow the UI to connect before we heal up.
+		await get_tree().create_timer(0.2).timeout
 		prepare_regen_timer()
 		max_health_updated.emit(max_health)
 		heal(max_health)
 
 func damage(value: int, source: int = 0) -> bool:
-	print('target', int(get_parent().name), ' bullet owend by: ', source)
+	# Do not allow damage when dead.
+	if health == 0:
+		return false
+
 	_damage_sync.rpc_id(int(get_parent().name), value, source)
 	return true
 
@@ -50,9 +55,8 @@ func damage(value: int, source: int = 0) -> bool:
 func _damage_sync(value, source):
 	# Don't allow negative values when damaging
 	var next_health = health - abs(value)
-	print(next_health,  ' from: ', source)
-	#if allow_damage_from_source(source) == false:
-		#return false
+	if allow_damage_from_source(source) == false:
+		return false
 
 	# Do not allow damage when dead.
 	if health == 0:
