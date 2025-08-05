@@ -45,6 +45,7 @@ spawn_path = NodePath("../PlayerContainer")
 [node name="ProjectileSystem" parent="." instance=ExtResource("4_4adp2")]
 
 [node name="BattleCreekScene" parent="." instance=ExtResource("3_k7f6b")]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
 
 [node name="ShootingTargets" parent="." instance=ExtResource("5_dess5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -55.4701, -7.5363503)
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, -44.816074, -6.4441175)

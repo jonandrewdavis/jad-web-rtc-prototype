@@ -20,7 +20,8 @@ func _ready() -> void:
 		cast_shadow_only()
 
 	_player_input = player.player_input
-	player.health_system.death.connect(_on_master_death)
+	player.health_system.death.connect(func(): _on_master_death.rpc())
+	player.health_system.respawn.connect(func(): _on_master_respawn.rpc())
 	
 	#weapon_manager.player = player
 	#weapon_manager.player_input = player.player_input
@@ -44,15 +45,21 @@ func cast_shadow_only():
 func _process(_delta):
 	on_animation_check()
 
+@rpc('call_local', 'reliable')
 func _on_master_death():
 	bones.physical_bones_start_simulation()
 	animation_player.active = false
+	if is_multiplayer_authority():
+		%vanguard_Mesh.cast_shadow = 1
+		%vanguard_visor.cast_shadow = 1
 
+@rpc('call_local', 'reliable')
 func _on_master_respawn():
-	player.master.bones.physical_bones_stop_simulation()
-	player.master.animation_player.active = true
-
-
+	bones.physical_bones_stop_simulation()
+	animation_player.active = true
+	if is_multiplayer_authority():
+		%vanguard_Mesh.cast_shadow = 3
+		%vanguard_visor.cast_shadow = 3
 
 # Set up a map. This could be better, but it works for now
 #  

@@ -1,6 +1,5 @@
 extends Node3D
 
-#var player_scene = preload("res://game/fpc/character.tscn")
 var player_scene_new = preload("res://addons/PlayerCharacter/Scenes/PlayerCharacterScene.tscn")
 var ball = preload("res://assets/ball.tscn")
 

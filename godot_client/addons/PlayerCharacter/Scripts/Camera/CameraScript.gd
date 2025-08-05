@@ -62,8 +62,7 @@ func _unhandled_input(event):
 		mouseInput = event.relative #get position of the mouse in a 2D sceen, so save it in a Vector2 
 
 		# ADDED:
-		#if playChar.player_model:
-			#playChar.player_model.rotate_y(-event.relative.x * (XAxisSens / 10))
+		playChar.player_model.rotate_y(-event.relative.x * (XAxisSens / 10))
 
 func _process(delta):
 	applies(delta)

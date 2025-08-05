@@ -116,6 +116,7 @@ func hitscanShot(pointOfCollisionHitscan : Vector3):
 		var colliderPoint = hitscanBulletCollision.position
 		var colliderNormal = hitscanBulletCollision.normal 
 		var finalDamage : int
+		print(collider)
 
 		if collider.is_in_group("Enemies") and collider.has_method("hitscanHit"):
 			finalDamage = cW.damagePerProj * cW.damageDropoff.sample(pointOfCollisionHitscan.distance_to(global_position) / cW.maxRange)
@@ -133,8 +134,6 @@ func hitscanShot(pointOfCollisionHitscan : Vector3):
 		elif collider.is_in_group("Players"):
 			finalDamage = cW.damagePerProj
 			var heath_system: HealthSystem = collider.get_node('HealthSystem')
-			#print('I AM', get_multiplayer_authority())
-			#print('I HIT: ', collider.get_multiplayer_authority())
 			var damage_successful = heath_system.damage(finalDamage, get_multiplayer_authority())
 			#if damage_successful:
 				#hit_signal.emit(data.source)

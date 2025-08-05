@@ -21,5 +21,7 @@ func _respawn():
 	player.set_collision_layer_value(1, true)
 	player.set_collision_layer_value(16, false)
 	health_system.heal(health_system.max_health)
+	health_system.respawn.emit()
 	player.immobile = false
 	player.position = Vector3(randi_range(-2, 2), 0.8, randi_range(-2, 2)) * 8
+	

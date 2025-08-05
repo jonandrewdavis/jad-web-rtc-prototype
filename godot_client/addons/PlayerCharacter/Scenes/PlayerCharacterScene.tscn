@@ -1205,8 +1205,20 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("HealthSystem:health")
 properties/2/spawn = true
 properties/2/replication_mode = 2
+properties/3/path = NodePath("PlayerInput:input_dir")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("PlayerInput:is_jumping")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath("PlayerInput:is_sprinting")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath("PlayerInput:is_crouching")
+properties/6/spawn = true
+properties/6/replication_mode = 1
 
-[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("player_input", "health_system")]
+[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("player_input", "player_model", "health_system")]
 collision_layer = 2
 collision_mask = 97
 floor_block_on_wall = false
@@ -1215,9 +1227,10 @@ floor_snap_length = 0.0
 platform_floor_layers = 4278190081
 script = ExtResource("1_834nb")
 player_input = NodePath("PlayerInput")
+player_model = NodePath("master")
 health_system = NodePath("HealthSystem")
 desiredMoveSpeedCurve = SubResource("Curve_b3kaq")
-maxSpeed = 11.0
+maxSpeed = 50.0
 inAirMoveSpeedCurve = SubResource("Curve_8ryj3")
 baseHitboxHeight = 2.0
 baseModelHeight = 1.0
@@ -1233,11 +1246,12 @@ walkDeccel = 9.0
 runSpeed = 10.0
 runAccel = 8.0
 runDeccel = 7.0
-jumpHeight = 1.6999999999970896
-jumpTimeToPeak = 0.3
-jumpTimeToFall = 0.3000000000029104
+jumpHeight = 3.0
+jumpTimeToPeak = 0.6999999999970896
+jumpTimeToFall = 0.6999999999970896
 jumpCooldown = 0.2
 coyoteJumpCooldown = 0.2
+inAirInputMultiplier = 0.2
 moveForwardAction = "up"
 moveBackwardAction = "down"
 moveLeftAction = "left"
@@ -1757,6 +1771,7 @@ script = ExtResource("31_o0oj7")
 [node name="HealthSystem" parent="." instance=ExtResource("30_0qb1j")]
 
 [node name="master" parent="." instance=ExtResource("33_o0oj7")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, -1, 0)
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_buf4k")

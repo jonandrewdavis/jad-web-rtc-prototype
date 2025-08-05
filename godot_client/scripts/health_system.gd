@@ -5,6 +5,8 @@ signal hurt
 signal health_updated
 signal max_health_updated
 signal death
+@warning_ignore("unused_signal")
+signal respawn
 
 # TODO: HealthBars, do we want them to show on enemies? 
 # Helldivers 2 does not, but there are other indicators (bleeding, fatigue)

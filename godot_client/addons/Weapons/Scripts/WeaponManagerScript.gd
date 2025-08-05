@@ -66,9 +66,9 @@ func initialize():
 				cWM = cW.weSl.model
 				cWM.visible = false
 				
-				forceAttackPointTransformValues(cW.weSl.attackPoint)
-				
-				cW.bobPos = cW.position
+				if is_multiplayer_authority():
+					forceAttackPointTransformValues(cW.weSl.attackPoint)
+					cW.bobPos = cW.position
 				
 	if weaponStack.size() > 0:
 		#enable (equip and set up) the first weapon on the weapon stack
@@ -119,7 +119,6 @@ func enterWeapon(nextWeapon : int):
 func _process(_delta : float):
 	if cW != null and cWM != null and canUseWeapon:
 		weaponInputs()
-		
 		reloadManager.autoReload()
 		
 	displayStats()
@@ -182,8 +181,12 @@ func displayBulletHole(colliderPoint : Vector3, colliderNormal : Vector3):
 	var bulletDecalInstance = bulletDecal.instantiate()
 	get_tree().get_root().add_child(bulletDecalInstance)
 	bulletDecalInstance.global_position = colliderPoint + (Vector3(colliderNormal) * 0.001)
-	bulletDecalInstance.look_at(colliderPoint - colliderNormal  * 0.001, Vector3.UP)
-	bulletDecalInstance.get_node('Sprite3D').axis = 2
+	if !colliderNormal.is_equal_approx(Vector3.UP):
+		bulletDecalInstance.look_at(colliderPoint - colliderNormal  * 0.01, Vector3.UP)
+		bulletDecalInstance.get_node('Sprite3D').axis = 2
+	else:
+		bulletDecalInstance.get_node('Sprite3D').axis = 1
+
 	
 func weaponSoundManagement(soundName : AudioStream, soundSpeed : float):
 	var audioIns : AudioStreamPlayer3D = audioManager.instantiate()

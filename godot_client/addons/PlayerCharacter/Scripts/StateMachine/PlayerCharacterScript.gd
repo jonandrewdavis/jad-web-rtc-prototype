@@ -4,6 +4,7 @@ class_name PlayerCharacter
 
 @export_group("Multiplayer Added")
 @export var player_input : PlayerInput
+@export var player_model: Node3D
 @export var health_system: HealthSystem
 @export var immobile: bool = false
 
@@ -94,7 +95,7 @@ func _enter_tree():
 
 func _ready():
 	add_to_group("Players")
-	
+
 	if is_multiplayer_authority():
 		%Camera.current = true
 	else:
@@ -104,11 +105,12 @@ func _ready():
 		%CameraHolder.set_physics_process(false)
 		%Camera.set_process(false)
 		%WeaponManager.set_process(false)
-		%WeaponManager.set_physics_process(false)
 		%ShootManager.set_process(false)
-		%ShootManager.set_physics_process(false)
+		%AnimationManager.set_process(false)
+		
 		%HUD.hide()
 		$SubViewportContainer.queue_free()
+		%WeaponManager.hide()
 
 	#set move variables, and value references
 	moveSpeed = walkSpeed

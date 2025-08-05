@@ -9,6 +9,9 @@ data = PackedVector3Array(-923.98, -1038.0762, 76.4935, -644.7095, -868.4262, 71
 [node name="BattleCreekScene" instance=ExtResource("1_77ewc")]
 script = ExtResource("2_rquj6")
 
+[node name="Beaver Creek" parent="." index="0"]
+transform = Transform3D(0.05, 0, 0, 0, -2.1855695e-09, -0.05, 0, 0.05, -2.1855695e-09, 0, 0, 0)
+
 [node name="StaticBody3D" type="StaticBody3D" parent="." index="1"]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
 
