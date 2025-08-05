@@ -43,4 +43,3 @@ func displayTotalAmmo(totalAmmo : int, nbProjShotsAtSameTime : int):
 	
 	
 	
-	

@@ -1179,9 +1179,9 @@ _data = {
 &"UnequipAnimSniperRifle": SubResource("Animation_5k808")
 }
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o0oj7"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cl8pt"]
 radius = 0.3
-height = 1.55
+height = 1.5
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_o0oj7"]
 radius = 0.25
@@ -1190,6 +1190,7 @@ radius = 0.25
 material = ExtResource("25_8ryj3")
 top_radius = 0.2
 bottom_radius = 0.2
+height = 1.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_32qq7"]
 line_spacing = 5.0
@@ -1267,18 +1268,18 @@ look_at_target = NodePath("CameraHolder/CameraRecoilHolder/Camera/Marker3D")
 desiredMoveSpeedCurve = SubResource("Curve_b3kaq")
 maxSpeed = 20.0
 inAirMoveSpeedCurve = SubResource("Curve_8ryj3")
-baseHitboxHeight = 2.0
-baseModelHeight = 1.0
+baseHitboxHeight = 1.5
+baseModelHeight = 1.5
 heightChangeSpeed = 10.0
-crouchSpeed = 2.0
+crouchSpeed = 1.5
 crouchAccel = 9.0
 crouchDeccel = 8.0
-crouchHitboxHeight = 1.2
-crouchModelHeight = 0.6
-walkSpeed = 4.0
-walkAccel = 8.0
+crouchHitboxHeight = 1.5
+crouchModelHeight = 1.5
+walkSpeed = 3.0
+walkAccel = 9.0
 walkDeccel = 9.0
-runSpeed = 6.0
+runSpeed = 6.5
 runAccel = 8.0
 runDeccel = 7.0
 jumpHeight = 2.1999999999970896
@@ -1330,15 +1331,13 @@ metadata/_custom_type_script = "uid://bh3rdvokmrar1"
 
 [node name="CameraHolder" type="Node3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.540581, 0)
 script = ExtResource("2_x12n0")
-XAxisSens = 0.04
-YAxisSens = 0.04
-maxUpAngleView = -90.0
-maxDownAngleView = 90.0
+maxUpAngleView = -88.0
+maxDownAngleView = 88.0
 baseCameraLerpSpeed = 8.0
 crouchCameraLerpSpeed = 8.0
 crouchCameraDepth = -0.4
+enableBob = false
 bobFrequency = 0.9
 bobAmplitude = 0.1
 enableTilt = false
@@ -1532,9 +1531,8 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
 
 [node name="Hitbox" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2240248, 0)
-shape = SubResource("CapsuleShape3D_o0oj7")
-debug_color = Color(0.63211524, 0.52913874, 0, 0.41960785)
+shape = SubResource("CapsuleShape3D_cl8pt")
+debug_color = Color(1, 0, 0.1137255, 0.78431374)
 
 [node name="HitboxHead" type="StaticBody3D" parent="."]
 unique_name_in_owner = true
@@ -1597,6 +1595,7 @@ script = ExtResource("102_xvqhe")
 metadata/_edit_use_anchors_ = true
 
 [node name="PlayerCharacterInfos" type="HBoxContainer" parent="HUD"]
+visible = false
 offset_left = 6.0
 offset_top = 9.0
 offset_right = 621.0
@@ -1700,30 +1699,32 @@ label_settings = SubResource("LabelSettings_y4xnc")
 vertical_alignment = 1
 
 [node name="WeaponsInfos" type="HBoxContainer" parent="HUD"]
-anchors_preset = 2
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 6.0
-offset_top = -103.0
-offset_right = 552.0
-offset_bottom = 29.0
+offset_left = -564.0
+offset_top = -72.0
+grow_horizontal = 0
 grow_vertical = 0
-scale = Vector2(0.7, 0.7)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/WeaponsInfos"]
 layout_mode = 2
 
 [node name="WeaponStackLabel" type="Label" parent="HUD/WeaponsInfos/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 texture_filter = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "Weapon stack :"
+text = "Weapon stack:"
 label_settings = SubResource("LabelSettings_32qq7")
 vertical_alignment = 1
 
 [node name="WeaponNameLabel" type="Label" parent="HUD/WeaponsInfos/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 texture_filter = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
@@ -1733,27 +1734,31 @@ vertical_alignment = 1
 
 [node name="TotalAmmoInMagLabel" type="Label" parent="HUD/WeaponsInfos/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 texture_filter = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "Total ammo in mag : "
+text = "Ammo:"
 label_settings = SubResource("LabelSettings_32qq7")
 vertical_alignment = 1
 
 [node name="TotalAmmoLabel" type="Label" parent="HUD/WeaponsInfos/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 texture_filter = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "Total ammo : "
+text = "Reserve Ammo:"
 label_settings = SubResource("LabelSettings_32qq7")
 vertical_alignment = 1
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="HUD/WeaponsInfos"]
 layout_mode = 2
+alignment = 1
 
 [node name="WeaponStackLabelText" type="Label" parent="HUD/WeaponsInfos/VBoxContainer2"]
 unique_name_in_owner = true
+visible = false
 texture_filter = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
@@ -1770,7 +1775,10 @@ text = "..................."
 label_settings = SubResource("LabelSettings_y4xnc")
 vertical_alignment = 1
 
-[node name="TotalAmmoInMagLabelText" type="Label" parent="HUD/WeaponsInfos/VBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/WeaponsInfos/VBoxContainer2"]
+layout_mode = 2
+
+[node name="TotalAmmoInMagLabelText" type="Label" parent="HUD/WeaponsInfos/VBoxContainer2/HBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
@@ -1779,7 +1787,15 @@ text = "..................."
 label_settings = SubResource("LabelSettings_y4xnc")
 vertical_alignment = 1
 
-[node name="TotalAmmoLabelText" type="Label" parent="HUD/WeaponsInfos/VBoxContainer2"]
+[node name="Split" type="Label" parent="HUD/WeaponsInfos/VBoxContainer2/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "/"
+label_settings = SubResource("LabelSettings_y4xnc")
+vertical_alignment = 1
+
+[node name="TotalAmmoLabelText" type="Label" parent="HUD/WeaponsInfos/VBoxContainer2/HBoxContainer"]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
@@ -1815,7 +1831,7 @@ health = 200
 regen_increment = 4
 
 [node name="master" parent="." instance=ExtResource("33_o0oj7")]
-transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, -1, 0)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -0.75, 0)
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_buf4k")

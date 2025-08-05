@@ -4,15 +4,19 @@ extends Node3D
 class_name CameraObject 
 
 @export_group("Camera variables")
-@export_range(0.0, 5.0, 0.01) var XAxisSens : float
-@export_range(0.0, 5.0, 0.01) var YAxisSens : float
+@export_range(0.01, 1.0, 0.01) var XAxisSens : float = 0.20
+@export_range(0.01, 1.0, 0.01) var YAxisSens : float = 0.20
 @export var maxUpAngleView : float
 @export var maxDownAngleView : float
 
 @export_group("FOV variables")
-@export var startFOV : float
-@export var runFOV : float
-@export var fovTransitionSpeed : float
+@export var startFOV : float = 92.0
+@export var runFOV : float = 98.0
+@export var fovTransitionSpeed : float = 10.0
+
+# NOTE: added
+@export var aimFOV: float = 80.0
+@export_range(0.01, 1.0, 0.01) var aimFactor : float = 0.5
 
 @export_group("Movement changes variables")
 @export var baseCamAngle : float
@@ -55,15 +59,17 @@ func _ready():
 	
 func _unhandled_input(event):
 	#this function manage camera rotation (360 on x axis, blocked at <= -60 and >= 60 on y axis, to not having the character do a complete head turn, which will be kinda weird)
-	if event is InputEventMouseMotion and is_multiplayer_authority():
-		rotate_y(-event.relative.x * (XAxisSens / 10))
-		camera.rotate_x(-event.relative.y * (YAxisSens / 10))
+	if event is InputEventMouseMotion and is_multiplayer_authority() and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		var sensitivity_factor = 100
+		if playChar.player_input.is_weapon_aim: sensitivity_factor = 100 * (aimFactor * 6)
+		rotate_y(-event.relative.x * (XAxisSens / sensitivity_factor))
+		camera.rotate_x(-event.relative.y * (YAxisSens / sensitivity_factor))
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(maxUpAngleView), deg_to_rad(maxDownAngleView))
 		mouseInput = event.relative #get position of the mouse in a 2D sceen, so save it in a Vector2 
 
 		# ADDED:
 		if playChar.immobile == false:
-			playChar.player_model.rotate_y(-event.relative.x * (XAxisSens / 10))
+			playChar.player_model.rotate_y(-event.relative.x * (XAxisSens / sensitivity_factor))
 
 func _process(delta):
 	applies(delta)
@@ -75,6 +81,12 @@ func applies(delta : float):
 	if playChar.stateMachine.currStateName == "Crouch":
 		position.y = lerp(position.y, 0.715 + crouchCameraDepth, crouchCameraLerpSpeed * delta)
 		rotation.z = lerp(rotation.z, deg_to_rad(crouchCamAngle) * playChar.inputDirection.x if playChar.inputDirection.x != 0.0 else deg_to_rad(crouchCamAngle), crouchCameraLerpSpeed * delta)
+		if playChar.player_input.is_weapon_aim:
+			camera.fov = lerp(camera.fov, aimFOV, fovTransitionSpeed * delta)
+	elif playChar.player_input.is_weapon_aim:
+		position.y = lerp(position.y, 0.715, baseCameraLerpSpeed * delta)
+		rotation.z = lerp(rotation.z, deg_to_rad(baseCamAngle), baseCameraLerpSpeed * delta)
+		camera.fov = lerp(camera.fov, aimFOV, fovTransitionSpeed * delta)
 	elif playChar.stateMachine.currStateName == "Run": 
 		camera.fov = lerp(camera.fov, runFOV, fovTransitionSpeed * delta)
 		rotation.z = lerp(rotation.z, deg_to_rad(baseCamAngle), baseCameraLerpSpeed * delta)
@@ -88,8 +100,7 @@ func applies(delta : float):
 		position.y = lerp(position.y, 0.715, baseCameraLerpSpeed * delta)
 		rotation.z = lerp(rotation.z, deg_to_rad(baseCamAngle), baseCameraLerpSpeed * delta)
 		camera.fov = lerp(camera.fov, startFOV, fovTransitionSpeed * delta)
-		
-		
+	
 func cameraBob(delta):
 	if enableBob:
 		headBobValue += delta * playChar.velocity.length() * float(playChar.is_on_floor())

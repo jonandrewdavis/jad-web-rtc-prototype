@@ -82,11 +82,13 @@ func inputManagement():
 			transitioned.emit(self, "WalkState")
 	else:
 		#has to continuously press run button to run
-		if !cR.player_input.is_sprinting:
+		if cR.player_input.is_weapon_aim:
+			cR.walkOrRun = "WalkState"
+			transitioned.emit(self, "WalkState")
+		elif !cR.player_input.is_sprinting:
 			cR.walkOrRun = "WalkState"
 			transitioned.emit(self, "WalkState")
 
-		
 func move(delta : float):
 	cR.inputDirection = cR.player_input.input_dir
 	cR.moveDirection = (cR.camHolder.global_basis * Vector3(cR.inputDirection.x, 0.0, cR.inputDirection.y)).normalized()

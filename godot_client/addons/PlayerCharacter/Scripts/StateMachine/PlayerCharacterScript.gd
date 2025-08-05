@@ -9,6 +9,7 @@ class_name PlayerCharacter
 @export var immobile: bool = false
 @export var look_at_target: Marker3D
 
+
 @export_group("Movement variables")
 var moveSpeed : float
 var moveAccel : float
@@ -81,7 +82,7 @@ var coyoteJumpOn : bool = false
 @export var jumpAction : String = ""
 
 #references variables
-@onready var camHolder : Node3D = $CameraHolder
+@onready var camHolder : CameraObject = %CameraHolder
 @onready var model : Node3D = $Model
 @onready var hitbox : CollisionShape3D = $Hitbox
 @onready var stateMachine : StateMachinePlayer = %StateMachine
@@ -109,13 +110,13 @@ func _ready():
 		%WeaponManager.set_process(false)
 		%ShootManager.set_process(false)
 		%AnimationManager.set_process(false)		
-		%HUD.hide()
 		$SubViewportContainer.queue_free()
+		%HUD.queue_free()
 		add_to_group("Enemies")
 		$HitboxHead.add_to_group("EnemiesHead")
 		$HitboxHead.set_collision_layer_value(6, true) 
 		%WeaponContainer.set_scale(Vector3(1.7, 1.7, 1.7))
-		%WeaponContainer.position = Vector3(-0.1, 0.1, 0.1)		
+		%WeaponContainer.position = Vector3(-0.15, 0.63, 0.0)		
 
 	#set move variables, and value references
 	moveSpeed = walkSpeed

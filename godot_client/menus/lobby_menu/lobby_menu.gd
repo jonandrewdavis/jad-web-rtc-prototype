@@ -83,24 +83,6 @@ func _ready():
 	ready_render_connections()
 	ready_timers()
 
-	signal_lobby_updated.connect(quick_join_seek_lobby)
-	var rand = randi_range(0, 10)
-	if rand % 2 == 0:
-		await get_tree().create_timer(1.0).timeout
-		connect_to_server()
-	else: 
-		await get_tree().create_timer(2.0).timeout
-		connect_to_server()
-	#for colorButton in %ColorGrid.get_children():
-		#var _button: Button = colorButton
-		#var _style: StyleBoxFlat = StyleBoxFlat.new()
-		#_style.bg_color = _button.get_theme_stylebox('theme_override_styles/normal').bg_color
-		#_style.bg_color.a = 0.5
-		#_button.set_stylebox('theme_override_styles/pressed', '', _style)
-		#pressed.bg_color.a = 0.5
-		#var getTheme: = colorButton.
-		#theme_override_styles/pressed
-
 func ready_required_connections():
 	signal_connection_confirmed.connect(_on_ws_connection_confirmed)
 	signal_disconnect.connect(_on_ws_disconnect)
@@ -129,7 +111,6 @@ func ready_input_connections():
 	%LobbyCreate.pressed.connect(func (): send_message_create_lobby())
 	%LobbyInput.text_submitted.connect(send_message_to_lobby)
 	%LobbyInputSend.pressed.connect(func (): send_message_to_lobby(%LobbyInput.text))
-	%QuickJoin.pressed.connect(quick_join)
 
 func ready_render_connections():
 	signal_connection_confirmed.connect(render_connection_confirmed)
@@ -305,7 +286,6 @@ func render_user_list(users):
 	for child in %UserList.get_children():
 		child.queue_free()
 		
-	print(users)
 	for single_user in users:
 		if single_user.has('username'):
 			var user_label = Label.new()
@@ -477,24 +457,6 @@ func on_heartbeat_light():
 func render_left_lobby():
 	%LobbyChat.text = ''
 	%LobbyChat.clear()
-
-func quick_join():
-	webSocketPeer = WebSocketPeer.new()	
-	webSocketPeer.connect_to_url(WEB_SOCKET_SERVER_URL)
-	set_process(true)
-	
-	signal_lobby_updated.connect(quick_join_seek_lobby)
-
-func quick_join_seek_lobby(lobbies):
-	if lobbies:
-		for lobby in lobbies:
-			if lobby.isGameStarted == false:
-				send_message_join_lobby(lobby.id)
-				return
-		
-		send_message_create_lobby()
-	else:
-		send_message_create_lobby()
 
 func get_username_input():
 	if %UsernameInput && %UsernameInput.text:

@@ -70,7 +70,7 @@ func inputManagement():
 	if cR.player_input.is_crouching:
 		transitioned.emit(self, "CrouchState")
 		
-	if cR.player_input.is_sprinting:
+	if cR.player_input.is_sprinting and not cR.player_input.is_weapon_aim:
 		cR.walkOrRun = "RunState"
 		transitioned.emit(self, "RunState")
 		

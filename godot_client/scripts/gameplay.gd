@@ -11,7 +11,7 @@ func _ready() -> void:
 	health_system.death.connect(_on_death)
 	
 func _on_death():
-	player.set_collision_layer_value(1, false)
+	player.set_collision_layer_value(2, false)
 	player.set_collision_layer_value(16, true)
 	player.immobile = true
 	player.toggle_weapon_visible(false)	
@@ -19,7 +19,7 @@ func _on_death():
 	_respawn()
 	
 func _respawn():
-	player.set_collision_layer_value(1, true)
+	player.set_collision_layer_value(2, true)
 	player.set_collision_layer_value(16, false)
 	health_system.heal(health_system.max_health)
 	health_system.respawn.emit()

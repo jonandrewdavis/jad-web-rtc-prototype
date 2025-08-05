@@ -28,8 +28,8 @@ func _ready() -> void:
 	
 	if not animation_player:
 		animation_player = $AnimationPlayer
-	$AnimationPlayer.speed_scale = 0.8
-	$AnimationPlayer.playback_default_blend_time = 0.5
+	$AnimationPlayer.speed_scale = 1
+	$AnimationPlayer.playback_default_blend_time = 0.2
 	
 	if player.look_at_target.get_path():
 		$Armature/GeneralSkeleton/RightLower.target_node = player.look_at_target.get_path()
@@ -131,7 +131,7 @@ func on_animation_check():
 	#if player.is_on_floor() == false: 
 		#_play('jump loop')
 		#return
-
+	animation_player.speed_scale = 1.0
 	match player.stateMachine.currStateName:
 		(&'Jump'):
 			_play('jump loop')
@@ -158,6 +158,7 @@ func on_animation_check():
 				elif _dir.x > 0.4: _play(MOVES.DIAGONAL.SLOW[3])
 				else: _play(MOVES.WALK.SLOW[1])
 		(&'Run'):
+			animation_player.speed_scale = 0.7
 			if _dir.y == 0.0 and _dir.x == 0.0:
 				_play('idle aiming')
 			elif _dir.y == 0:
@@ -175,6 +176,7 @@ func on_animation_check():
 				elif _dir.x > 0.4: _play(MOVES.DIAGONAL.FAST[3]) 
 				else: _play(MOVES.WALK.FAST[1])
 		(&'Crouch'):
+			animation_player.speed_scale = 0.7
 			if _dir.y == 0.0 and _dir.x == 0.0:
 				_play('idle crouching aiming')
 			elif _dir.y == 0:

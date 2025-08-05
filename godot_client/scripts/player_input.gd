@@ -27,7 +27,7 @@ func _ready():
 		
 func _physics_process(_delta: float) -> void:
 	#	cR.inputDirection = Input.get_vector(cR.moveLeftAction, cR.moveRightAction, cR.moveForwardAction, cR.moveBackwardAction)
-	if player.immobile:
+	if player.immobile or Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		input_dir = Vector2.ZERO
 		is_jumping = false
 		is_sprinting = false
@@ -52,19 +52,13 @@ func _physics_process(_delta: float) -> void:
 	is_weapon_melee = Input.is_action_pressed("weapon_melee")
 	is_weapon_reload = Input.is_action_pressed("weapon_reload")
 	is_weapon_aim = Input.is_action_pressed("weapon_aim")
-	
 	is_debug_b = Input.is_action_pressed("debug_b")
-	
-	#if Input.is_action_pressed("weapon_shoot") and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
-		#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
-	if Input.is_action_just_pressed('ui_cancel'):
-		# You may want another node to handle pausing, because this player may get paused too.
-		match Input.mouse_mode:
-			Input.MOUSE_MODE_CAPTURED:
-				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-			Input.MOUSE_MODE_VISIBLE:
-				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+func _process(_delta):
+	if Input.is_action_just_pressed('menu') and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	elif Input.is_action_just_pressed('menu') and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:

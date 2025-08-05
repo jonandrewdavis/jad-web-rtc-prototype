@@ -11,8 +11,12 @@ var RETICLE: Control
 
 func _ready() -> void:
 	if not is_multiplayer_authority():
-		hide()
+		queue_free()
 		return
+
+	DebugMenu.style = DebugMenu.Style.VISIBLE_COMPACT
+
+	%Menu.hide()
 
 	if !player:
 		player = get_parent()
@@ -28,11 +32,23 @@ func _ready() -> void:
 	%HurtTexture.set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
 	%HurtTimer.timeout.connect(_on_hurt_timer_timeout)
 
-	## Get current state
-	#var current = progress_bar.get_current_value()
-	#var percentage = progress_bar.get_percentage()
-	#var is_full = progress_bar.is_full()
+	%AimSlider.value_changed.connect(_on_aim_changed)
+	%SenSlider.value_changed.connect(_on_sens_changed)
 
+	await get_tree().create_timer(0.1).timeout
+	%SenSlider.value = player.camHolder.XAxisSens
+	%AimSlider.value = player.camHolder.aimFactor
+
+	%Respawn.pressed.connect(func(): player.health_system.death.emit())
+	%Disconnect.pressed.connect(_on_disconnect)
+	%Quit.pressed.connect(func(): get_tree().quit())
+
+
+func _process(_delta: float) -> void:
+	if %Menu.visible and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		%Menu.hide()
+	elif %Menu.visible == false and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+		%Menu.show()
 
 func _on_hurt():
 	%HurtTexture.visible = true
@@ -67,3 +83,18 @@ func change_reticle(reticle): # Yup, this function is kinda strange
 	RETICLE = load(reticle).instantiate()
 	RETICLE.character = player
 	add_child(RETICLE)
+
+func _on_sens_changed(new_value: float):
+	player.camHolder.XAxisSens = new_value
+	player.camHolder.YAxisSens = new_value
+	%SenVal.text = str("%0.2f" % new_value)
+
+func _on_aim_changed(new_value: float):
+	player.camHolder.aimFactor = new_value
+	%AimVal.text = str("%0.2f" % new_value)
+
+func _on_disconnect():
+	Hub.world.get_parent().show()
+	Hub.world.queue_free()
+	
+	

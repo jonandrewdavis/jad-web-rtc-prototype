@@ -48,6 +48,9 @@ func applies(delta : float):
 	cR.hitbox.shape.height = lerp(cR.hitbox.shape.height, cR.crouchHitboxHeight, cR.heightChangeSpeed * delta)
 	cR.model.scale.y = lerp(cR.model.scale.y, cR.crouchModelHeight, cR.heightChangeSpeed * delta)
 	
+	if not is_multiplayer_authority():
+		%WeaponContainer.position = Vector3(-0.15, 0.63, 0.0)		
+
 #func inputManagement():
 	#if Input.is_action_just_pressed(cR.jumpAction):
 		#if !raycastVerification(): #if nothing block the player character when it will leaves the crouch state
