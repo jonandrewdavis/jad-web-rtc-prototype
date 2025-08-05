@@ -31,12 +31,12 @@ func _ready() -> void:
 	$AnimationPlayer.speed_scale = 0.8
 	$AnimationPlayer.playback_default_blend_time = 0.5
 	
-	#if player.look_at_target.get_path():
-		#$Armature/GeneralSkeleton/RightLower.target_node = player.look_at_target.get_path()
-		#$Armature/GeneralSkeleton/LeftLower.target_node = player.look_at_target.get_path()
-		#$Armature/GeneralSkeleton/LeftUpper.target_node = player.look_at_target.get_path()
-		#$Armature/GeneralSkeleton/RightHand.target_node = player.look_at_target.get_path()
-		#$Armature/GeneralSkeleton/LeftHand.target_node = player.look_at_target.get_path()
+	if player.look_at_target.get_path():
+		$Armature/GeneralSkeleton/RightLower.target_node = player.look_at_target.get_path()
+		$Armature/GeneralSkeleton/LeftLower.target_node = player.look_at_target.get_path()
+		$Armature/GeneralSkeleton/LeftUpper.target_node = player.look_at_target.get_path()
+		$Armature/GeneralSkeleton/RightHand.target_node = player.look_at_target.get_path()
+		$Armature/GeneralSkeleton/LeftHand.target_node = player.look_at_target.get_path()
 
 func cast_shadow_only():
 	%vanguard_Mesh.cast_shadow = 3

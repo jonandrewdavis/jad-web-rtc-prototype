@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=4 uid="uid://bwggrf7sbmkcv"]
+[gd_scene load_steps=93 format=4 uid="uid://bwggrf7sbmkcv"]
 
 [ext_resource type="Script" uid="uid://d3s8yxuvpmekm" path="res://addons/PlayerCharacter/Scripts/StateMachine/PlayerCharacterScript.gd" id="1_834nb"]
 [ext_resource type="Script" uid="uid://sca7ypsol83f" path="res://addons/PlayerCharacter/Scripts/StateMachine/StateMachineScript.gd" id="2_834nb"]
@@ -20,6 +20,7 @@
 [ext_resource type="Resource" uid="uid://dn71dyben68oe" path="res://addons/Weapons/Resources/RocketLauncherWeaponResources.tres" id="19_m6yr4"]
 [ext_resource type="Script" uid="uid://bcka80usfl4am" path="res://addons/Weapons/Scripts/WeaponSlotScript.gd" id="24_tyw5b"]
 [ext_resource type="Material" uid="uid://f3f1s20quvcb" path="res://addons/PlayerCharacter/Materials/PlayerCharacterMaterial.tres" id="25_8ryj3"]
+[ext_resource type="Script" uid="uid://11klj8n5vpt0" path="res://addons/PlayerCharacter/Scenes/hitbox_head.gd" id="25_cl8pt"]
 [ext_resource type="Texture2D" uid="uid://jwucel52ti1u" path="res://addons/Weapons/Images/Crosshair.png" id="28_msp70"]
 [ext_resource type="PackedScene" uid="uid://qsh5m8pulul5" path="res://scripts/health_system.tscn" id="30_0qb1j"]
 [ext_resource type="Script" uid="uid://b444whi1t4ggg" path="res://scripts/player_input.gd" id="30_mdlbe"]
@@ -1178,9 +1179,17 @@ _data = {
 &"UnequipAnimSniperRifle": SubResource("Animation_5k808")
 }
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5yjma"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o0oj7"]
+radius = 0.3
+height = 1.55
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_p2iaj"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_o0oj7"]
+radius = 0.25
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_o0oj7"]
+material = ExtResource("25_8ryj3")
+top_radius = 0.2
+bottom_radius = 0.2
 
 [sub_resource type="LabelSettings" id="LabelSettings_32qq7"]
 line_spacing = 5.0
@@ -1239,8 +1248,11 @@ properties/12/replication_mode = 2
 properties/13/path = NodePath("CameraHolder/CameraRecoilHolder/Camera/WeaponManager/WeaponContainer/RocketLauncher:visible")
 properties/13/spawn = true
 properties/13/replication_mode = 2
+properties/14/path = NodePath("CameraHolder/CameraRecoilHolder/Camera/WeaponManager/WeaponContainer:visible")
+properties/14/spawn = true
+properties/14/replication_mode = 2
 
-[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("player_input", "player_model", "health_system")]
+[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("player_input", "player_model", "health_system", "look_at_target")]
 collision_layer = 34
 collision_mask = 97
 floor_block_on_wall = false
@@ -1251,6 +1263,7 @@ script = ExtResource("1_834nb")
 player_input = NodePath("PlayerInput")
 player_model = NodePath("master")
 health_system = NodePath("HealthSystem")
+look_at_target = NodePath("CameraHolder/CameraRecoilHolder/Camera/Marker3D")
 desiredMoveSpeedCurve = SubResource("Curve_b3kaq")
 maxSpeed = 20.0
 inAirMoveSpeedCurve = SubResource("Curve_8ryj3")
@@ -1269,7 +1282,7 @@ runSpeed = 6.0
 runAccel = 8.0
 runDeccel = 7.0
 jumpHeight = 2.1999999999970896
-jumpTimeToPeak = 0.4000000000087311
+jumpTimeToPeak = 0.6000000000058208
 jumpTimeToFall = 0.4000000000087311
 jumpCooldown = 0.2
 coyoteJumpCooldown = 0.2
@@ -1515,21 +1528,31 @@ libraries = {
 &"": SubResource("AnimationLibrary_tt46u")
 }
 
+[node name="Marker3D" type="Marker3D" parent="CameraHolder/CameraRecoilHolder/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
 [node name="Hitbox" type="CollisionShape3D" parent="."]
-shape = SubResource("CapsuleShape3D_5yjma")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2240248, 0)
+shape = SubResource("CapsuleShape3D_o0oj7")
+debug_color = Color(0.63211524, 0.52913874, 0, 0.41960785)
+
+[node name="HitboxHead" type="StaticBody3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9394463, 0)
+collision_layer = 0
+collision_mask = 0
+input_ray_pickable = false
+script = ExtResource("25_cl8pt")
+
+[node name="HitboxHeadCollision" type="CollisionShape3D" parent="HitboxHead"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15490818, 0)
+shape = SubResource("SphereShape3D_o0oj7")
+debug_color = Color(0.972549, 0, 0.4392157, 0.8117647)
 
 [node name="Model" type="MeshInstance3D" parent="."]
 visible = false
-layers = 2
-material_override = ExtResource("25_8ryj3")
-mesh = SubResource("CapsuleMesh_p2iaj")
-
-[node name="Area3D" type="Area3D" parent="."]
-collision_layer = 2
-collision_mask = 68
-
-[node name="standingHitbox2" type="CollisionShape3D" parent="Area3D"]
-shape = SubResource("CapsuleShape3D_5yjma")
+mesh = SubResource("CylinderMesh_o0oj7")
 
 [node name="Raycasts" type="Node3D" parent="."]
 

@@ -7,6 +7,7 @@ class_name PlayerCharacter
 @export var player_model: Node3D
 @export var health_system: HealthSystem
 @export var immobile: bool = false
+@export var look_at_target: Marker3D
 
 @export_group("Movement variables")
 var moveSpeed : float
@@ -81,7 +82,7 @@ var coyoteJumpOn : bool = false
 
 #references variables
 @onready var camHolder : Node3D = $CameraHolder
-@onready var model : MeshInstance3D = $Model
+@onready var model : Node3D = $Model
 @onready var hitbox : CollisionShape3D = $Hitbox
 @onready var stateMachine : StateMachinePlayer = %StateMachine
 @onready var hud : CanvasLayer = $HUD
@@ -97,6 +98,7 @@ func _ready():
 	add_to_group("Players")
 
 	if is_multiplayer_authority():
+		%HitboxHead.queue_free()
 		%Camera.current = true
 	else:
 		set_process(false)
@@ -106,11 +108,14 @@ func _ready():
 		%Camera.set_process(false)
 		%WeaponManager.set_process(false)
 		%ShootManager.set_process(false)
-		#%AnimationManager.set_process(false)		
+		%AnimationManager.set_process(false)		
 		%HUD.hide()
 		$SubViewportContainer.queue_free()
-		#%WeaponManager.hide()
 		add_to_group("Enemies")
+		$HitboxHead.add_to_group("EnemiesHead")
+		$HitboxHead.set_collision_layer_value(6, true) 
+		%WeaponContainer.set_scale(Vector3(1.7, 1.7, 1.7))
+		%WeaponContainer.position = Vector3(-0.1, 0.1, 0.1)		
 
 	#set move variables, and value references
 	moveSpeed = walkSpeed
@@ -160,3 +165,6 @@ func projectileHit(damageVal : float, _hitscanDir : Vector3):
 	var damage_successful = health_system.damage(damageVal, 1)
 	if damage_successful:
 		DamageNumberScript.displayNumber(damageVal, global_position + Vector3.UP, 110, DamageNumberScript.DamageType.NORMAL)
+
+func toggle_weapon_visible(value: bool):
+	%WeaponContainer.visible = value

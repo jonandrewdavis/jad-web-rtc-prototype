@@ -28,6 +28,17 @@ func _ready():
 func _physics_process(_delta: float) -> void:
 	#	cR.inputDirection = Input.get_vector(cR.moveLeftAction, cR.moveRightAction, cR.moveForwardAction, cR.moveBackwardAction)
 	if player.immobile:
+		input_dir = Vector2.ZERO
+		is_jumping = false
+		is_sprinting = false
+		is_interacting = false
+		is_crouching = false
+		is_weapon_up = false
+		is_weapon_down = false
+		is_weapon_shoot = false
+		is_weapon_melee = false
+		is_weapon_reload = false
+		is_weapon_aim = false
 		return
 		
 	input_dir = Input.get_vector("left", "right", "up", "down")

@@ -119,7 +119,7 @@ func hitscanShot(pointOfCollisionHitscan : Vector3):
 	
 		# NOTE: Added
 		var source = get_multiplayer_authority()
-
+		#print('DEBUG COLLIDER: ', collider)
 		if collider.is_in_group("Enemies") and collider.has_method("hitscanHit"):
 			finalDamage = cW.damagePerProj * cW.damageDropoff.sample(pointOfCollisionHitscan.distance_to(global_position) / cW.maxRange)
 			collider.hitscanHit(finalDamage, hitscanBulletDirection, hitscanBulletCollision.position, source)
@@ -132,7 +132,6 @@ func hitscanShot(pointOfCollisionHitscan : Vector3):
 			finalDamage = cW.damagePerProj * cW.damageDropoff.sample(pointOfCollisionHitscan.distance_to(global_position) / cW.maxRange)
 			collider.hitscanHit(finalDamage/6.0, hitscanBulletDirection, hitscanBulletCollision.position, source)
 			weapM.displayBulletHole(colliderPoint, colliderNormal)
-			
 		else:
 			weapM.displayBulletHole(colliderPoint, colliderNormal)
 
