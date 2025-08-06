@@ -1396,7 +1396,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.78936e-08, 0.154984, 0.541
 transform = Transform3D(1, 0, -4.54747e-13, 0, 1, 0, 0, 0, 1, -1.19209e-07, 0.065257, 0.568656)
 
 [node name="AssaultRifle" type="Node3D" parent="CameraHolder/CameraRecoilHolder/Camera/WeaponManager/WeaponContainer" node_paths=PackedStringArray("model", "attackPoint", "muzzleFlashSpawner")]
-transform = Transform3D(-0.22, 0, 5.5773995e-07, 0, 0.22, 0, -5.5773995e-07, 0, -0.22, 0.194412, -0.18, -0.144264)
+transform = Transform3D(-0.14141321, 0.16852982, 5.5773995e-07, 0.16852982, 0.14141321, 0, -3.585082e-07, 4.2725372e-07, -0.22, 0.194, -0.65, -0.144)
 script = ExtResource("24_tyw5b")
 model = NodePath(".")
 weaponId = 2

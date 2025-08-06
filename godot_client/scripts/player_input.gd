@@ -64,3 +64,11 @@ func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		mouseInput.x += event.relative.x
 		mouseInput.y += event.relative.y
+	
+	if event is InputEventMouseButton and event.button_index == 4:
+		is_weapon_up = true
+	elif event is InputEventMouseButton and event.button_index == 5:
+		is_weapon_down = true
+	else:
+		is_weapon_up = false
+		is_weapon_down = false

@@ -42,7 +42,9 @@ func _ready() -> void:
 	%Respawn.pressed.connect(func(): player.health_system.death.emit())
 	%Disconnect.pressed.connect(_on_disconnect)
 	%Quit.pressed.connect(func(): get_tree().quit())
-
+	
+	
+	%ScoreTimer.timeout.connect(update_score)
 
 func _process(_delta: float) -> void:
 	if %Menu.visible and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -97,4 +99,9 @@ func _on_disconnect():
 	Hub.world.get_parent().show()
 	Hub.world.queue_free()
 	
-	
+func update_score():
+	pass
+	#var players = get_tree().get_nodes_in_group("Players")
+	#for _player in players:
+		##add_child()
+		#print(_player.name)

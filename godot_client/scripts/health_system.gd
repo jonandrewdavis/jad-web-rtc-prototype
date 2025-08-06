@@ -65,6 +65,7 @@ func _damage_sync(value, source):
 	# Do not allow overkill. Just die.
 	# TODO: Clamp is easier right? Might work here
 	if next_health <= 0:
+		regen_tick_timer.stop()
 		regen_timer.stop()
 		health = 0
 		last_damage_source = source

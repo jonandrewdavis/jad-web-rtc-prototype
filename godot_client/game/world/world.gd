@@ -7,12 +7,11 @@ var ball = preload("res://assets/ball.tscn")
 
 func _ready() -> void:
 	Hub.world = self
-	
 	multiplayer.connected_to_server.connect(RTCServerConnected)
 	multiplayer.peer_connected.connect(RTCPeerConnected)
 	multiplayer.peer_disconnected.connect(RTCPeerDisconnected)
 	
-	add_player_to_game(multiplayer.get_unique_id())
+	#add_player_to_game(multiplayer.get_unique_id())
 
 func RTCServerConnected():
 	print("WORLD: rtc server connected")

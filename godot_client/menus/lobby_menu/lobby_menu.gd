@@ -10,7 +10,7 @@ const WEB_SOCKET_SECRET_KEY = "9317e4d6-83b3-4188-94c4-353a2798d3c1"
 #const WEB_SOCKET_SERVER_URL = 'ws://localhost:8787'
 
 # REMOTE
-const WEB_SOCKET_SERVER_URL = 'ws-lobby-worker.jonandrewdavis.workers.dev'
+const WEB_SOCKET_SERVER_URL = 'wss://ws-lobby-worker.jonandrewdavis.workers.dev'
 
 var current_username : String = ""
 var webSocketPeer : WebSocketPeer 
@@ -352,11 +352,11 @@ func _on_game_started():
 
 	multiplayer.multiplayer_peer = webRTCPeer
 	# Game world. Scripts within take care of adding players.
-	var new_game_world = GameWorldScene.instantiate()
-	add_child(new_game_world)
-	
-	await get_tree().create_timer(1.0).timeout
+	#var new_game_world = GameWorldScene.instantiate()
+	#add_child(new_game_world)
 	hide()
+	await get_tree().create_timer(1.0).timeout
+	Hub.world.add_player_to_game(multiplayer.get_unique_id())
 
 	
 # NOTE: The server will send a candidate, offer, and answer for each peer in the lobby

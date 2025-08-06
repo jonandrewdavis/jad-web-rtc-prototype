@@ -1,7 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://coipmkwg135us"]
+[gd_scene load_steps=3 format=3 uid="uid://coipmkwg135us"]
 
+[ext_resource type="PackedScene" uid="uid://3o00hq8ytpai" path="res://game/world/world.tscn" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://chqusw4w4e11" path="res://menus/lobby_menu/lobby_menu.tscn" id="3_h2yge"]
 
 [node name="Main" type="Node"]
 
 [node name="LobbyMenu" parent="." instance=ExtResource("3_h2yge")]
+
+[node name="World" parent="." instance=ExtResource("2_0xm2m")]
