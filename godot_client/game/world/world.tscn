@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://3bbhh1hy8wyv" path="res://assets/textures/NightSkyHDRI008_2K-TONEMAPPED.jpg" id="3_dess5"]
 [ext_resource type="PackedScene" uid="uid://crep3klgx68p5" path="res://scripts/projectile_system.tscn" id="4_4adp2"]
 [ext_resource type="PackedScene" uid="uid://bkwpea4jhu861" path="res://assets/environment/rust/rust_clean_textured.tscn" id="5_uynus"]
-[ext_resource type="Texture2D" uid="uid://cbbfth2legtx8" path="res://assets/environment/snowfort/Snow008A_1K-JPG_AmbientOcclusion.jpg" id="6_uynus"]
+[ext_resource type="Texture2D" uid="uid://d3lk7sn6r5krt" path="res://assets/environment/rust/Snow008A_1K-JPG_Color.jpg" id="6_uynus"]
 [ext_resource type="PackedScene" uid="uid://u4tj3ey6tjg8" path="res://addons/Weapons/Scenes/RocketScene.tscn" id="7_vwhhl"]
 [ext_resource type="PackedScene" uid="uid://0gq5270ogtxu" path="res://addons/Weapons/Scenes/BulletDecalScene.tscn" id="8_5hesp"]
 [ext_resource type="PackedScene" uid="uid://x8oniabn746q" path="res://addons/Weapons/Scenes/MuzzleFlashParticleScene.tscn" id="9_ncs2d"]

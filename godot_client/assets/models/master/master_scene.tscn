@@ -10,6 +10,7 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ji8ob"]
 resource_name = "VanguardBodyMat"
 cull_mode = 2
+albedo_color = Color(1, 0.5686275, 1, 1)
 albedo_texture = ExtResource("2_rwaq7")
 roughness = 0.552786
 normal_enabled = true
@@ -554,12 +555,12 @@ transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_ggsdj")
 
 [node name="Physical Bone RightFoot" type="PhysicalBone3D" parent="Armature/GeneralSkeleton/PhysicalBoneSimulator3D" index="15"]
-transform = Transform3D(-0.5407734, -0.7548198, -0.37122944, 0.073051706, -0.4818013, 0.8732302, -0.8379903, 0.4451007, 0.31568617, -0.13216908, 0.5565325, -0.10057908)
+transform = Transform3D(-0.5407734, -0.7548198, -0.37122944, 0.073051706, -0.4818013, 0.8732302, -0.8379903, 0.44510072, 0.31568617, -0.13216908, 0.5565325, -0.10057908)
 collision_layer = 0
 collision_mask = 16384
 joint_type = 1
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2629665e-05, -5.115196e-05, 0.09995882)
-body_offset = Transform3D(0.9812436, -0.14251274, -0.12981391, 4.7571957e-06, 0.67341983, -0.7392602, 0.19277331, 0.72539365, 0.6607896, 0.012981147, 0.073930025, -0.0660122)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2631528e-05, -5.1155686e-05, 0.09995881)
+body_offset = Transform3D(0.9812436, -0.1425128, -0.12981388, 4.7571957e-06, 0.67341983, -0.7392602, 0.19277331, 0.72539365, 0.6607896, 0.012981147, 0.073930025, -0.0660122)
 bone_name = "RightFoot"
 joint_constraints/bias = 0.3
 joint_constraints/damping = 1.0
@@ -602,12 +603,12 @@ transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_kfdpx")
 
 [node name="Physical Bone LeftFoot" type="PhysicalBone3D" parent="Armature/GeneralSkeleton/PhysicalBoneSimulator3D" index="18"]
-transform = Transform3D(-0.8894969, -0.33862996, -0.30679807, -0.05668299, -0.5844594, 0.80944073, -0.45341188, 0.7373852, 0.5006803, 0.05330393, 0.476233, 0.13551715)
+transform = Transform3D(-0.8894969, -0.33862996, -0.306798, -0.05668299, -0.5844594, 0.8094407, -0.45341188, 0.7373852, 0.50068027, 0.05330393, 0.476233, 0.13551715)
 collision_layer = 0
 collision_mask = 16384
 joint_type = 1
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00015139487, -0.0005754493, 0.0995004)
-body_offset = Transform3D(0.98125076, 0.14247464, 0.12980095, -1.5307218e-05, 0.6735215, -0.7391677, -0.19273639, 0.72530687, 0.66089565, -0.012981817, 0.07393506, -0.06531283)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00015139487, -0.00057543814, 0.09950042)
+body_offset = Transform3D(0.98125076, 0.14247464, 0.12980093, -1.5307218e-05, 0.6735215, -0.7391677, -0.19273639, 0.72530687, 0.6608956, -0.012981817, 0.07393506, -0.06531283)
 bone_name = "LeftFoot"
 joint_constraints/bias = 0.3
 joint_constraints/damping = 1.0

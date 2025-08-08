@@ -7,16 +7,17 @@ extends CanvasLayer
 const WEB_SOCKET_SECRET_KEY = "9317e4d6-83b3-4188-94c4-353a2798d3c1"
 
 # LOCAL
-#const WEB_SOCKET_SERVER_URL = 'ws://localhost:8787'
+const WEB_SOCKET_SERVER_URL = 'ws://localhost:8787'
 
 # REMOTE
-const WEB_SOCKET_SERVER_URL = 'wss://ws-lobby-worker.jonandrewdavis.workers.dev'
+#const WEB_SOCKET_SERVER_URL = 'wss://ws-lobby-worker.jonandrewdavis.workers.dev'
 
 var current_username : String = ""
 var webSocketPeer : WebSocketPeer 
 var webRTCPeer: WebRTCMultiplayerPeer 
 
 var current_web_id: int 
+var current_chosen_color: Color
 var is_lobby_host = false
 #var lobby_data = null # Not used
 
@@ -26,6 +27,7 @@ var timer_heartbeat_light = Timer.new()
 # TODO: Parse for alpha chars
 var username_input = ''
 var connection_validated = false
+
 
 #region Signals
 signal signal_connection_confirmed(webId: int)
@@ -112,6 +114,10 @@ func ready_input_connections():
 	%LobbyInput.text_submitted.connect(send_message_to_lobby)
 	%LobbyInputSend.pressed.connect(func (): send_message_to_lobby(%LobbyInput.text))
 
+	# TODO: Temp. Remove. This should come from the server, but we'll just use it locally to share via synchronizer for now
+	%UsernameInput.text_changed.connect(func (text): Hub.current_chosen_username = text)
+	%ColorGrid.color_grid_changed.connect(func(color: Color): Hub.current_chosen_color = color)
+
 func ready_render_connections():
 	signal_connection_confirmed.connect(render_connection_confirmed)
 	signal_disconnect.connect(render_web_socket_disconnect)
@@ -140,9 +146,9 @@ func _process(_delta):
 		WebSocketPeer.STATE_CONNECTING:
 			return
 		WebSocketPeer.STATE_OPEN:
-			# TODO: Improve this step
+			# TODO: Improve this step - this is where the client tells everyone about themselves
 			if connection_validated == false:
-				_send_message(Action_Connect, {"secretKey" : WEB_SOCKET_SECRET_KEY, "username" : current_username})
+				_send_message(Action_Connect, {"secretKey" : WEB_SOCKET_SECRET_KEY, "username" : current_username, "color": 'RED'})
 				connection_validated = true
 				return
 			while webSocketPeer.get_available_packet_count():
@@ -191,6 +197,7 @@ func parse_message_from_server(message):
 				webSocketPeer.disconnect_from_host(1000, "Couldn't authenticate")
 		Action_GetUsers:
 			if message.payload.has("users"):
+				print(message.payload.users)
 				signal_update_user_list.emit(message.payload.users)
 			else:
 				signal_update_user_list.emit([])
@@ -296,6 +303,8 @@ func render_user_list(users):
 func render_lobby_list(lobbies):
 	for child in %LobbyList.get_children():
 		child.queue_free()
+
+	var found_player_in_lobby = false
 	for lobby in lobbies:
 		var render_lobby: LobbyListItem = LobbyItemScene.instantiate()
 		render_lobby.name = str(lobby.id)
@@ -306,7 +315,19 @@ func render_lobby_list(lobbies):
 		render_lobby.lobby_leave_button.pressed.connect(func(): send_message_leave_lobby())
 		render_lobby.lobby_start_button.pressed.connect(func(): send_message_start_game(lobby.id))
 
+		# if you are in here, we update your current lobby... lol.
+		#if lobby.player
+		if lobby.players.filter(func(_p): return int(_p.id) == current_web_id):
+			found_player_in_lobby = true
+			render_lobby_current(lobby)
+			
+	if found_player_in_lobby == false:
+		render_lobby_current(null)
+
 func render_remove_user_from_list(webId):
+	# User could be in a lobby, so, ask for updates.
+	send_message_get_lobbies()
+
 	for child in %UserList.get_children():
 		# TODO: Better types here, float can often have an extra .0 decimal
 		if child.name == str(int(webId)):
@@ -455,8 +476,10 @@ func on_heartbeat_light():
 		%ConnectLight.modulate = Color.WHITE
 
 func render_left_lobby():
+	render_lobby_current(null)
 	%LobbyChat.text = ''
 	%LobbyChat.clear()
+	
 
 func get_username_input():
 	if %UsernameInput && %UsernameInput.text:
@@ -468,3 +491,19 @@ func get_username_input():
 			random_username = random_username + letters[randi_range(0, letters.length() - 1)]
 		%UsernameInput.text = random_username
 		return random_username
+
+func render_lobby_current(lobby):
+	for child in %LobbyUsers.get_children():
+		child.queue_free()
+	
+	# No Lobby.
+	if lobby == null:
+		%CurrentLobbyId.text = ''
+		return
+		
+	%CurrentLobbyId.text = lobby.id.substr(0, 7)
+	for single_user in lobby.players:
+		var user_label = Label.new()
+		user_label.name = str(int(single_user.id))
+		user_label.text = single_user.username
+		%LobbyUsers.add_child(user_label, true)

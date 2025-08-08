@@ -12,6 +12,8 @@ var is_first_person = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+
+
 	if not is_multiplayer_authority():
 		set_process(false)
 		set_physics_process(false)
@@ -23,6 +25,7 @@ func _ready() -> void:
 	player.health_system.death.connect(func(): _on_master_death.rpc())
 	player.health_system.respawn.connect(func(): _on_master_respawn.rpc())
 	
+
 	#weapon_manager.player = player
 	#weapon_manager.player_input = player.player_input
 	
@@ -37,6 +40,11 @@ func _ready() -> void:
 		$Armature/GeneralSkeleton/LeftUpper.target_node = player.look_at_target.get_path()
 		$Armature/GeneralSkeleton/RightHand.target_node = player.look_at_target.get_path()
 		$Armature/GeneralSkeleton/LeftHand.target_node = player.look_at_target.get_path()
+
+
+	await get_tree().create_timer(0.1).timeout
+	var mesh_material: StandardMaterial3D = %vanguard_Mesh.get_active_material(0)
+	mesh_material.albedo_color = player.current_chosen_color
 
 func cast_shadow_only():
 	%vanguard_Mesh.cast_shadow = 3

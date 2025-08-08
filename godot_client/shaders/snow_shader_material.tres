@@ -10,4 +10,4 @@ shader_parameter/snow_color = Color(1, 1, 1, 1)
 shader_parameter/snow_transparency = 0.5000000475000002
 shader_parameter/speed = 0.8000000380000001
 shader_parameter/wind = 0.5000001187500001
-shader_parameter/num_of_layers = 60
+shader_parameter/num_of_layers = 20

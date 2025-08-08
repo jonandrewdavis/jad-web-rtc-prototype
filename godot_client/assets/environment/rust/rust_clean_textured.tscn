@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c1b1yrided7i2" path="res://assets/environment/rust/rust_clean.glb" id="1_l4jrd"]
 [ext_resource type="Script" uid="uid://b5ru7fcyan8pk" path="res://assets/environment/rust/rust_clean_textured.gd" id="2_6q7a7"]
-[ext_resource type="Texture2D" uid="uid://cbbfth2legtx8" path="res://assets/environment/snowfort/Snow008A_1K-JPG_AmbientOcclusion.jpg" id="2_xuybn"]
+[ext_resource type="Texture2D" uid="uid://d3lk7sn6r5krt" path="res://assets/environment/rust/Snow008A_1K-JPG_Color.jpg" id="2_xuybn"]
 [ext_resource type="Texture2D" uid="uid://bsp382t47me3i" path="res://assets/environment/rust/rust_clean_Image_1.png" id="3_6q7a7"]
 [ext_resource type="Texture2D" uid="uid://dymj8tlvognsx" path="res://assets/environment/rust/rust_clean_Image_2.png" id="4_y220n"]
 [ext_resource type="Texture2D" uid="uid://c064crkprba7c" path="res://assets/environment/rust/rust_clean_Image_5.png" id="5_8mde7"]
