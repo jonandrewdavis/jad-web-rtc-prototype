@@ -8,7 +8,7 @@ class_name PlayerCharacter
 @export var health_system: HealthSystem
 @export var immobile: bool = false
 @export var look_at_target: Marker3D
-
+@export var current_chosen_color_index: int
 
 @export_group("Movement variables")
 var moveSpeed : float
@@ -101,6 +101,7 @@ func _ready():
 	if is_multiplayer_authority():
 		%HitboxHead.queue_free()
 		%Camera.current = true
+		current_chosen_color_index = Hub.current_chosen_color_index
 	else:
 		set_process(false)
 		set_physics_process(false)

@@ -12,8 +12,6 @@ var is_first_person = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-
-
 	if not is_multiplayer_authority():
 		set_process(false)
 		set_physics_process(false)
@@ -25,10 +23,10 @@ func _ready() -> void:
 	player.health_system.death.connect(func(): _on_master_death.rpc())
 	player.health_system.respawn.connect(func(): _on_master_respawn.rpc())
 	
-
 	#weapon_manager.player = player
 	#weapon_manager.player_input = player.player_input
-	
+	set_mesh_color(player.current_chosen_color_index)
+
 	if not animation_player:
 		animation_player = $AnimationPlayer
 	$AnimationPlayer.speed_scale = 1
@@ -41,10 +39,11 @@ func _ready() -> void:
 		$Armature/GeneralSkeleton/RightHand.target_node = player.look_at_target.get_path()
 		$Armature/GeneralSkeleton/LeftHand.target_node = player.look_at_target.get_path()
 
-
-	await get_tree().create_timer(0.1).timeout
+func set_mesh_color(new_color: int):
 	var mesh_material: StandardMaterial3D = %vanguard_Mesh.get_active_material(0)
-	mesh_material.albedo_color = player.current_chosen_color
+	var new_mat = mesh_material.duplicate() 
+	new_mat.albedo_color = Hub.colors[new_color]
+	%vanguard_Mesh.set_surface_override_material(0, new_mat)
 
 func cast_shadow_only():
 	%vanguard_Mesh.cast_shadow = 3

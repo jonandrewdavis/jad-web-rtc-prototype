@@ -373,13 +373,11 @@ func _on_game_started():
 
 	multiplayer.multiplayer_peer = webRTCPeer
 	# Game world. Scripts within take care of adding players.
-	#var new_game_world = GameWorldScene.instantiate()
-	#add_child(new_game_world)
 	hide()
 	await get_tree().create_timer(1.0).timeout
-	Hub.world.add_player_to_game(multiplayer.get_unique_id())
+	var new_game_world = GameWorldScene.instantiate()
+	add_child(new_game_world)	
 
-	
 # NOTE: The server will send a candidate, offer, and answer for each peer in the lobby
 func create_multiplayer_peer_connection(id: int):
 	if id != current_web_id:

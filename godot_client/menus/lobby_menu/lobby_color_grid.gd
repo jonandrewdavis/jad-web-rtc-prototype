@@ -28,16 +28,13 @@ func _ready() -> void:
 		add_child(new_button)
 		
 	await get_tree().create_timer(0.1).timeout	
-	var first_color: Button = get_child(0)
+	var random_color = randi_range(0, get_child_count() - 1)
+	var first_color: Button = get_child(random_color)
 	first_color.set_pressed_no_signal(true)
-	
+	choose_color(true, colors[random_color])
 	# TODO: instantiate a grid of colors & hook up connections
 	pass
 	
 func choose_color(toggled_on, color_string):
 	if toggled_on:
 		color_grid_changed.emit(color_string)
-		print(toggled_on, color_string)
-
-	# bg_color
-	# border_width_left

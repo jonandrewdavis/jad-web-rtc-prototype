@@ -11,7 +11,7 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(RTCPeerConnected)
 	multiplayer.peer_disconnected.connect(RTCPeerDisconnected)
 	
-	#add_player_to_game(multiplayer.get_unique_id())
+	add_player_to_game(multiplayer.get_unique_id())
 
 func RTCServerConnected():
 	print("WORLD: rtc server connected")
@@ -30,7 +30,7 @@ func add_player_to_game(id: int):
 	var has_id = id in player_container.get_children().map(func(node): int(node.name))
 	if has_id == true:
 		return
-		
+
 	#var player_to_add = player_scene.instantiate()
 	var player_to_add = player_scene_new.instantiate()
 	
