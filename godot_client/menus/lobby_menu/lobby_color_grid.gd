@@ -1,8 +1,8 @@
-extends GridContainer
+extends Control
 
 signal color_grid_changed(value)
 
-var colors = [Color.WHITE, Color.CHARTREUSE, Color.DEEP_PINK, Color.CYAN, Color.ORANGE_RED, Color.SLATE_BLUE, Color.YELLOW, Color.CORAL, Color.BLUE]
+var colors = [Color.WHITE, Color.DEEP_PINK, Color.CYAN, Color.BLUE_VIOLET, Color.ROYAL_BLUE, Color.CORAL]
 
 func _ready() -> void:
 	var new_toggle_group = ButtonGroup.new()
@@ -25,16 +25,15 @@ func _ready() -> void:
 		new_button.add_theme_stylebox_override('pressed', style_pressed)
 		new_button.add_theme_stylebox_override('hover', style_pressed)
 		new_button.mouse_default_cursor_shape = 2
-		add_child(new_button)
+		%ColorGrid.add_child(new_button)
 		
 	await get_tree().create_timer(0.1).timeout	
 	var random_color = randi_range(0, get_child_count() - 1)
-	var first_color: Button = get_child(random_color)
+	var first_color: Button = %ColorGrid.get_child(random_color)
 	first_color.set_pressed_no_signal(true)
 	choose_color(true, colors[random_color])
-	# TODO: instantiate a grid of colors & hook up connections
-	pass
 	
 func choose_color(toggled_on, color_string):
 	if toggled_on:
 		color_grid_changed.emit(color_string)
+		%ColorRect.color = color_string

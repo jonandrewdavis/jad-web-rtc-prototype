@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://dhsq83gov2k4t"]
+
+[ext_resource type="Texture2D" uid="uid://br3rf0u4bxs67" path="res://game/Weapons/Images/MuzzleFlash.png" id="1_7422i"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b458f"]
+transparency = 1
+blend_mode = 1
+albedo_texture = ExtResource("1_7422i")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.2
+emission_texture = ExtResource("1_7422i")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_7422i"]
+material = SubResource("StandardMaterial3D_b458f")
+
+[node name="MuzzleParticles" type="CPUParticles3D"]
+emitting = false
+amount = 4
+lifetime = 0.05
+one_shot = true
+randomness = 0.4
+mesh = SubResource("QuadMesh_7422i")
+initial_velocity_min = 0.2
+initial_velocity_max = 1.0
+angular_velocity_min = -200.51
+angular_velocity_max = 10.15

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://kox0c7rb0yh2"]
 
-[ext_resource type="PackedScene" uid="uid://cjhibfe5567xa" path="res://addons/Targets/Scenes/ShootingRangeTargetScene.tscn" id="1_q5uj6"]
+[ext_resource type="PackedScene" uid="uid://cjhibfe5567xa" path="res://game/Targets/Scenes/ShootingRangeTargetScene.tscn" id="1_q5uj6"]
 
 [node name="ShootingTargets" type="Node3D"]
 

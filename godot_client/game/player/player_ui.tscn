@@ -219,18 +219,22 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "Settings"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Menu/InGameMenuMargin/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="Menu/InGameMenuMargin/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="SensLabel" type="HBoxContainer" parent="Menu/InGameMenuMargin/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Menu/InGameMenuMargin/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Menu/InGameMenuMargin/VBoxContainer/GridContainer/SensLabel"]
 layout_mode = 2
 text = "Look Sensitivity"
 
-[node name="SenVal" type="Label" parent="Menu/InGameMenuMargin/VBoxContainer/HBoxContainer"]
+[node name="SenVal" type="Label" parent="Menu/InGameMenuMargin/VBoxContainer/GridContainer/SensLabel"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="SenSlider" type="HSlider" parent="Menu/InGameMenuMargin/VBoxContainer/HBoxContainer"]
+[node name="SenSlider" type="HSlider" parent="Menu/InGameMenuMargin/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -242,22 +246,40 @@ tick_count = 10
 ticks_on_borders = true
 ticks_position = 3
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Menu/InGameMenuMargin/VBoxContainer"]
+[node name="AimSensLabel" type="HBoxContainer" parent="Menu/InGameMenuMargin/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Menu/InGameMenuMargin/VBoxContainer/HBoxContainer3"]
+[node name="Label" type="Label" parent="Menu/InGameMenuMargin/VBoxContainer/GridContainer/AimSensLabel"]
 layout_mode = 2
 text = "Aim Slow Intensity"
 
-[node name="AimVal" type="Label" parent="Menu/InGameMenuMargin/VBoxContainer/HBoxContainer3"]
+[node name="AimVal" type="Label" parent="Menu/InGameMenuMargin/VBoxContainer/GridContainer/AimSensLabel"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="AimSlider" type="HSlider" parent="Menu/InGameMenuMargin/VBoxContainer/HBoxContainer3"]
+[node name="AimSlider" type="HSlider" parent="Menu/InGameMenuMargin/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 0.01000000000931322
+max_value = 1.0
+step = 0.01000000000931322
+value = 0.01000000000931322
+tick_count = 10
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="SoundLabel" type="HBoxContainer" parent="Menu/InGameMenuMargin/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Menu/InGameMenuMargin/VBoxContainer/GridContainer/SoundLabel"]
+layout_mode = 2
+text = "Sound"
+
+[node name="SoundSlider" type="HSlider" parent="Menu/InGameMenuMargin/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01000000000931322
 value = 0.01000000000931322

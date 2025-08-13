@@ -8,7 +8,6 @@ class_name Master
 
 var _player_input: PlayerInput
 
-var is_first_person = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -16,7 +15,7 @@ func _ready() -> void:
 		set_process(false)
 		set_physics_process(false)
 	
-	if is_multiplayer_authority() and is_first_person:
+	if is_multiplayer_authority() and player.is_first_person:
 		cast_shadow_only()
 
 	_player_input = player.player_input
@@ -25,7 +24,7 @@ func _ready() -> void:
 	
 	#weapon_manager.player = player
 	#weapon_manager.player_input = player.player_input
-	set_mesh_color(player.current_chosen_color_index)
+	#set_mesh_color(player.current_chosen_color_index)
 
 	if not animation_player:
 		animation_player = $AnimationPlayer

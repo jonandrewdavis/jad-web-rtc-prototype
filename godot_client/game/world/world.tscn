@@ -1,24 +1,26 @@
-[gd_scene load_steps=15 format=3 uid="uid://3o00hq8ytpai"]
+[gd_scene load_steps=17 format=3 uid="uid://3o00hq8ytpai"]
 
 [ext_resource type="Script" uid="uid://bdf0fok3q1l6c" path="res://game/world/world.gd" id="1_we8ss"]
+[ext_resource type="Material" uid="uid://buguph1wmcp08" path="res://shaders/snow_shader_material.tres" id="2_vwhhl"]
 [ext_resource type="Texture2D" uid="uid://3bbhh1hy8wyv" path="res://assets/textures/NightSkyHDRI008_2K-TONEMAPPED.jpg" id="3_dess5"]
 [ext_resource type="PackedScene" uid="uid://crep3klgx68p5" path="res://scripts/projectile_system.tscn" id="4_4adp2"]
 [ext_resource type="PackedScene" uid="uid://bkwpea4jhu861" path="res://assets/environment/rust/rust_clean_textured.tscn" id="5_uynus"]
 [ext_resource type="Texture2D" uid="uid://d3lk7sn6r5krt" path="res://assets/environment/rust/Snow008A_1K-JPG_Color.jpg" id="6_uynus"]
-[ext_resource type="PackedScene" uid="uid://u4tj3ey6tjg8" path="res://addons/Weapons/Scenes/RocketScene.tscn" id="7_vwhhl"]
-[ext_resource type="PackedScene" uid="uid://0gq5270ogtxu" path="res://addons/Weapons/Scenes/BulletDecalScene.tscn" id="8_5hesp"]
-[ext_resource type="PackedScene" uid="uid://x8oniabn746q" path="res://addons/Weapons/Scenes/MuzzleFlashParticleScene.tscn" id="9_ncs2d"]
+[ext_resource type="PackedScene" uid="uid://u4tj3ey6tjg8" path="res://game/Weapons/Scenes/RocketScene.tscn" id="7_vwhhl"]
+[ext_resource type="PackedScene" uid="uid://0gq5270ogtxu" path="res://game/Weapons/Scenes/BulletDecalScene.tscn" id="8_5hesp"]
 [ext_resource type="PackedScene" uid="uid://d1phoa8tdhobe" path="res://game/world/world_boundaries.tscn" id="9_vwhhl"]
+[ext_resource type="PackedScene" uid="uid://d27xhk2ygjsbr" path="res://game/Targets/Scenes/HitableBoxScene.tscn" id="10_5hesp"]
+[ext_resource type="PackedScene" uid="uid://cjhibfe5567xa" path="res://game/Targets/Scenes/ShootingRangeTargetScene.tscn" id="11_ncs2d"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_uynus"]
 panorama = ExtResource("3_dess5")
 
-[sub_resource type="Sky" id="Sky_4adp2"]
+[sub_resource type="Sky" id="Sky_vwhhl"]
 sky_material = SubResource("PanoramaSkyMaterial_uynus")
 
 [sub_resource type="Environment" id="Environment_dess5"]
 background_mode = 2
-sky = SubResource("Sky_4adp2")
+sky = SubResource("Sky_vwhhl")
 ambient_light_source = 2
 ambient_light_color = Color(0.40012595, 0.41648132, 0.66999865, 1)
 ambient_light_energy = 0.7
@@ -43,12 +45,21 @@ orientation = 1
 script = ExtResource("1_we8ss")
 player_container = NodePath("PlayerContainer")
 
+[node name="SnowShader" type="Panel" parent="."]
+material = ExtResource("2_vwhhl")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_dess5")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.38245693, -0.7559008, -0.5313574, -0.08658036, -0.6018674, 0.7938889, -0.919908, -0.25762329, -0.29563454, 0, 3.7201366, 8.137672)
-light_energy = 0.5
+light_energy = 0.1
 shadow_enabled = true
 
 [node name="PlayerContainer" type="Node3D" parent="."]
@@ -60,8 +71,10 @@ spawn_path = NodePath("../PlayerContainer")
 [node name="ProjectileSystem" parent="." instance=ExtResource("4_4adp2")]
 
 [node name="rust_clean" parent="." instance=ExtResource("5_uynus")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.506607, 0, 0)
 
 [node name="rust_decoration" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.506607, 0, 0)
 
 [node name="snowWorldFloor" type="MeshInstance3D" parent="rust_decoration"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.913002, 0)
@@ -103,7 +116,40 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11.124223, 0)
 [node name="BulletDecal" parent="rust_decoration" instance=ExtResource("8_5hesp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11.124223, 0)
 
-[node name="MuzzleFlashParticles" parent="rust_decoration" instance=ExtResource("9_ncs2d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11.124223, 0)
-
 [node name="WorldBoundaries" parent="." instance=ExtResource("9_vwhhl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.506607, 0, 0)
+
+[node name="rust_interactive" type="Node3D" parent="."]
+
+[node name="HitableBox" parent="rust_interactive" instance=ExtResource("10_5hesp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.807888, -0.6957283, -24.054644)
+
+[node name="HitableBox7" parent="rust_interactive" instance=ExtResource("10_5hesp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.265163, -0.6957283, -3.7719717)
+
+[node name="HitableBox8" parent="rust_interactive" instance=ExtResource("10_5hesp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.265163, -0.6957283, -1.8018527)
+
+[node name="HitableBox6" parent="rust_interactive" instance=ExtResource("10_5hesp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.807888, -0.6957283, -24.054644)
+
+[node name="HitableBox2" parent="rust_interactive" instance=ExtResource("10_5hesp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.484749, 1.3109872, -24.89788)
+
+[node name="HitableBox3" parent="rust_interactive" instance=ExtResource("10_5hesp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.163538, 1.3109872, -23.754036)
+
+[node name="HitableBox4" parent="rust_interactive" instance=ExtResource("10_5hesp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.366747, 1.3109872, -22.232935)
+
+[node name="HitableBox5" parent="rust_interactive" instance=ExtResource("10_5hesp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.965487, 1.273165, -22.446089)
+
+[node name="ShootingRangeTarget" parent="." instance=ExtResource("11_ncs2d")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 26.800938, -1.7176356, -42.820244)
+
+[node name="ShootingRangeTarget2" parent="." instance=ExtResource("11_ncs2d")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 12.53087, -1.7176356, -42.820244)
+
+[node name="ShootingRangeTarget3" parent="." instance=ExtResource("11_ncs2d")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 20.026426, -1.7176356, -42.820244)

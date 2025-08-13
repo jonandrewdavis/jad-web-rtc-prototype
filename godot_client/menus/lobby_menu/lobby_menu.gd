@@ -13,11 +13,12 @@ const WEB_SOCKET_SERVER_URL = 'ws://localhost:8787'
 #const WEB_SOCKET_SERVER_URL = 'wss://ws-lobby-worker.jonandrewdavis.workers.dev'
 
 var current_username : String = ""
+var current_chosen_color: Color
+
 var webSocketPeer : WebSocketPeer 
 var webRTCPeer: WebRTCMultiplayerPeer 
 
 var current_web_id: int 
-var current_chosen_color: Color
 var is_lobby_host = false
 #var lobby_data = null # Not used
 
@@ -115,8 +116,8 @@ func ready_input_connections():
 	%LobbyInputSend.pressed.connect(func (): send_message_to_lobby(%LobbyInput.text))
 
 	# TODO: Temp. Remove. This should come from the server, but we'll just use it locally to share via synchronizer for now
-	%UsernameInput.text_changed.connect(func (text): Hub.current_chosen_username = text)
-	%ColorGrid.color_grid_changed.connect(func(color: Color): Hub.current_chosen_color = color)
+	#%UsernameInput.text_changed.connect(func (text): Hub.current_chosen_username = text)
+	%ColorControl.color_grid_changed.connect(func(color: Color): current_chosen_color = color)
 
 func ready_render_connections():
 	signal_connection_confirmed.connect(render_connection_confirmed)
@@ -148,7 +149,7 @@ func _process(_delta):
 		WebSocketPeer.STATE_OPEN:
 			# TODO: Improve this step - this is where the client tells everyone about themselves
 			if connection_validated == false:
-				_send_message(Action_Connect, {"secretKey" : WEB_SOCKET_SECRET_KEY, "username" : current_username, "color": 'RED'})
+				_send_message(Action_Connect, {"secretKey" : WEB_SOCKET_SECRET_KEY, "username" : current_username, "color": current_chosen_color})
 				connection_validated = true
 				return
 			while webSocketPeer.get_available_packet_count():
@@ -373,9 +374,10 @@ func _on_game_started():
 
 	multiplayer.multiplayer_peer = webRTCPeer
 	# Game world. Scripts within take care of adding players.
-	hide()
-	await get_tree().create_timer(1.0).timeout
 	var new_game_world = GameWorldScene.instantiate()
+	await get_tree().create_timer(0.5).timeout
+	hide()
+	get_parent().get_node('LobbyMenuLevel').queue_free()
 	add_child(new_game_world)	
 
 # NOTE: The server will send a candidate, offer, and answer for each peer in the lobby
@@ -477,16 +479,16 @@ func render_left_lobby():
 	render_lobby_current(null)
 	%LobbyChat.text = ''
 	%LobbyChat.clear()
-	
+
+
+var random_names = NameGenerator.new()
 
 func get_username_input():
 	if %UsernameInput && %UsernameInput.text:
 		return %UsernameInput.text
 	else:
-		const letters = "abc123"
-		var random_username = ""
-		for i in range(8):
-			random_username = random_username + letters[randi_range(0, letters.length() - 1)]
+		var random_users_array = random_names.new_name()
+		var random_username = random_users_array[2]
 		%UsernameInput.text = random_username
 		return random_username
 

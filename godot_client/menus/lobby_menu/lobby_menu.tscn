@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://e1via0bhi4hy" path="res://menus/lobby_menu/lobby_menu.gd" id="1_3p3bs"]
 [ext_resource type="Material" uid="uid://buguph1wmcp08" path="res://shaders/snow_shader_material.tres" id="2_07jv1"]
 [ext_resource type="StyleBox" uid="uid://8nr6rb2m1nto" path="res://assets/ui/section_panel_style_box_flat.tres" id="2_urr6r"]
-[ext_resource type="Script" uid="uid://ulyxryf5vvmq" path="res://menus/lobby_menu/lobby_color_grid.gd" id="4_wkj3s"]
+[ext_resource type="PackedScene" uid="uid://cr0rjm7booup1" path="res://menus/lobby_menu/lobby_color_grid.tscn" id="4_07jv1"]
 
 [sub_resource type="Gradient" id="Gradient_urr6r"]
 offsets = PackedFloat32Array(0.56650245, 0.591133)
@@ -77,7 +77,7 @@ theme_override_constants/separation = 10
 [node name="WebsocketsLobbyLabel" type="Label" parent="TopCenter/TopVbox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
-text = "Tundra 2"
+text = "jonandrewdavis.com WebRTC Prototype"
 horizontal_alignment = 1
 
 [node name="WebSockets Lobby" type="Label" parent="TopCenter/TopVbox"]
@@ -121,11 +121,9 @@ placeholder_text = "Username"
 max_length = 12
 emoji_menu_enabled = false
 
-[node name="ColorGrid" type="GridContainer" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin"]
+[node name="ColorControl" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin" instance=ExtResource("4_07jv1")]
 unique_name_in_owner = true
 layout_mode = 2
-columns = 3
-script = ExtResource("4_wkj3s")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin"]
 layout_mode = 2

@@ -9,6 +9,8 @@ class_name PlayerUI
 
 var RETICLE: Control
 
+var volume_master: float = 0.0
+
 func _ready() -> void:
 	if not is_multiplayer_authority():
 		queue_free()
@@ -17,6 +19,8 @@ func _ready() -> void:
 	DebugMenu.style = DebugMenu.Style.VISIBLE_COMPACT
 
 	%Menu.hide()
+
+	volume_master = db_to_linear(AudioServer.get_bus_volume_db(0))
 
 	if !player:
 		player = get_parent()
@@ -34,17 +38,19 @@ func _ready() -> void:
 
 	%AimSlider.value_changed.connect(_on_aim_changed)
 	%SenSlider.value_changed.connect(_on_sens_changed)
+	%SoundSlider.value_changed.connect(func(_new_sound_value): AudioServer.set_bus_volume_db(0, linear_to_db(_new_sound_value) ))
 
 	await get_tree().create_timer(0.1).timeout
 	%SenSlider.value = player.camHolder.XAxisSens
 	%AimSlider.value = player.camHolder.aimFactor
+	%SoundSlider.value = volume_master
 
 	%Respawn.pressed.connect(func(): player.health_system.death.emit())
 	%Disconnect.pressed.connect(_on_disconnect)
 	%Quit.pressed.connect(func(): get_tree().quit())
 	
-	
 	%ScoreTimer.timeout.connect(update_score)
+
 
 func _process(_delta: float) -> void:
 	if %Menu.visible and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:

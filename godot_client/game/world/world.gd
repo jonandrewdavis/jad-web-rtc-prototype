@@ -1,6 +1,6 @@
 extends Node3D
 
-var player_scene_new = preload("res://addons/PlayerCharacter/Scenes/PlayerCharacterScene.tscn")
+var player_scene_new = preload("res://game/PlayerCharacter/Scenes/PlayerCharacterScene.tscn")
 var ball = preload("res://assets/ball.tscn")
 
 @export var player_container: Node3D
@@ -35,7 +35,7 @@ func add_player_to_game(id: int):
 	var player_to_add = player_scene_new.instantiate()
 	
 	player_to_add.name = str(id)
-	player_to_add.position = Vector3(randi_range(-2, 2), 0.8, randi_range(-2, 2)) * 5
+	player_to_add.position = Vector3(randi_range(-2, 2), 0.8, randi_range(-2, 2)) * 8
 	player_container.add_child(player_to_add, true)
 
 func remove_player_from_game(id: int):
