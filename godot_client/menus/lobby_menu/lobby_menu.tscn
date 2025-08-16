@@ -43,7 +43,7 @@ border_color = Color(0.6392157, 0.6392157, 0.6392157, 0.6313726)
 script = ExtResource("1_3p3bs")
 
 [node name="BlackBackground" type="Panel" parent="."]
-modulate = Color(1, 1, 1, 0.80784315)
+modulate = Color(1, 1, 1, 0.63529414)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

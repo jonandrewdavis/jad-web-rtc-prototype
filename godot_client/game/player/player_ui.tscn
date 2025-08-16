@@ -5,7 +5,7 @@
 [ext_resource type="Shader" uid="uid://qeyffruxo18f" path="res://shaders/progress-bar/progress_bar.gdshader" id="2_k8gwt"]
 [ext_resource type="Texture2D" uid="uid://dgawa7qhyucjl" path="res://assets/ui/keys/1.png" id="3_8j042"]
 [ext_resource type="Texture2D" uid="uid://lx43i3uhpig5" path="res://assets/ui/keys/2.png" id="4_3sa24"]
-[ext_resource type="Texture2D" uid="uid://bjgabt4w188s2" path="res://assets/ui/TAB.png" id="4_587s8"]
+[ext_resource type="Texture2D" uid="uid://bjgabt4w188s2" path="res://assets/ui/keys/TAB.png" id="4_587s8"]
 [ext_resource type="Texture2D" uid="uid://ckj546ywa71nr" path="res://assets/ui/keys/C.png" id="5_gyopi"]
 [ext_resource type="Texture2D" uid="uid://bs056of5ahnqb" path="res://assets/ui/keys/SHIFTBIGGER.png" id="6_1d6ur"]
 

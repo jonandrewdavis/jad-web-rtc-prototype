@@ -18,4 +18,3 @@ func _ready():
 @rpc("any_peer", 'call_local')
 func on_score_updated(source):
 	players[source].score = players[source].score + 1
-	print('new score', players[source].score)
