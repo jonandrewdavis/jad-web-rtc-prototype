@@ -9,7 +9,7 @@ const WEB_SOCKET_SECRET_KEY = "9317e4d6-83b3-4188-94c4-353a2798d3c1"
 # LOCAL
 # REMOTE
 #const WEB_SOCKET_SERVER_URL = 'ws://localhost:8787'
-const WEB_SOCKET_SERVER_URL = 'wss://ws-lobby-worker.jonandrewdavis.workers.dev'
+const WEB_SOCKET_SERVER_URL = 'wss://typescript-websockets-lobby.jonandrewdavis.workers.dev'
 
 var current_username : String = ""
 var current_chosen_color: String
@@ -79,6 +79,7 @@ const Action_Candidate = "Candidate"
 #endregion
 
 func _ready():
+	Hub.lobby_menu = self
 	set_process(false)	
 	ready_required_connections()
 	ready_input_connections()

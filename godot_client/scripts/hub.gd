@@ -5,8 +5,6 @@ var world: Node3D
 var projectile_system: ProjectileSystem
 var players = {}
 
-
-
 signal hit
 signal world_loaded
 signal score_updated
