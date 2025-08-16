@@ -44,7 +44,7 @@ var rng = RandomNumberGenerator.new()
 func _ready():
 	if is_multiplayer_authority():
 		initialize()
-	
+
 func initialize():
 	for weapon in weaponResources:
 		#create dict to refer weapons
@@ -99,7 +99,6 @@ func enterWeapon(nextWeapon : int):
 	cWM = cW.weSl.model
 	cWM.visible = true
 	
-	%MuzzleParticles.position = cW.weSl.muzzleFlashSpawner.position
 	
 	shootManager.getCurrentWeapon(cW)
 	reloadManager.getCurrentWeapon(cW)
@@ -169,17 +168,19 @@ func changeWeapon(nextWeapon : int):
 	
 func displayMuzzleFlash():
 	# NOTE: edited.
+	%MuzzleParticles.global_position = cW.weSl.muzzleFlashSpawner.global_position
 	%MuzzleParticles.emitting = true
-	
+
+	# TODO: Disabled. Renable?	
 	#create a muzzle flash instance, and display it at the indicated point
-	if cW.muzzleFlashRef != null:
-		var muzzleFlashInstance = cW.muzzleFlashRef.instantiate()
-		add_child(muzzleFlashInstance)
-		muzzleFlashInstance.global_position = cW.weSl.muzzleFlashSpawner.global_position
-		muzzleFlashInstance.emitting = true
-	else:
-		push_error("%s doesn't have a muzzle flash reference" % cW.weaponName)
-		return
+	#if cW.muzzleFlashRef != null:
+		#var muzzleFlashInstance = cW.muzzleFlashRef.instantiate()
+		#add_child(muzzleFlashInstance)
+		#muzzleFlashInstance.global_position = cW.weSl.muzzleFlashSpawner.global_position
+		#muzzleFlashInstance.emitting = true
+	#else:
+		#push_error("%s doesn't have a muzzle flash reference" % cW.weaponName)
+		#return
 		
 func displayBulletHole(colliderPoint : Vector3, colliderNormal : Vector3):
 	Hub.projectile_system.add_new_decal.rpc(colliderPoint, colliderNormal)

@@ -7,13 +7,12 @@ extends CanvasLayer
 const WEB_SOCKET_SECRET_KEY = "9317e4d6-83b3-4188-94c4-353a2798d3c1"
 
 # LOCAL
-const WEB_SOCKET_SERVER_URL = 'ws://localhost:8787'
-
 # REMOTE
-#const WEB_SOCKET_SERVER_URL = 'wss://ws-lobby-worker.jonandrewdavis.workers.dev'
+#const WEB_SOCKET_SERVER_URL = 'ws://localhost:8787'
+const WEB_SOCKET_SERVER_URL = 'wss://ws-lobby-worker.jonandrewdavis.workers.dev'
 
 var current_username : String = ""
-var current_chosen_color: Color
+var current_chosen_color: String
 
 var webSocketPeer : WebSocketPeer 
 var webRTCPeer: WebRTCMultiplayerPeer 
@@ -46,7 +45,7 @@ signal signal_lobby_joined()
 signal signal_left_lobby()
 signal signal_lobby_message
 signal signal_lobby_game_started
-#signal signal_lobby_get(lobby) # NOT USED
+signal signal_lobby_get_own(lobby) # NOT USED
 
 # NOTE: The server will send WebRTC candidates, offers, and answers through this signal
 signal signal_new_rtc_peer_connection(id: int)
@@ -80,6 +79,7 @@ const Action_Candidate = "Candidate"
 #endregion
 
 func _ready():
+	Hub.lobby_menu = self
 	set_process(false)	
 	ready_required_connections()
 	ready_input_connections()
@@ -117,7 +117,7 @@ func ready_input_connections():
 
 	# TODO: Temp. Remove. This should come from the server, but we'll just use it locally to share via synchronizer for now
 	#%UsernameInput.text_changed.connect(func (text): Hub.current_chosen_username = text)
-	%ColorControl.color_grid_changed.connect(func(color: Color): current_chosen_color = color)
+	%ColorControl.color_grid_changed.connect(func(color: String): current_chosen_color = color)
 
 func ready_render_connections():
 	signal_connection_confirmed.connect(render_connection_confirmed)
@@ -128,6 +128,8 @@ func ready_render_connections():
 	signal_lobby_updated.connect(render_lobby_list)
 	signal_left_lobby.connect(render_left_lobby)
 	signal_lobby_message.connect(render_lobby_message)
+	
+	Hub.world_loaded.connect(on_world_loaded)
 
 func ready_timers():
 	timer_heartbeat.one_shot = false
@@ -205,9 +207,9 @@ func parse_message_from_server(message):
 		Action_GetLobbies:
 			if message.payload.has("lobbies"):
 				signal_lobby_updated.emit(message.payload.lobbies)
-		#Action_GetOwnLobby:
-			#if message.payload.has("lobby"):
-				#signal_lobby_get_own.emit(message.payload.lobby)
+		Action_GetOwnLobby:
+			if message.payload.has("lobby"):
+				signal_lobby_get_own.emit(message.payload.lobby)
 		Action_PlayerJoin:
 			if message.payload.has("id"):
 				signal_player_join.emit(message.payload.id)
@@ -264,6 +266,9 @@ func _is_web_socket_connecting() -> bool:
 	if webSocketPeer:
 		return webSocketPeer.get_ready_state() == WebSocketPeer.STATE_CONNECTING
 	return false 
+	
+func send_message_get_own_lobby():
+	_send_message(Action_GetOwnLobby, {})
 
 func send_message_get_lobbies():
 		_send_message(Action_GetLobbies, {})
@@ -365,20 +370,32 @@ func _on_game_started():
 	webRTCPeer = WebRTCMultiplayerPeer.new()
 	# Currently, we are using `create_mesh`, but we may want server authority.
 	webRTCPeer.create_mesh(current_web_id)
-	
 	# CRITICAL: Use server authority.
 	#if is_lobby_host:
 		#webRTCPeer.create_server()
 	#else:
 		#webRTCPeer.create_client(current_web_id)
-
 	multiplayer.multiplayer_peer = webRTCPeer
+
 	# Game world. Scripts within take care of adding players.
 	var new_game_world = GameWorldScene.instantiate()
-	await get_tree().create_timer(0.5).timeout
+	Hub.world_loaded.emit()
+	call_deferred("add_child", new_game_world)
 	hide()
-	get_parent().get_node('LobbyMenuLevel').queue_free()
-	add_child(new_game_world)	
+	
+	
+func _on_game_rejoin():
+	#webRTCPeer = WebRTCMultiplayerPeer.new()
+	#webRTCPeer.create_mesh(current_web_id)
+	#multiplayer.multiplayer_peer = webRTCPeer
+	var new_game_world = GameWorldScene.instantiate()
+	Hub.world_loaded.emit()
+	call_deferred("add_child", new_game_world)
+	hide()
+
+func on_world_loaded():
+	var menu_preview = get_parent().get_node_or_null('LobbyMenuLevel')
+	if menu_preview != null: menu_preview.queue_free()
 
 # NOTE: The server will send a candidate, offer, and answer for each peer in the lobby
 func create_multiplayer_peer_connection(id: int):
@@ -507,3 +524,10 @@ func render_lobby_current(lobby):
 		user_label.name = str(int(single_user.id))
 		user_label.text = single_user.username
 		%LobbyUsers.add_child(user_label, true)
+
+	# TODO: This is not resilient.
+	# TODO: re think. This doesn't work at all.
+	#if lobby.isGameStarted == true and webRTCPeer == null: 
+		#_on_game_started()
+	#elif lobby.isGameStarted == true:
+		#_on_game_rejoin()

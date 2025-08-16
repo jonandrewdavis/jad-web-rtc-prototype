@@ -7,7 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://do008xirxxawf" path="res://assets/sound/shotgun-short.mp3" id="4_oc2ye"]
 
 [sub_resource type="Curve" id="Curve_eo1mu"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.0991379, 1), 0.0, 0.0, 0, 0, Vector2(0.336207, 0.168539), 0.0, 0.0, 0, 0, Vector2(1, 0.0492958), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.0991379, 1), 0.0, 0.0, 0, 0, Vector2(0.5176041, 0.1726479), 0.0, 0.0, 0, 0, Vector2(1, 0.0492958), 0.0, 0.0, 0, 0]
 point_count = 4
 
 [resource]
@@ -31,13 +31,13 @@ unequipTime = 0.2
 canAutoShoot = true
 nbProjShotsAtSameTime = 8
 nbProjShots = 1
-minSpread = -1.1999999999970896
-maxSpread = 1.1999999999970896
+minSpread = -1.0
+maxSpread = 1.0
 maxRange = 50.0
-damagePerProj = 25.0
+damagePerProj = 30.0
 damageDropoff = SubResource("Curve_eo1mu")
 headshotDamageMult = 1.7
-timeBetweenShots = 0.28
+timeBetweenShots = 0.3800000000046566
 multiPartReload = true
 multiPartReloadTime = 0.22
 baseRotSpeed = 7.0

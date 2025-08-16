@@ -17,7 +17,7 @@ var damageNumber : PackedScene = preload("../../Targets/Scenes/DamageNumberScene
 
 # Colors
 var normalColor : Color = Color(248, 248, 242, 255)
-var criticalColor : Color = Color(255, 85, 85, 255)
+var criticalColor : Color = Color(255.0, 238.648, 63.998, 255.0)
 
 # Tweens
 var upTweenAmount : float = 0.5
@@ -51,7 +51,7 @@ func displayNumber(value : float, position : Vector3, fontSize : int, damageType
 	animateDisplay(numberLabel)
 	
 func animateDisplay(currentDisplay : Label3D) -> void:
-	var originalYPos : float = currentDisplay.global_position.y
+	var originalYPos : float = currentDisplay.global_position.y + 1.0
 	var tween = get_tree().create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(currentDisplay, "position:y", originalYPos + upTweenAmount, upTweenLength).set_ease(Tween.EASE_OUT)

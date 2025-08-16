@@ -24,7 +24,11 @@ func _ready() -> void:
 	
 	#weapon_manager.player = player
 	#weapon_manager.player_input = player.player_input
-	#set_mesh_color(player.current_chosen_color_index)
+
+	if Hub.lobby_menu:
+		Hub.lobby_menu.send_message_get_own_lobby()
+		Hub.lobby_menu.signal_lobby_get_own.connect(_on_get_own_lobby)
+
 
 	if not animation_player:
 		animation_player = $AnimationPlayer
@@ -38,10 +42,10 @@ func _ready() -> void:
 		$Armature/GeneralSkeleton/RightHand.target_node = player.look_at_target.get_path()
 		$Armature/GeneralSkeleton/LeftHand.target_node = player.look_at_target.get_path()
 
-func set_mesh_color(new_color: int):
+func set_mesh_color(new_color: Color):
 	var mesh_material: StandardMaterial3D = %vanguard_Mesh.get_active_material(0)
 	var new_mat = mesh_material.duplicate() 
-	new_mat.albedo_color = Hub.colors[new_color]
+	new_mat.albedo_color = new_color
 	%vanguard_Mesh.set_surface_override_material(0, new_mat)
 
 func cast_shadow_only():
@@ -66,6 +70,14 @@ func _on_master_respawn():
 	if is_multiplayer_authority():
 		%vanguard_Mesh.cast_shadow = 3
 		%vanguard_visor.cast_shadow = 3
+
+func _on_get_own_lobby(lobby):
+	for _this_player in lobby.players:
+		if int(_this_player.id) == int(player.name):
+			#var test = str_to_var(_this_player.color)
+			#print(type_string(typeof(test)))
+			var _color: Color = Color.from_string(_this_player.color, Color.BLUE)
+			set_mesh_color(_color)
 
 # Set up a map. This could be better, but it works for now
 #  

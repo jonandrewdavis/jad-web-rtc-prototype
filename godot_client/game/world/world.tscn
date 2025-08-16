@@ -1,35 +1,14 @@
-[gd_scene load_steps=17 format=3 uid="uid://3o00hq8ytpai"]
+[gd_scene load_steps=12 format=3 uid="uid://3o00hq8ytpai"]
 
 [ext_resource type="Script" uid="uid://bdf0fok3q1l6c" path="res://game/world/world.gd" id="1_we8ss"]
 [ext_resource type="Material" uid="uid://buguph1wmcp08" path="res://shaders/snow_shader_material.tres" id="2_vwhhl"]
-[ext_resource type="Texture2D" uid="uid://3bbhh1hy8wyv" path="res://assets/textures/NightSkyHDRI008_2K-TONEMAPPED.jpg" id="3_dess5"]
+[ext_resource type="Environment" uid="uid://ccvbsj3m2xgxj" path="res://game/world/world_environment_rust.tres" id="3_vwhhl"]
 [ext_resource type="PackedScene" uid="uid://crep3klgx68p5" path="res://scripts/projectile_system.tscn" id="4_4adp2"]
 [ext_resource type="PackedScene" uid="uid://bkwpea4jhu861" path="res://assets/environment/rust/rust_clean_textured.tscn" id="5_uynus"]
 [ext_resource type="Texture2D" uid="uid://d3lk7sn6r5krt" path="res://assets/environment/rust/Snow008A_1K-JPG_Color.jpg" id="6_uynus"]
-[ext_resource type="PackedScene" uid="uid://u4tj3ey6tjg8" path="res://game/Weapons/Scenes/RocketScene.tscn" id="7_vwhhl"]
-[ext_resource type="PackedScene" uid="uid://0gq5270ogtxu" path="res://game/Weapons/Scenes/BulletDecalScene.tscn" id="8_5hesp"]
 [ext_resource type="PackedScene" uid="uid://d1phoa8tdhobe" path="res://game/world/world_boundaries.tscn" id="9_vwhhl"]
 [ext_resource type="PackedScene" uid="uid://d27xhk2ygjsbr" path="res://game/Targets/Scenes/HitableBoxScene.tscn" id="10_5hesp"]
 [ext_resource type="PackedScene" uid="uid://cjhibfe5567xa" path="res://game/Targets/Scenes/ShootingRangeTargetScene.tscn" id="11_ncs2d"]
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_uynus"]
-panorama = ExtResource("3_dess5")
-
-[sub_resource type="Sky" id="Sky_vwhhl"]
-sky_material = SubResource("PanoramaSkyMaterial_uynus")
-
-[sub_resource type="Environment" id="Environment_dess5"]
-background_mode = 2
-sky = SubResource("Sky_vwhhl")
-ambient_light_source = 2
-ambient_light_color = Color(0.40012595, 0.41648132, 0.66999865, 1)
-ambient_light_energy = 0.7
-reflected_light_source = 1
-tonemap_mode = 4
-tonemap_exposure = 0.7
-fog_light_color = Color(0, 0, 0, 1)
-fog_light_energy = 0.2
-fog_density = 0.0666
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_we8ss"]
 albedo_texture = ExtResource("6_uynus")
@@ -55,17 +34,17 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_dess5")
+environment = ExtResource("3_vwhhl")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.38245693, -0.7559008, -0.5313574, -0.08658036, -0.6018674, 0.7938889, -0.919908, -0.25762329, -0.29563454, 0, 3.7201366, 8.137672)
-light_energy = 0.1
-shadow_enabled = true
+light_energy = 0.4
+directional_shadow_mode = 1
+sky_mode = 1
 
 [node name="PlayerContainer" type="Node3D" parent="."]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://clkawa2tv4ko1")
 spawn_path = NodePath("../PlayerContainer")
 
 [node name="ProjectileSystem" parent="." instance=ExtResource("4_4adp2")]
@@ -81,40 +60,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.913002, 0)
 mesh = SubResource("QuadMesh_ibfx6")
 skeleton = NodePath("../..")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="rust_decoration"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -27.976559, 3.50876, 1.4689189)
-light_energy = 4.0
-spot_range = 8.0
-
-[node name="SpotLight3D3" type="SpotLight3D" parent="rust_decoration"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -21.77456, 3.50876, 1.4689189)
-light_energy = 4.0
-spot_range = 8.0
-
-[node name="SpotLight3D4" type="SpotLight3D" parent="rust_decoration"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -9.805605, 6.4267325, 8.281065)
-light_energy = 4.0
-spot_range = 8.0
-
-[node name="SpotLight3D2" type="SpotLight3D" parent="rust_decoration"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -25.322618, 13.077207, -8.484107)
-light_energy = 7.0
-spot_range = 12.0
-
-[node name="SpotLight3D5" type="SpotLight3D" parent="rust_decoration"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -25.322618, 9.6148405, 0.29836464)
-light_energy = 10.453
-spot_range = 12.0
-spot_attenuation = 0.5
-
 [node name="Camera3D" type="Camera3D" parent="rust_decoration"]
 transform = Transform3D(0.915922, -0.15744768, 0.3691845, 0, 0.91984206, 0.39228898, -0.40135637, -0.3593061, 0.84250355, -14.682034, 12.468091, 18.51445)
-
-[node name="Rocket" parent="rust_decoration" instance=ExtResource("7_vwhhl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11.124223, 0)
-
-[node name="BulletDecal" parent="rust_decoration" instance=ExtResource("8_5hesp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11.124223, 0)
 
 [node name="WorldBoundaries" parent="." instance=ExtResource("9_vwhhl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.506607, 0, 0)
@@ -122,7 +69,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.506607, 0, 0)
 [node name="rust_interactive" type="Node3D" parent="."]
 
 [node name="HitableBox" parent="rust_interactive" instance=ExtResource("10_5hesp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.807888, -0.6957283, -24.054644)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.646051, -0.6957283, -38.20824)
 
 [node name="HitableBox7" parent="rust_interactive" instance=ExtResource("10_5hesp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.265163, -0.6957283, -3.7719717)
@@ -145,11 +92,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.366747, 1.3109872, -22.232
 [node name="HitableBox5" parent="rust_interactive" instance=ExtResource("10_5hesp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.965487, 1.273165, -22.446089)
 
-[node name="ShootingRangeTarget" parent="." instance=ExtResource("11_ncs2d")]
+[node name="ShootingRangeTarget" parent="rust_interactive" instance=ExtResource("11_ncs2d")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 26.800938, -1.7176356, -42.820244)
 
-[node name="ShootingRangeTarget2" parent="." instance=ExtResource("11_ncs2d")]
+[node name="ShootingRangeTarget2" parent="rust_interactive" instance=ExtResource("11_ncs2d")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 12.53087, -1.7176356, -42.820244)
 
-[node name="ShootingRangeTarget3" parent="." instance=ExtResource("11_ncs2d")]
+[node name="ShootingRangeTarget3" parent="rust_interactive" instance=ExtResource("11_ncs2d")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 20.026426, -1.7176356, -42.820244)
+
+[node name="preload" type="Node3D" parent="."]
+unique_name_in_owner = true

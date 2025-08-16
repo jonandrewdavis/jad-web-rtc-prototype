@@ -9,8 +9,6 @@ class_name PlayerUI
 
 var RETICLE: Control
 
-var volume_master: float = 0.0
-
 func _ready() -> void:
 	if not is_multiplayer_authority():
 		queue_free()
@@ -20,7 +18,7 @@ func _ready() -> void:
 
 	%Menu.hide()
 
-	volume_master = db_to_linear(AudioServer.get_bus_volume_db(0))
+	AudioServer.set_bus_volume_linear(0, 0.5)
 
 	if !player:
 		player = get_parent()
@@ -38,18 +36,26 @@ func _ready() -> void:
 
 	%AimSlider.value_changed.connect(_on_aim_changed)
 	%SenSlider.value_changed.connect(_on_sens_changed)
-	%SoundSlider.value_changed.connect(func(_new_sound_value): AudioServer.set_bus_volume_db(0, linear_to_db(_new_sound_value) ))
+	%SoundSlider.value_changed.connect(_on_sound_changed)
 
 	await get_tree().create_timer(0.1).timeout
 	%SenSlider.value = player.camHolder.XAxisSens
 	%AimSlider.value = player.camHolder.aimFactor
-	%SoundSlider.value = volume_master
+	%SoundSlider.value = AudioServer.get_bus_volume_linear(0)
 
 	%Respawn.pressed.connect(func(): player.health_system.death.emit())
 	%Disconnect.pressed.connect(_on_disconnect)
 	%Quit.pressed.connect(func(): get_tree().quit())
+
 	
 	%ScoreTimer.timeout.connect(update_score)
+	%ScoreTimer.start()
+
+	# Hit
+	Hub.hit.connect(_on_hit_signal)
+	%HitMarker.hide()
+	%HitMarker.set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
+	%HitTimer.timeout.connect(func(): %HitMarker.hide())
 
 
 func _process(_delta: float) -> void:
@@ -101,13 +107,26 @@ func _on_aim_changed(new_value: float):
 	player.camHolder.aimFactor = new_value
 	%AimVal.text = str("%0.2f" % new_value)
 
+func _on_sound_changed(new_value:float):
+	AudioServer.set_bus_volume_linear(0, new_value)
+
+# TODO: Do not use Hub this way.
 func _on_disconnect():
-	Hub.world.get_parent().show()
+	if multiplayer != null && multiplayer.has_multiplayer_peer():
+		multiplayer.multiplayer_peer = null
+
+	Hub.lobby_menu.show()
 	Hub.world.queue_free()
-	
+
 func update_score():
-	pass
-	#var players = get_tree().get_nodes_in_group("Players")
-	#for _player in players:
-		##add_child()
-		#print(_player.name)
+	for _score in %Scoreboard.get_children():
+		_score.queue_free()
+		
+	for _player_id in Hub.players:
+		var new_label = Label.new()
+		new_label.text = Hub.players[_player_id].username + ": " + str(Hub.players[_player_id].score) 
+		%Scoreboard.add_child(new_label)
+	
+func _on_hit_signal():
+	%HitMarker.show()
+	%HitTimer.start()

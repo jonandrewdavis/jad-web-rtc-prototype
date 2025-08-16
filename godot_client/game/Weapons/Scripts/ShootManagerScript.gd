@@ -129,8 +129,9 @@ func hitscanShot(pointOfCollisionHitscan : Vector3):
 		elif collider.is_in_group("HitableObjects") and collider.has_method("hitscanHit"): 
 			finalDamage = cW.damagePerProj * cW.damageDropoff.sample(pointOfCollisionHitscan.distance_to(global_position) / cW.maxRange)
 			collider.hitscanHit(finalDamage/6.0, hitscanBulletDirection, hitscanBulletCollision.position, source)
-			weapM.displayBulletHole(colliderPoint, colliderNormal)
+			#weapM.displayBulletHole(colliderPoint, colliderNormal)
 		else:
+			#print('DEBUG: COLLISION', hitscanBulletCollision.collider)
 			weapM.displayBulletHole(colliderPoint, colliderNormal)
 
 # NOTE: Unchanged legacy version			

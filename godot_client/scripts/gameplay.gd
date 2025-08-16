@@ -18,8 +18,12 @@ func _ready() -> void:
 	#player.add_to_group("targets")
 	health_system = player.get_node('HealthSystem')
 	health_system.death.connect(_on_death)
+	if Hub.lobby_menu:
+		Hub.lobby_menu.signal_lobby_get_own.connect(_on_get_own_lobby)
 	
 func _on_death():
+	if Hub:
+		Hub.score_updated.emit(health_system.last_damage_source)
 	player.set_collision_layer_value(2, false)
 	player.set_collision_layer_value(16, true)
 	player.immobile = true
@@ -39,3 +43,17 @@ func _respawn():
 	var linkToAmmoRefill = player.get_node("LinkComponent")
 	if linkToAmmoRefill != null:
 		linkToAmmoRefill.ammoRefillLink(ammoToRefill)
+
+func _on_get_own_lobby(lobby):
+	#print(lobby)
+	for _player in lobby.players:
+		# TODO: tiring to cast this so often...
+		var _id = int(_player.id)
+		print(_player)
+		# TODO: fragiel, things can be left off or dropped...
+		Hub.players[_id] = { 
+			'id': _id, 
+				'username': _player.username, 
+			'color': _player.color,
+			'score': 0
+		}

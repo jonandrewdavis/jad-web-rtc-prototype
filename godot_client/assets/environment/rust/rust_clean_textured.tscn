@@ -19,10 +19,9 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dddme"]
 resource_name = "Material_0"
-transparency = 2
-alpha_scissor_threshold = 0.5
-alpha_antialiasing_mode = 0
+albedo_color = Color(0.7854352, 0.7854352, 0.7854352, 1)
 albedo_texture = ExtResource("2_xuybn")
+metallic_specular = 0.0
 texture_filter = 2
 texture_repeat = false
 

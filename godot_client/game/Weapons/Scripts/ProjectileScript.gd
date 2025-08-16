@@ -37,7 +37,7 @@ func _process(delta):
 	else: hit()
 		
 func _on_body_entered(body):
-	if body.get_multiplayer_authority() != multiplayer.get_unique_id():
+	if body.get_multiplayer_authority() != source:
 		applyDamage(body)
 		hit()
 
@@ -48,18 +48,17 @@ func hit():
 	if isExplosive: 
 		explode()
 
+
 func applyDamage(body):
 	if body.is_in_group("Enemies") and body.has_method("projectileHit"):
 		body.projectileHit(damage, direction, source)
 	elif body.is_in_group("EnemiesHead") and body.has_method("projectileHit"):
 		body.projectileHit(damage * 2.0, direction, source)
+	elif body.is_in_group("HitableObjects") and body.has_method("projectileHit"):
+		body.projectileHit(damage, direction, source)
 	elif body.has_method("projectileHit") == false:
 		Hub.projectile_system.add_new_decal.rpc(position, normal)
-		
-	if body.is_in_group("HitableObjects") and body.has_method("projectileHit"):
-		body.projectileHit(damage, direction, source)
 
-	
 func explode():
 	#this function is visual and audio only, it doesn't affect the gameplay
 	weaponSoundManagement(explosionSound)

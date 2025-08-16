@@ -3,26 +3,24 @@
 [ext_resource type="PackedScene" uid="uid://bkwpea4jhu861" path="res://assets/environment/rust/rust_clean_textured.tscn" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://dc2ojoo4jixer" path="res://game/camera_spectate.tscn" id="3_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://chqusw4w4e11" path="res://menus/lobby_menu/lobby_menu.tscn" id="3_h2yge"]
-[ext_resource type="Texture2D" uid="uid://3bbhh1hy8wyv" path="res://assets/textures/NightSkyHDRI008_2K-TONEMAPPED.jpg" id="4_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://ds4serotkbns3" path="res://assets/environment/pano/thumbnail_1f8d7483-2ae1-41c1-8d7f-7a5ee5fa7760.jpg.2048x2048_q85.jpg.webp" id="4_1bvp3"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
 panorama = ExtResource("4_1bvp3")
 
-[sub_resource type="Sky" id="Sky_4adp2"]
+[sub_resource type="Sky" id="Sky_ncs2d"]
 sky_material = SubResource("PanoramaSkyMaterial_lquwl")
 
 [sub_resource type="Environment" id="Environment_7mycd"]
 background_mode = 2
-sky = SubResource("Sky_4adp2")
-ambient_light_source = 2
-ambient_light_color = Color(0.40012595, 0.41648132, 0.66999865, 1)
-ambient_light_energy = 0.7
+sky = SubResource("Sky_ncs2d")
 reflected_light_source = 1
 tonemap_mode = 4
-tonemap_exposure = 0.7
-fog_light_color = Color(0, 0, 0, 1)
-fog_light_energy = 0.2
-fog_density = 0.0666
+tonemap_exposure = 0.8
+fog_mode = 1
+fog_light_color = Color(1, 1, 1, 1)
+fog_light_energy = 0.92
+fog_density = 0.75
 
 [node name="Main" type="Node"]
 
@@ -42,12 +40,12 @@ transform = Transform3D(1, 0, 0, 0, 0.8877109, 0.4604012, 0, -0.4604012, 0.88771
 [node name="rust_clean" parent="LobbyMenuLevel" instance=ExtResource("2_0xm2m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.868752, 0, 7.1283913)
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="LobbyMenuLevel"]
-environment = SubResource("Environment_7mycd")
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="LobbyMenuLevel"]
 transform = Transform3D(0.38245693, -0.75590086, -0.5313574, -0.08658036, -0.6018674, 0.7938889, -0.919908, -0.25762317, -0.29563448, 0, 3.7201366, 8.137672)
 light_energy = 0.5
 shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="LobbyMenuLevel"]
+environment = SubResource("Environment_7mycd")
 
 [editable path="LobbyMenuLevel/CameraSpectate"]

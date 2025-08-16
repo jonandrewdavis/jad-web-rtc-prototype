@@ -45,9 +45,6 @@ var playCharInputDir : Vector2
 #Mouse variables
 var mouseFree : bool = false
 
-@export_group("Keybind variables")
-@export var mouseModeAction : String = ""
-
 #References variables
 @onready var camera : Camera3D = %Camera
 @onready var playChar : PlayerCharacter = $".."

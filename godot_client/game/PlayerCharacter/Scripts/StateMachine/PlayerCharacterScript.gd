@@ -101,17 +101,13 @@ func _ready():
 	if is_multiplayer_authority():
 		%HitboxHead.queue_free()
 		%Camera.current = true
-		if is_first_person == true:
-			%CameraHolder.position = Vector3.ZERO
-		else:
-			# TODO: 
-			%CameraHolder.position = Vector3.ZERO
+		%MuzzleParticles.emitting = true
 	else:
 		set_process(false)
 		set_physics_process(false)
-		%CameraHolder.set_process(false)
-		%CameraHolder.set_physics_process(false)
-		%Camera.set_process(false)
+		#%CameraHolder.set_process(false)
+		#%CameraHolder.set_physics_process(false)
+		#%Camera.set_process(false)
 		%WeaponManager.set_process(false)
 		%ShootManager.set_process(false)
 		%AnimationManager.set_process(false)		
@@ -152,14 +148,14 @@ func hitscanHit(damageVal : float, _hitscanDir : Vector3, _hitscanPos : Vector3,
 	var damage_successful = health_system.damage(damageVal, source)
 	if damage_successful:
 		Hub.emit_signal('hit')
-		DamageNumberScript.displayNumber(damageVal, global_position + Vector3.UP, 110, DamageNumberScript.DamageType.NORMAL)
+		DamageNumberScript.displayNumber(damageVal, global_position + Vector3.UP, 130, DamageNumberScript.DamageType.NORMAL)
 
 func projectileHit(damageVal : float, _hitscanDir : Vector3, source = 1):
 	# TODO: Projectile source & physics
 	var damage_successful = health_system.damage(damageVal, source)
 	if damage_successful:
 		Hub.emit_signal('hit')
-		DamageNumberScript.displayNumber(damageVal, global_position + Vector3.UP, 110, DamageNumberScript.DamageType.NORMAL)
+		DamageNumberScript.displayNumber(damageVal, global_position + Vector3.UP, 130, DamageNumberScript.DamageType.NORMAL)
 
 func toggle_weapon_visible(value: bool):
 	%WeaponContainer.visible = value

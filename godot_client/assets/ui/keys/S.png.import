@@ -2,21 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3bbhh1hy8wyv"
-path.s3tc="res://.godot/imported/NightSkyHDRI008_2K-TONEMAPPED.jpg-dcc5e596477130a42a223a24966d98b5.s3tc.ctex"
+uid="uid://bdcjugn7xm3s4"
+path="res://.godot/imported/S.png-8fbe3defcc628d4294c537c2c9982d20.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/NightSkyHDRI008_2K-TONEMAPPED.jpg"
-dest_files=["res://.godot/imported/NightSkyHDRI008_2K-TONEMAPPED.jpg-dcc5e596477130a42a223a24966d98b5.s3tc.ctex"]
+source_file="res://assets/ui/keys/S.png"
+dest_files=["res://.godot/imported/S.png-8fbe3defcc628d4294c537c2c9982d20.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -24,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -38,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1
