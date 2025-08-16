@@ -115,9 +115,6 @@ func _on_disconnect():
 	if multiplayer != null && multiplayer.has_multiplayer_peer():
 		multiplayer.multiplayer_peer = null
 
-	Hub.lobby_menu.show()
-	Hub.world.queue_free()
-
 func update_score():
 	for _score in %Scoreboard.get_children():
 		_score.queue_free()

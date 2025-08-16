@@ -5,7 +5,6 @@ var player_scene_new = preload("res://game/PlayerCharacter/Scenes/PlayerCharacte
 @export var player_container: Node3D
 
 func _ready() -> void:
-	Hub.world = self
 	multiplayer.connected_to_server.connect(RTCServerConnected)
 	multiplayer.peer_connected.connect(RTCPeerConnected)
 	multiplayer.peer_disconnected.connect(RTCPeerDisconnected)

@@ -49,7 +49,6 @@ func _on_get_own_lobby(lobby):
 	for _player in lobby.players:
 		# TODO: tiring to cast this so often...
 		var _id = int(_player.id)
-		print(_player)
 		# TODO: fragiel, things can be left off or dropped...
 		Hub.players[_id] = { 
 			'id': _id, 
