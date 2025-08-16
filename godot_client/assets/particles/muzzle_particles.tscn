@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhsq83gov2k4t"]
+
+[ext_resource type="QuadMesh" uid="uid://8itwxodghju5" path="res://assets/particles/muzzle_particles_material_v1.tres" id="1_b458f"]
+
+[node name="MuzzleParticles" type="CPUParticles3D"]
+emitting = false
+amount = 2
+lifetime = 0.02
+one_shot = true
+randomness = 0.2
+mesh = ExtResource("1_b458f")
+initial_velocity_min = 0.2
+initial_velocity_max = 1.0

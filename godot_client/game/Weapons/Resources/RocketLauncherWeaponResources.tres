@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="WeaponResourceNew" load_steps=6 format=3 uid="uid://dn71dyben68oe"]
+
+[ext_resource type="PackedScene" uid="uid://x8oniabn746q" path="res://game/Weapons/Scenes/MuzzleFlashParticleScene.tscn" id="1_0gii7"]
+[ext_resource type="PackedScene" uid="uid://u4tj3ey6tjg8" path="res://game/Weapons/Scenes/RocketScene.tscn" id="2_6h0db"]
+[ext_resource type="Script" uid="uid://bnhfyt5sl8jcd" path="res://game/Weapons/Scripts/WeaponResourcesScript.gd" id="3_mb34y"]
+[ext_resource type="AudioStream" uid="uid://do008xirxxawf" path="res://assets/sound/shotgun-short.mp3" id="4_6h0db"]
+
+[sub_resource type="Curve" id="Curve_8j8ql"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.969231, 0.0578563), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[resource]
+script = ExtResource("3_mb34y")
+weaponName = "RocketLauncher"
+weaponId = 5
+type = 2
+animBlendTime = 0.2
+equipAnimName = "EquipAnimRocketLauncher"
+unequipAnimName = "UnequipAnimRocketLauncher"
+shootAnimName = "ShootAnimRocketLancher"
+reloadAnimName = "ReloadAnimRocketLauncher"
+shootSound = ExtResource("4_6h0db")
+shootSoundSpeed = 0.4000000000087311
+totalAmmoInMag = 1
+totalAmmoInMagRef = 1
+ammoType = "RocketAmmo"
+equipTime = 0.2
+unequipTime = 0.2
+canAutoShoot = true
+nbProjShotsAtSameTime = 1
+nbProjShots = 1
+damagePerProj = 340.0
+damageDropoff = SubResource("Curve_8j8ql")
+timeBetweenShots = 0.82
+reloadTime = 1.82
+baseRotSpeed = 3.0
+targetRotSpeed = 6.5
+recoilVal = Vector3(0.19, 0.03, 0)
+isProjExplosive = true
+projRef = ExtResource("2_6h0db")
+projMoveSpeed = 38.0
+projTimeBeforeVanish = 10.0
+projGravityVal = 0.4000000000087311
+position = Array[Vector3]([Vector3(0.177288, -0.268151, -0.15469), Vector3(0, 3.14159, 0)])
+tiltRotSpeed = 7.0
+tiltRotAmount = 0.2
+minSwayVal = Vector2(-20, -20)
+maxSwayVal = Vector2(20, 20)
+swaySpeedPos = 0.1
+swaySpeedRot = 0.1
+swayAmountPos = 0.2
+swayAmountRot = 48.0
+bobFreq = 0.01
+bobAmount = 0.025
+bobSpeed = 10.0
+onIdleBobFreqDivider = 1.2
+muzzleFlashRef = ExtResource("1_0gii7")

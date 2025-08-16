@@ -1,12 +1,20 @@
 extends Node
 
+var lobby_menu: LobbyMenu
 var world: Node3D
 var projectile_system: ProjectileSystem
+var players = {}
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+
+signal hit
+signal world_loaded
+signal score_updated
+
+func _ready(): 
+	# source is player who last damaged
+	score_updated.connect(func(source): on_score_updated.rpc(source))
+
+@rpc("any_peer", 'call_local')
+func on_score_updated(source):
+	players[source].score = players[source].score + 1

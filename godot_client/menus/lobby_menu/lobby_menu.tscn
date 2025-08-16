@@ -1,9 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://chqusw4w4e11"]
+[gd_scene load_steps=9 format=3 uid="uid://chqusw4w4e11"]
 
 [ext_resource type="Script" uid="uid://e1via0bhi4hy" path="res://menus/lobby_menu/lobby_menu.gd" id="1_3p3bs"]
-[ext_resource type="PackedScene" uid="uid://cbw01twgu8g7v" path="res://shaders/background_shader.tscn" id="2_b120b"]
+[ext_resource type="Material" uid="uid://buguph1wmcp08" path="res://shaders/snow_shader_material.tres" id="2_07jv1"]
 [ext_resource type="StyleBox" uid="uid://8nr6rb2m1nto" path="res://assets/ui/section_panel_style_box_flat.tres" id="2_urr6r"]
-[ext_resource type="ButtonGroup" uid="uid://d0agga0yyv3w2" path="res://menus/lobby_menu/color_button_group.tres" id="4_07jv1"]
+[ext_resource type="PackedScene" uid="uid://cr0rjm7booup1" path="res://menus/lobby_menu/lobby_color_grid.tscn" id="4_07jv1"]
 
 [sub_resource type="Gradient" id="Gradient_urr6r"]
 offsets = PackedFloat32Array(0.56650245, 0.591133)
@@ -15,59 +15,50 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b120b"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 1
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x0ybd"]
+content_margin_left = 25.0
+content_margin_top = 25.0
+content_margin_right = 25.0
+content_margin_bottom = 25.0
+bg_color = Color(0, 0, 0, 0.25490198)
+border_width_left = 2
 border_width_top = 1
 border_width_right = 1
-border_width_bottom = 1
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
+border_width_bottom = 4
+border_color = Color(0.6392157, 0.6392157, 0.6392157, 0.6313726)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wkj3s"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0, 0, 0, 0.6)
-border_width_left = 1
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qr2lo"]
+content_margin_left = 25.0
+content_margin_top = 25.0
+content_margin_right = 25.0
+content_margin_bottom = 25.0
+bg_color = Color(0, 0, 0, 0.25490198)
+border_width_left = 2
 border_width_top = 1
 border_width_right = 1
-border_width_bottom = 1
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_07jv1"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(1, 0.29803923, 1, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
+border_width_bottom = 4
+border_color = Color(0.6392157, 0.6392157, 0.6392157, 0.6313726)
 
 [node name="LobbyMenu" type="CanvasLayer"]
 script = ExtResource("1_3p3bs")
 
-[node name="BackgroundShader" parent="." instance=ExtResource("2_b120b")]
-visible = true
+[node name="BlackBackground" type="Panel" parent="."]
+modulate = Color(1, 1, 1, 0.63529414)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SnowShader" type="Panel" parent="."]
+material = ExtResource("2_07jv1")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="TopCenter" type="MarginContainer" parent="."]
 anchors_preset = 5
@@ -86,7 +77,7 @@ theme_override_constants/separation = 10
 [node name="WebsocketsLobbyLabel" type="Label" parent="TopCenter/TopVbox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
-text = "sockets.jonandrewdavis.com"
+text = "jonandrewdavis.com WebRTC Prototype"
 horizontal_alignment = 1
 
 [node name="WebSockets Lobby" type="Label" parent="TopCenter/TopVbox"]
@@ -130,24 +121,9 @@ placeholder_text = "Username"
 max_length = 12
 emoji_menu_enabled = false
 
-[node name="ColorGrid" type="GridContainer" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin"]
+[node name="ColorControl" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin" instance=ExtResource("4_07jv1")]
 unique_name_in_owner = true
 layout_mode = 2
-
-[node name="Button" type="Button" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin/ColorGrid"]
-custom_minimum_size = Vector2(25, 25)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_b120b")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_wkj3s")
-toggle_mode = true
-button_group = ExtResource("4_07jv1")
-
-[node name="Button2" type="Button" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin/ColorGrid"]
-custom_minimum_size = Vector2(25, 25)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_07jv1")
-toggle_mode = true
-button_group = ExtResource("4_07jv1")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin"]
 layout_mode = 2
@@ -155,16 +131,19 @@ layout_mode = 2
 [node name="LobbyServerConnect" type="Button" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "Connect"
 
 [node name="LobbyServerDisconnect" type="Button" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+mouse_default_cursor_shape = 2
 disabled = true
 text = "Disconnect"
 
 [node name="QuickJoin" type="Button" parent="TopCenter/TopVbox/TopSections/Login/SectionLogin"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 text = "Quick Join"
 
@@ -214,6 +193,7 @@ layout_mode = 2
 [node name="LobbyCreate" type="Button" parent="TopCenter/TopVbox/TopSections/Lobbies/SectionLobbies/HBoxContainer/LobbyCreateContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "CreateLobby"
 
 [node name="LobbyList" type="VBoxContainer" parent="TopCenter/TopVbox/TopSections/Lobbies/SectionLobbies"]
@@ -221,36 +201,71 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 
-[node name="LobbyChat" type="VBoxContainer" parent="TopCenter/TopVbox"]
+[node name="LobbyCurrent" type="HBoxContainer" parent="TopCenter/TopVbox"]
 layout_mode = 2
 
-[node name="LobbyPanel" type="PanelContainer" parent="TopCenter/TopVbox/LobbyChat"]
+[node name="Lobby" type="PanelContainer" parent="TopCenter/TopVbox/LobbyCurrent"]
 layout_mode = 2
-theme_override_styles/panel = ExtResource("2_urr6r")
+theme_override_styles/panel = SubResource("StyleBoxFlat_x0ybd")
 
-[node name="LobbyContainer" type="VBoxContainer" parent="TopCenter/TopVbox/LobbyChat/LobbyPanel"]
+[node name="LobbyInfo" type="HBoxContainer" parent="TopCenter/TopVbox/LobbyCurrent/Lobby"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="LobbyVert" type="VBoxContainer" parent="TopCenter/TopVbox/LobbyCurrent/Lobby/LobbyInfo"]
 layout_mode = 2
 
-[node name="LobbyChat" type="RichTextLabel" parent="TopCenter/TopVbox/LobbyChat/LobbyPanel/LobbyContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TopCenter/TopVbox/LobbyCurrent/Lobby/LobbyInfo/LobbyVert"]
+layout_mode = 2
+
+[node name="CurrentLobbyLabel" type="Label" parent="TopCenter/TopVbox/LobbyCurrent/Lobby/LobbyInfo/LobbyVert/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Lobby:"
+
+[node name="CurrentLobbyId" type="Label" parent="TopCenter/TopVbox/LobbyCurrent/Lobby/LobbyInfo/LobbyVert/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+
+[node name="HSeparator" type="HSeparator" parent="TopCenter/TopVbox/LobbyCurrent/Lobby/LobbyInfo/LobbyVert"]
+layout_mode = 2
+
+[node name="LobbyUsers" type="VBoxContainer" parent="TopCenter/TopVbox/LobbyCurrent/Lobby/LobbyInfo/LobbyVert"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LobbyChat" type="VBoxContainer" parent="TopCenter/TopVbox/LobbyCurrent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LobbyPanel" type="PanelContainer" parent="TopCenter/TopVbox/LobbyCurrent/LobbyChat"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qr2lo")
+
+[node name="LobbyContainer" type="VBoxContainer" parent="TopCenter/TopVbox/LobbyCurrent/LobbyChat/LobbyPanel"]
+layout_mode = 2
+
+[node name="LobbyChat" type="RichTextLabel" parent="TopCenter/TopVbox/LobbyCurrent/LobbyChat/LobbyPanel/LobbyContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 bbcode_enabled = true
 scroll_following = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TopCenter/TopVbox"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TopCenter/TopVbox/LobbyCurrent/LobbyChat"]
 layout_mode = 2
 
-[node name="LobbyChatLabel" type="Label" parent="TopCenter/TopVbox/HBoxContainer"]
+[node name="LobbyChatLabel" type="Label" parent="TopCenter/TopVbox/LobbyCurrent/LobbyChat/HBoxContainer"]
 layout_mode = 2
 text = "Lobby Chat"
 
-[node name="LobbyInput" type="LineEdit" parent="TopCenter/TopVbox/HBoxContainer"]
+[node name="LobbyInput" type="LineEdit" parent="TopCenter/TopVbox/LobbyCurrent/LobbyChat/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LobbyInputSend" type="Button" parent="TopCenter/TopVbox/HBoxContainer"]
+[node name="LobbyInputSend" type="Button" parent="TopCenter/TopVbox/LobbyCurrent/LobbyChat/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Send"

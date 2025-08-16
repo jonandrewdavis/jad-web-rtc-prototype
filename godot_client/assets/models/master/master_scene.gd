@@ -4,9 +4,10 @@ class_name Master
 
 @export var animation_player: AnimationPlayer
 @export var bones: PhysicalBoneSimulator3D
-@export var weapon_manager: WeaponManager
-@onready var player: Player = get_parent()
+@onready var player: PlayerCharacter = get_parent()
+
 var _player_input: PlayerInput
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -14,25 +15,38 @@ func _ready() -> void:
 		set_process(false)
 		set_physics_process(false)
 	
+	if is_multiplayer_authority() and player.is_first_person:
+		cast_shadow_only()
+
 	_player_input = player.player_input
+	player.health_system.death.connect(func(): _on_master_death.rpc())
+	player.health_system.respawn.connect(func(): _on_master_respawn.rpc())
 	
-	weapon_manager.player = player
-	weapon_manager.player_input = player.player_input
-	
+	#weapon_manager.player = player
+	#weapon_manager.player_input = player.player_input
+
+	if Hub.lobby_menu:
+		Hub.lobby_menu.send_message_get_own_lobby()
+		Hub.lobby_menu.signal_lobby_get_own.connect(_on_get_own_lobby)
+
+
 	if not animation_player:
 		animation_player = $AnimationPlayer
-	$AnimationPlayer.speed_scale = 0.7
-	$AnimationPlayer.playback_default_blend_time = 0.8
-	%AnimationPlayer.set_method_call_mode(AnimationPlayer.ANIMATION_METHOD_CALL_IMMEDIATE)	
+	$AnimationPlayer.speed_scale = 1
+	$AnimationPlayer.playback_default_blend_time = 0.2
 	
 	if player.look_at_target.get_path():
 		$Armature/GeneralSkeleton/RightLower.target_node = player.look_at_target.get_path()
 		$Armature/GeneralSkeleton/LeftLower.target_node = player.look_at_target.get_path()
-
 		$Armature/GeneralSkeleton/LeftUpper.target_node = player.look_at_target.get_path()
-
 		$Armature/GeneralSkeleton/RightHand.target_node = player.look_at_target.get_path()
 		$Armature/GeneralSkeleton/LeftHand.target_node = player.look_at_target.get_path()
+
+func set_mesh_color(new_color: Color):
+	var mesh_material: StandardMaterial3D = %vanguard_Mesh.get_active_material(0)
+	var new_mat = mesh_material.duplicate() 
+	new_mat.albedo_color = new_color
+	%vanguard_Mesh.set_surface_override_material(0, new_mat)
 
 func cast_shadow_only():
 	%vanguard_Mesh.cast_shadow = 3
@@ -40,6 +54,30 @@ func cast_shadow_only():
 
 func _process(_delta):
 	on_animation_check()
+
+@rpc('call_local', 'reliable')
+func _on_master_death():
+	bones.physical_bones_start_simulation()
+	animation_player.active = false
+	if is_multiplayer_authority():
+		%vanguard_Mesh.cast_shadow = 1
+		%vanguard_visor.cast_shadow = 1
+
+@rpc('call_local', 'reliable')
+func _on_master_respawn():
+	bones.physical_bones_stop_simulation()
+	animation_player.active = true
+	if is_multiplayer_authority():
+		%vanguard_Mesh.cast_shadow = 3
+		%vanguard_visor.cast_shadow = 3
+
+func _on_get_own_lobby(lobby):
+	for _this_player in lobby.players:
+		if int(_this_player.id) == int(player.name):
+			#var test = str_to_var(_this_player.color)
+			#print(type_string(typeof(test)))
+			var _color: Color = Color.from_string(_this_player.color, Color.BLUE)
+			set_mesh_color(_color)
 
 # Set up a map. This could be better, but it works for now
 #  
@@ -107,13 +145,20 @@ func _play(animation_name):
 func on_animation_check():
 	var _dir = _player_input.input_dir
 	var _slowed = _player_input.is_weapon_aim or _player_input.is_crouching
-
-	if player.is_on_floor() == false: 
-		_play('jump loop')
-		return
-
-	match player.state:
-		(&'normal'):
+	
+	#if player.is_on_floor() == false: 
+		#_play('jump loop')
+		#return
+	animation_player.speed_scale = 1.0
+	match player.stateMachine.currStateName:
+		(&'Jump'):
+			_play('jump loop')
+		(&'Inair'):
+			_play('jump loop')
+		(&'Idle'):
+			if _dir.y == 0.0 and _dir.x == 0.0:
+				_play('idle aiming')
+		(&'Walk'):
 			if _dir.y == 0.0 and _dir.x == 0.0:
 				_play('idle aiming')
 			elif _dir.y == 0:
@@ -130,7 +175,8 @@ func on_animation_check():
 				if _dir.x < -0.4: _play(MOVES.DIAGONAL.SLOW[2])
 				elif _dir.x > 0.4: _play(MOVES.DIAGONAL.SLOW[3])
 				else: _play(MOVES.WALK.SLOW[1])
-		(&'sprinting'):
+		(&'Run'):
+			animation_player.speed_scale = 0.7
 			if _dir.y == 0.0 and _dir.x == 0.0:
 				_play('idle aiming')
 			elif _dir.y == 0:
@@ -147,7 +193,8 @@ func on_animation_check():
 				if _dir.x < -0.4: _play(MOVES.DIAGONAL.FAST[2])
 				elif _dir.x > 0.4: _play(MOVES.DIAGONAL.FAST[3]) 
 				else: _play(MOVES.WALK.FAST[1])
-		(&'crouching'):
+		(&'Crouch'):
+			animation_player.speed_scale = 0.7
 			if _dir.y == 0.0 and _dir.x == 0.0:
 				_play('idle crouching aiming')
 			elif _dir.y == 0:
@@ -162,7 +209,6 @@ func on_animation_check():
 			elif _dir.y > 0.0:
 				# Backwards
 				_play(MOVES.WALK.CROUCH[1])
-
 
 
 		#(&'crouching'):

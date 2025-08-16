@@ -1,0 +1,22 @@
+[gd_resource type="QuadMesh" load_steps=3 format=3 uid="uid://8itwxodghju5"]
+
+[ext_resource type="Texture2D" uid="uid://br3rf0u4bxs67" path="res://game/Weapons/Images/MuzzleFlash.png" id="1_vfdj3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b458f"]
+transparency = 1
+blend_mode = 1
+albedo_texture = ExtResource("1_vfdj3")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.2
+emission_texture = ExtResource("1_vfdj3")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[resource]
+material = SubResource("StandardMaterial3D_b458f")
+size = Vector2(0.4, 0.4)
+center_offset = Vector3(0, 0.1, 0)

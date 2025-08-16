@@ -56,16 +56,19 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
+mouse_default_cursor_shape = 2
 text = "Join Lobby"
 
 [node name="LobbyLeaveButton" type="Button" parent="HBoxContainer/LobbyButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
+mouse_default_cursor_shape = 2
 text = "Leave Lobby"
 
 [node name="LobbyStartGame" type="Button" parent="HBoxContainer/LobbyButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
+mouse_default_cursor_shape = 2
 text = "Start Game"

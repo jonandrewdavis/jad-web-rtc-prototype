@@ -5,6 +5,8 @@ signal hurt
 signal health_updated
 signal max_health_updated
 signal death
+@warning_ignore("unused_signal")
+signal respawn
 
 # TODO: HealthBars, do we want them to show on enemies? 
 # Helldivers 2 does not, but there are other indicators (bleeding, fatigue)
@@ -35,18 +37,26 @@ func _ready() -> void:
 	# NOTE: Added health to syncronizer to display to other clients (for health bars to be visible) 
 
 	if is_multiplayer_authority():
+		# Allow the UI to connect before we heal up.
+		await get_tree().create_timer(0.2).timeout
 		prepare_regen_timer()
 		max_health_updated.emit(max_health)
 		heal(max_health)
 
 func damage(value: int, source: int = 0) -> bool:
-	# Don't allow negative values when damaging
-	var next_health = health - abs(value)
-
-	if allow_damage_from_source(source) == false:
+	# Do not allow damage when dead.
+	if health == 0:
 		return false
 
+	_damage_sync.rpc_id(int(get_parent().name), value, source)
+	return true
 
+@rpc('any_peer')
+func _damage_sync(value, source):
+	# Don't allow negative values when damaging
+	var next_health = health - abs(value)
+	if allow_damage_from_source(source) == false:
+		return false
 
 	# Do not allow damage when dead.
 	if health == 0:
@@ -55,41 +65,31 @@ func damage(value: int, source: int = 0) -> bool:
 	# Do not allow overkill. Just die.
 	# TODO: Clamp is easier right? Might work here
 	if next_health <= 0:
+		regen_tick_timer.stop()
 		regen_timer.stop()
 		health = 0
 		last_damage_source = source
-		rpc_update_health.rpc(0)
+		health_updated.emit(0)
 		hurt.emit()
 		death.emit()
 		return true
+
+	# Damage
+	if next_health < health and regen_enabled:
+		hurt.emit()
+		regen_timer.start()
+
+	# Death
+	if next_health == 0:
+		death.emit()
 	
 	# Valid damage, not dead
 	last_damage_source = source
-	rpc_update_health.rpc(next_health)
+	health = next_health
+	health_updated.emit(next_health)
 	hurt.emit()
 
 	return true
-
-# Use call_local because heals originate from the local player
-# Use any_peer, because damage can come from anywhere. 
-@rpc('call_local', 'any_peer')
-func rpc_update_health(next_health):
-	if is_multiplayer_authority():
-		# TODO: Sometimes this prints twice with the same value. It functions, but why? Local bullets hitting at the same time??
-		#print('DEBUG: Authourized damage to update: ', next_health)
-
-		# Damage
-		if next_health < health and regen_enabled:
-			hurt.emit()
-			regen_timer.start()
-	
-		# Death
-		if next_health == 0:
-			death.emit()
-
-		health = next_health
-		health_updated.emit(next_health)
-
 
 func allow_damage_from_source(_source: int):
 	# TODO: More rules. Teams?
@@ -101,14 +101,14 @@ func allow_damage_from_source(_source: int):
 	return true
 
 func heal(value):
-
 	var next_health = health + abs(value)
 	
 	# Do not allow overheal
 	if next_health > max_health:
 		next_health = max_health
-
-	rpc_update_health.rpc(next_health)
+	
+	health = next_health
+	health_updated.emit(next_health)
 
 func prepare_regen_timer():
 	add_child(regen_timer)

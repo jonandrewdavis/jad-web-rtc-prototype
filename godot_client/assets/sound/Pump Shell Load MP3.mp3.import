@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://biivypbpjtmw1"
+path="res://.godot/imported/Pump Shell Load MP3.mp3-6e8a46bfbdcd6b6becd68f77867b73c2.mp3str"
+
+[deps]
+
+source_file="res://assets/sound/Pump Shell Load MP3.mp3"
+dest_files=["res://.godot/imported/Pump Shell Load MP3.mp3-6e8a46bfbdcd6b6becd68f77867b73c2.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -7,12 +7,13 @@ extends CanvasLayer
 const WEB_SOCKET_SECRET_KEY = "9317e4d6-83b3-4188-94c4-353a2798d3c1"
 
 # LOCAL
-#const WEB_SOCKET_SERVER_URL = 'ws://localhost:8787'
-
 # REMOTE
-const WEB_SOCKET_SERVER_URL = 'ws-lobby-worker.jonandrewdavis.workers.dev'
+#const WEB_SOCKET_SERVER_URL = 'ws://localhost:8787'
+const WEB_SOCKET_SERVER_URL = 'wss://ws-lobby-worker.jonandrewdavis.workers.dev'
 
 var current_username : String = ""
+var current_chosen_color: String
+
 var webSocketPeer : WebSocketPeer 
 var webRTCPeer: WebRTCMultiplayerPeer 
 
@@ -26,6 +27,7 @@ var timer_heartbeat_light = Timer.new()
 # TODO: Parse for alpha chars
 var username_input = ''
 var connection_validated = false
+
 
 #region Signals
 signal signal_connection_confirmed(webId: int)
@@ -43,7 +45,7 @@ signal signal_lobby_joined()
 signal signal_left_lobby()
 signal signal_lobby_message
 signal signal_lobby_game_started
-#signal signal_lobby_get(lobby) # NOT USED
+signal signal_lobby_get_own(lobby) # NOT USED
 
 # NOTE: The server will send WebRTC candidates, offers, and answers through this signal
 signal signal_new_rtc_peer_connection(id: int)
@@ -77,21 +79,12 @@ const Action_Candidate = "Candidate"
 #endregion
 
 func _ready():
+	Hub.lobby_menu = self
 	set_process(false)	
 	ready_required_connections()
 	ready_input_connections()
 	ready_render_connections()
 	ready_timers()
-	
-	#for colorButton in %ColorGrid.get_children():
-		#var _button: Button = colorButton
-		#var _style: StyleBoxFlat = StyleBoxFlat.new()
-		#_style.bg_color = _button.get_theme_stylebox('theme_override_styles/normal').bg_color
-		#_style.bg_color.a = 0.5
-		#_button.set_stylebox('theme_override_styles/pressed', '', _style)
-		#pressed.bg_color.a = 0.5
-		#var getTheme: = colorButton.
-		#theme_override_styles/pressed
 
 func ready_required_connections():
 	signal_connection_confirmed.connect(_on_ws_connection_confirmed)
@@ -121,7 +114,10 @@ func ready_input_connections():
 	%LobbyCreate.pressed.connect(func (): send_message_create_lobby())
 	%LobbyInput.text_submitted.connect(send_message_to_lobby)
 	%LobbyInputSend.pressed.connect(func (): send_message_to_lobby(%LobbyInput.text))
-	%QuickJoin.pressed.connect(quick_join)
+
+	# TODO: Temp. Remove. This should come from the server, but we'll just use it locally to share via synchronizer for now
+	#%UsernameInput.text_changed.connect(func (text): Hub.current_chosen_username = text)
+	%ColorControl.color_grid_changed.connect(func(color: String): current_chosen_color = color)
 
 func ready_render_connections():
 	signal_connection_confirmed.connect(render_connection_confirmed)
@@ -132,6 +128,8 @@ func ready_render_connections():
 	signal_lobby_updated.connect(render_lobby_list)
 	signal_left_lobby.connect(render_left_lobby)
 	signal_lobby_message.connect(render_lobby_message)
+	
+	Hub.world_loaded.connect(on_world_loaded)
 
 func ready_timers():
 	timer_heartbeat.one_shot = false
@@ -151,9 +149,9 @@ func _process(_delta):
 		WebSocketPeer.STATE_CONNECTING:
 			return
 		WebSocketPeer.STATE_OPEN:
-			# TODO: Improve this step
+			# TODO: Improve this step - this is where the client tells everyone about themselves
 			if connection_validated == false:
-				_send_message(Action_Connect, {"secretKey" : WEB_SOCKET_SECRET_KEY, "username" : current_username})
+				_send_message(Action_Connect, {"secretKey" : WEB_SOCKET_SECRET_KEY, "username" : current_username, "color": current_chosen_color})
 				connection_validated = true
 				return
 			while webSocketPeer.get_available_packet_count():
@@ -202,15 +200,16 @@ func parse_message_from_server(message):
 				webSocketPeer.disconnect_from_host(1000, "Couldn't authenticate")
 		Action_GetUsers:
 			if message.payload.has("users"):
+				print(message.payload.users)
 				signal_update_user_list.emit(message.payload.users)
 			else:
 				signal_update_user_list.emit([])
 		Action_GetLobbies:
 			if message.payload.has("lobbies"):
 				signal_lobby_updated.emit(message.payload.lobbies)
-		#Action_GetOwnLobby:
-			#if message.payload.has("lobby"):
-				#signal_lobby_get_own.emit(message.payload.lobby)
+		Action_GetOwnLobby:
+			if message.payload.has("lobby"):
+				signal_lobby_get_own.emit(message.payload.lobby)
 		Action_PlayerJoin:
 			if message.payload.has("id"):
 				signal_player_join.emit(message.payload.id)
@@ -267,6 +266,9 @@ func _is_web_socket_connecting() -> bool:
 	if webSocketPeer:
 		return webSocketPeer.get_ready_state() == WebSocketPeer.STATE_CONNECTING
 	return false 
+	
+func send_message_get_own_lobby():
+	_send_message(Action_GetOwnLobby, {})
 
 func send_message_get_lobbies():
 		_send_message(Action_GetLobbies, {})
@@ -296,15 +298,19 @@ func send_message_start_game(idLobby: String):
 func render_user_list(users):
 	for child in %UserList.get_children():
 		child.queue_free()
+		
 	for single_user in users:
-		var user_label = Label.new()
-		user_label.name = str(int(single_user.id))
-		user_label.text = single_user.username
-		%UserList.add_child(user_label, true)
+		if single_user.has('username'):
+			var user_label = Label.new()
+			user_label.name = str(int(single_user.id))
+			user_label.text = single_user.username
+			%UserList.add_child(user_label, true)
 
 func render_lobby_list(lobbies):
 	for child in %LobbyList.get_children():
 		child.queue_free()
+
+	var found_player_in_lobby = false
 	for lobby in lobbies:
 		var render_lobby: LobbyListItem = LobbyItemScene.instantiate()
 		render_lobby.name = str(lobby.id)
@@ -315,7 +321,19 @@ func render_lobby_list(lobbies):
 		render_lobby.lobby_leave_button.pressed.connect(func(): send_message_leave_lobby())
 		render_lobby.lobby_start_button.pressed.connect(func(): send_message_start_game(lobby.id))
 
+		# if you are in here, we update your current lobby... lol.
+		#if lobby.player
+		if lobby.players.filter(func(_p): return int(_p.id) == current_web_id):
+			found_player_in_lobby = true
+			render_lobby_current(lobby)
+			
+	if found_player_in_lobby == false:
+		render_lobby_current(null)
+
 func render_remove_user_from_list(webId):
+	# User could be in a lobby, so, ask for updates.
+	send_message_get_lobbies()
+
 	for child in %UserList.get_children():
 		# TODO: Better types here, float can often have an extra .0 decimal
 		if child.name == str(int(webId)):
@@ -352,22 +370,33 @@ func _on_game_started():
 	webRTCPeer = WebRTCMultiplayerPeer.new()
 	# Currently, we are using `create_mesh`, but we may want server authority.
 	webRTCPeer.create_mesh(current_web_id)
-	
 	# CRITICAL: Use server authority.
 	#if is_lobby_host:
 		#webRTCPeer.create_server()
 	#else:
 		#webRTCPeer.create_client(current_web_id)
-
 	multiplayer.multiplayer_peer = webRTCPeer
+
 	# Game world. Scripts within take care of adding players.
 	var new_game_world = GameWorldScene.instantiate()
-	add_child(new_game_world)
+	Hub.world_loaded.emit()
+	call_deferred("add_child", new_game_world)
+	hide()
 	
-	await get_tree().create_timer(1.0).timeout
+	
+func _on_game_rejoin():
+	#webRTCPeer = WebRTCMultiplayerPeer.new()
+	#webRTCPeer.create_mesh(current_web_id)
+	#multiplayer.multiplayer_peer = webRTCPeer
+	var new_game_world = GameWorldScene.instantiate()
+	Hub.world_loaded.emit()
+	call_deferred("add_child", new_game_world)
 	hide()
 
-	
+func on_world_loaded():
+	var menu_preview = get_parent().get_node_or_null('LobbyMenuLevel')
+	if menu_preview != null: menu_preview.queue_free()
+
 # NOTE: The server will send a candidate, offer, and answer for each peer in the lobby
 func create_multiplayer_peer_connection(id: int):
 	if id != current_web_id:
@@ -464,34 +493,41 @@ func on_heartbeat_light():
 		%ConnectLight.modulate = Color.WHITE
 
 func render_left_lobby():
+	render_lobby_current(null)
 	%LobbyChat.text = ''
 	%LobbyChat.clear()
 
-func quick_join():
-	webSocketPeer = WebSocketPeer.new()	
-	webSocketPeer.connect_to_url(WEB_SOCKET_SERVER_URL)
-	set_process(true)
-	
-	signal_lobby_updated.connect(quick_join_seek_lobby)
 
-func quick_join_seek_lobby(lobbies):
-	if lobbies:
-		for lobby in lobbies:
-			if lobby.isGameStarted == false:
-				send_message_join_lobby(lobby.id)
-				return
-		
-		send_message_create_lobby()
-	else:
-		send_message_create_lobby()
+var random_names = NameGenerator.new()
 
 func get_username_input():
 	if %UsernameInput && %UsernameInput.text:
 		return %UsernameInput.text
 	else:
-		const letters = "abc123"
-		var random_username = ""
-		for i in range(8):
-			random_username = random_username + letters[randi_range(0, letters.length() - 1)]
+		var random_users_array = random_names.new_name()
+		var random_username = random_users_array[2]
 		%UsernameInput.text = random_username
 		return random_username
+
+func render_lobby_current(lobby):
+	for child in %LobbyUsers.get_children():
+		child.queue_free()
+	
+	# No Lobby.
+	if lobby == null:
+		%CurrentLobbyId.text = ''
+		return
+		
+	%CurrentLobbyId.text = lobby.id.substr(0, 7)
+	for single_user in lobby.players:
+		var user_label = Label.new()
+		user_label.name = str(int(single_user.id))
+		user_label.text = single_user.username
+		%LobbyUsers.add_child(user_label, true)
+
+	# TODO: This is not resilient.
+	# TODO: re think. This doesn't work at all.
+	#if lobby.isGameStarted == true and webRTCPeer == null: 
+		#_on_game_started()
+	#elif lobby.isGameStarted == true:
+		#_on_game_rejoin()
