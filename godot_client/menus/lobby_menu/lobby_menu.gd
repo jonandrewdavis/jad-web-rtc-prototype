@@ -213,12 +213,13 @@ func parse_message_from_server(message):
 			if message.payload.has("webId"):
 				signal_player_left.emit(message.payload.webId)
 		Action_CreateLobby:
-			signal_lobby_created.emit()
+			#signal_lobby_created.emit()
 			is_lobby_host = true
 		Action_JoinLobby:
-			signal_lobby_joined.emit()
+			pass
+			#signal_lobby_joined.emit()
 		Action_LeaveLobby:
-			signal_left_lobby.emit()
+			#signal_left_lobby.emit()
 			is_lobby_host = false
 		#Action_LobbyChanged:
 			#if json_message.payload.has("lobby"):
@@ -237,9 +238,7 @@ func parse_message_from_server(message):
 		Action_Answer:
 			webRTCPeer.get_peer(message.payload.orgPeer).connection.set_remote_description("answer", message.payload.data)
 		Action_Candidate:
-			var data = message.payload
-			#print("Got Candididate: " + str(data.orgPeer) + " my id is " + str(current_web_id))
-			webRTCPeer.get_peer(data.orgPeer).connection.add_ice_candidate(data.mid, data.index, data.sdp)
+			webRTCPeer.get_peer(message.payload.orgPeer).connection.add_ice_candidate(message.payload.mid, message.payload.index, message.payload.sdp)
 		Action_MessageToLobby:
 			if message.payload.has("message_text"):
 				signal_lobby_message.emit(message.payload)
@@ -405,7 +404,6 @@ func create_multiplayer_peer_connection(id: int):
 	#connection.ice_candidate_created.connect(self.iceCandidateCreated.bind(id))
 	#connection_list[id] = connection
 	#webRTCPeer.add_peer(connection, id) # Comment to disable ENet
-
 
 
 func offerCreated(type, data, id):
