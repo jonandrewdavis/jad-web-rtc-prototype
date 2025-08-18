@@ -46,7 +46,7 @@ func applies(delta : float):
 	if cR.hitGroundCooldown > 0.0: cR.hitGroundCooldown -= delta
 	
 	cR.hitbox.shape.height = lerp(cR.hitbox.shape.height, cR.crouchHitboxHeight, cR.heightChangeSpeed * delta)
-	cR.model.scale.y = lerp(cR.model.scale.y, cR.crouchModelHeight, cR.heightChangeSpeed * delta)
+	#cR.model.scale.y = lerp(cR.model.scale.y, cR.crouchModelHeight, cR.heightChangeSpeed * delta)
 	
 	if not is_multiplayer_authority():
 		%WeaponContainer.position = Vector3(-0.15, 0.63, 0.0)		

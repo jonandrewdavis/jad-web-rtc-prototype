@@ -1,18 +1,16 @@
 extends Node3D
 
-var player_scene_new = preload("res://game/PlayerCharacter/Scenes/PlayerCharacterScene.tscn")
+var player_scene_new = preload("res://game/PlayerCharacter/PlayerCharacterScene.tscn")
 
 @export var player_container: Node3D
 
 func _ready() -> void:
-	Hub.world = self
-
 	multiplayer.connected_to_server.connect(RTCServerConnected)
 	multiplayer.peer_connected.connect(RTCPeerConnected)
 	multiplayer.peer_disconnected.connect(RTCPeerDisconnected)
+	print("WHY NO READY ")
 
 	add_player_to_game(multiplayer.get_unique_id())
-	Hub.projectile_system.add_new_projectile_preload()
 
 func RTCServerConnected():
 	print("WORLD: rtc server connected")

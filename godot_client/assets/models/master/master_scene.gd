@@ -25,9 +25,9 @@ func _ready() -> void:
 	#weapon_manager.player = player
 	#weapon_manager.player_input = player.player_input
 
-	if Hub.lobby_menu:
-		Hub.lobby_menu.send_message_get_own_lobby()
-		Hub.lobby_menu.signal_lobby_get_own.connect(_on_get_own_lobby)
+	#if Hub.lobby_menu:
+		#Hub.lobby_menu.send_message_get_own_lobby()
+		#Hub.lobby_menu.signal_lobby_get_own.connect(_on_get_own_lobby)
 
 
 	if not animation_player:

@@ -15,12 +15,6 @@ run/main_scene="uid://coipmkwg135us"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="uid://er7ks6c1nypb"
 
-[autoload]
-
-Hub="*res://scripts/hub.gd"
-DamageNumberScript="*res://game/Targets/Scripts/DamageNumberScript.gd"
-DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
-
 [debug]
 
 gdscript/warnings/unused_signal=0

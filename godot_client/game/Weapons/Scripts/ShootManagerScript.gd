@@ -187,4 +187,4 @@ func projectileShot(pointOfCollisionProjectile : Vector3):
 	# NOTE: Networked version - AD
 	var projInstanceName = cW.projRef.get_state().get_node_name(0)
 	var cWArray = [cW.weSl.attackPoint.global_transform,  cW.damagePerProj, cW.projTimeBeforeVanish, cW.projGravityVal, cW.isProjExplosive, cW.projMoveSpeed]
-	Hub.projectile_system.add_new_projectile.rpc(cWArray, projectileDirection, projInstanceName, _normal, source)
+	#Hub.projectile_system.add_new_projectile.rpc(cWArray, projectileDirection, projInstanceName, _normal, source)

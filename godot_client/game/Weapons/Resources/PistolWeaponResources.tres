@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="WeaponResourceNew" load_steps=7 format=3 uid="uid://j42d6dl8qkaj"]
+[gd_resource type="Resource" script_class="WeaponResourceNew" load_steps=6 format=3 uid="uid://j42d6dl8qkaj"]
 
 [ext_resource type="AudioStream" uid="uid://bhigie4rovst1" path="res://assets/sound/9mm Pistol Rack Full.mp3" id="1_gd0kh"]
-[ext_resource type="PackedScene" uid="uid://x8oniabn746q" path="res://game/Weapons/Scenes/MuzzleFlashParticleScene.tscn" id="1_yg7sv"]
 [ext_resource type="Script" uid="uid://bnhfyt5sl8jcd" path="res://game/Weapons/Scripts/WeaponResourcesScript.gd" id="2_gd0kh"]
 [ext_resource type="AudioStream" uid="uid://bgvgepafdad0q" path="res://assets/sound/9mm Pistol Chamber Check Full.mp3" id="3_rglq3"]
 [ext_resource type="AudioStream" uid="uid://cosnwrc55jfiu" path="res://assets/sound/556 Single Isolated MP3.mp3" id="4_sdsuq"]
@@ -55,4 +54,3 @@ bobFreq = 0.008
 bobAmount = 0.018
 bobSpeed = 10.0
 onIdleBobFreqDivider = 2.0
-muzzleFlashRef = ExtResource("1_yg7sv")

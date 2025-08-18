@@ -9,12 +9,14 @@ class_name ProjectileSystem
 @onready var RifleRound: PackedScene = preload("res://game/Weapons/Scenes/RifleRound.tscn")
 
 func _ready():
-	Hub.projectile_system = self
+	#Hub.projectile_system = self
 	
 	# NOTE: Since we're using RPCs, now each client just adds. No spawner needed. Interesting.
 	#var SPAWNABLES = [bulletDecal]
 	#for item in SPAWNABLES:
 		#spawner.add_spawnable_scene(item.get_state().get_path())
+
+	pass
 
 @rpc('any_peer', 'call_local')
 func add_new_decal(colliderPoint : Vector3, colliderNormal : Vector3):

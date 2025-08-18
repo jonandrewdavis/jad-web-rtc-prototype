@@ -32,7 +32,7 @@ func applies(delta : float):
 		if cR.coyoteJumpCooldown > 0.0: cR.coyoteJumpCooldown -= delta
 		
 	cR.hitbox.shape.height = lerp(cR.hitbox.shape.height, cR.baseHitboxHeight, cR.heightChangeSpeed * delta)
-	cR.model.scale.y = lerp(cR.model.scale.y, cR.baseModelHeight, cR.heightChangeSpeed * delta)
+	#cR.model.scale.y = lerp(cR.model.scale.y, cR.baseModelHeight, cR.heightChangeSpeed * delta)
 		
 func inputManagement():
 	if cR.player_input.is_jumping:

@@ -57,7 +57,8 @@ func applyDamage(body):
 	elif body.is_in_group("HitableObjects") and body.has_method("projectileHit"):
 		body.projectileHit(damage, direction, source)
 	elif body.has_method("projectileHit") == false:
-		Hub.projectile_system.add_new_decal.rpc(position, normal)
+		pass
+		#Hub.projectile_system.add_new_decal.rpc(position, normal)
 
 func explode():
 	#this function is visual and audio only, it doesn't affect the gameplay

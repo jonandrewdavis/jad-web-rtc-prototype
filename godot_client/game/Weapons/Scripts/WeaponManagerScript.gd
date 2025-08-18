@@ -36,10 +36,10 @@ var rng = RandomNumberGenerator.new()
 @onready var ammoManager : Node3D = %AmmunitionManager
 @onready var animPlayer : AnimationPlayer = %AnimationPlayer
 @onready var animManager : Node3D = %AnimationManager
-@onready var audioManager : PackedScene = preload("../../Misc/Scenes/AudioManagerScene.tscn")
-@onready var bulletDecal : PackedScene = preload("../../Weapons/Scenes/BulletDecalScene.tscn")
-@onready var hud : CanvasLayer = %HUD
-@onready var linkComponent : Node3D = %LinkComponent
+@onready var audioManager : PackedScene = preload("res://game/Misc/Scenes/AudioManagerScene.tscn")
+@onready var bulletDecal : PackedScene = preload("res://game/Misc/Scenes/BulletDecalScene.tscn")
+#@onready var hud : CanvasLayer = %HUD
+#@onready var linkComponent : Node3D = %LinkComponent
 
 func _ready():
 	if is_multiplayer_authority():
@@ -122,7 +122,7 @@ func _process(_delta : float):
 		weaponInputs()
 		reloadManager.autoReload()
 		
-	displayStats()
+	#displayStats()
 	
 #func weaponInputs():
 	#if Input.is_action_pressed(shoot_action): shootManager.shoot()
@@ -153,12 +153,12 @@ func weaponInputs():
 			weaponIndex = max(weaponIndex - 1, 0) #from last element of weapon stack to first element 
 			changeWeapon(weaponStack[weaponIndex])
 
-func displayStats():
-	hud.displayWeaponStack(weaponStack.size())
-	hud.displayWeaponName(cW.weaponName)
-	hud.displayTotalAmmoInMag(cW.totalAmmoInMag, cW.nbProjShotsAtSameTime)
-	hud.displayTotalAmmo(ammoManager.ammoDict[cW.ammoType], cW.nbProjShotsAtSameTime)
-	
+#func displayStats():
+	#hud.displayWeaponStack(weaponStack.size())
+	#hud.displayWeaponName(cW.weaponName)
+	#hud.displayTotalAmmoInMag(cW.totalAmmoInMag, cW.nbProjShotsAtSameTime)
+	#hud.displayTotalAmmo(ammoManager.ammoDict[cW.ammoType], cW.nbProjShotsAtSameTime)
+
 func changeWeapon(nextWeapon : int):
 	if canChangeWeapons and cW.canShoot and cW.canReload:
 		exitWeapon(nextWeapon)
@@ -168,8 +168,7 @@ func changeWeapon(nextWeapon : int):
 	
 func displayMuzzleFlash():
 	# NOTE: edited.
-	%MuzzleParticles.global_position = cW.weSl.muzzleFlashSpawner.global_position
-	%MuzzleParticles.emitting = true
+	pass
 
 	# TODO: Disabled. Renable?	
 	#create a muzzle flash instance, and display it at the indicated point
@@ -183,7 +182,8 @@ func displayMuzzleFlash():
 		#return
 		
 func displayBulletHole(colliderPoint : Vector3, colliderNormal : Vector3):
-	Hub.projectile_system.add_new_decal.rpc(colliderPoint, colliderNormal)
+	pass
+	#Hub.projectile_system.add_new_decal.rpc(colliderPoint, colliderNormal)
 
 	# NOTE: Moved to projectiles system to spawn.  
 	

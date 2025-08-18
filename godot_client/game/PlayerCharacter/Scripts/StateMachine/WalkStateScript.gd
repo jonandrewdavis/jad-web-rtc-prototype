@@ -50,7 +50,7 @@ func applies(delta : float):
 	if cR.hitGroundCooldown > 0.0: cR.hitGroundCooldown -= delta
 	
 	cR.hitbox.shape.height = lerp(cR.hitbox.shape.height, cR.baseHitboxHeight, cR.heightChangeSpeed * delta)
-	cR.model.scale.y = lerp(cR.model.scale.y, cR.baseModelHeight, cR.heightChangeSpeed * delta)
+	#cR.model.scale.y = lerp(cR.model.scale.y, cR.baseModelHeight, cR.heightChangeSpeed * delta)
 	
 #func inputManagement():
 	#if Input.is_action_just_pressed(cR.jumpAction):

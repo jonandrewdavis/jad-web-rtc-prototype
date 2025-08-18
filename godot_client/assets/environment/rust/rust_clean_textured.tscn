@@ -1004,7 +1004,7 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_xpsr5")
 
-[node name="rust_clean" instance=ExtResource("1_l4jrd")]
+[node name="rust_map_textured" instance=ExtResource("1_l4jrd")]
 script = ExtResource("2_6q7a7")
 
 [node name="Mesh_0" parent="." index="0"]

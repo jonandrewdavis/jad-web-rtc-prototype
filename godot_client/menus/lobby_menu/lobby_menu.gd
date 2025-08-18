@@ -8,8 +8,8 @@ const WEB_SOCKET_SECRET_KEY = "9317e4d6-83b3-4188-94c4-353a2798d3c1"
 
 # LOCAL
 # REMOTE
-#const WEB_SOCKET_SERVER_URL = 'ws://localhost:8787'
-const WEB_SOCKET_SERVER_URL = 'wss://typescript-websockets-lobby.jonandrewdavis.workers.dev'
+const WEB_SOCKET_SERVER_URL = 'ws://localhost:8787'
+#const WEB_SOCKET_SERVER_URL = 'wss://typescript-websockets-lobby.jonandrewdavis.workers.dev'
 
 var current_username : String = ""
 var current_chosen_color: String
@@ -17,7 +17,7 @@ var current_chosen_color: String
 var webSocketPeer : WebSocketPeer 
 var webRTCPeer: WebRTCMultiplayerPeer 
 
-var current_web_id: int 
+var current_web_id: String
 var is_lobby_host = false
 #var lobby_data = null # Not used
 
@@ -30,7 +30,7 @@ var connection_validated = false
 
 
 #region Signals
-signal signal_connection_confirmed(webId: int)
+signal signal_connection_confirmed(webId: String)
 signal signal_disconnect
 signal signal_message(text)
 signal signal_heartbeat
@@ -79,7 +79,7 @@ const Action_Candidate = "Candidate"
 #endregion
 
 func _ready():
-	Hub.lobby_menu = self
+	#Hub.lobby_menu = self
 	set_process(false)	
 	ready_required_connections()
 	ready_input_connections()
@@ -94,7 +94,7 @@ func ready_required_connections():
 	# REQUIRED FOR WEB_RTC:
 	signal_new_rtc_peer_connection.connect(create_multiplayer_peer_connection)
 
-func _on_ws_connection_confirmed(webId: int):
+func _on_ws_connection_confirmed(webId: String):
 	connection_validated = true
 	current_web_id = webId
 	send_message_get_lobbies()
@@ -182,6 +182,7 @@ func data_received():
 	var packet_to_json = JSON.parse_string(packet)
 	if packet_to_json and packet_to_json.has('action') and packet_to_json.has('payload'):
 		parse_message_from_server(packet_to_json)
+		print('DEBUG PACKET: ', packet)
 		signal_message.emit(packet)
 	else:
 		signal_message.emit("Invalid message received")
@@ -231,14 +232,16 @@ func parse_message_from_server(message):
 			signal_lobby_game_started.emit()
 		Action_NewPeerConnection:
 			# NOTE: This signal kicks of the WebRTC negotiation process. Connected during start_game
-			signal_new_rtc_peer_connection.emit(message.payload.id)
+			signal_new_rtc_peer_connection.emit(int(message.payload.id))
 			# TODO: Action, Offer, Answer are largely untyped, can we improve the types?
 		Action_Offer:
-			webRTCPeer.get_peer(message.payload.orgPeer).connection.set_remote_description("offer", message.payload.data)
+			webRTCPeer.get_peer(int(message.payload.orgPeer)).connection.set_remote_description("offer", message.payload.data)
 		Action_Answer:
-			webRTCPeer.get_peer(message.payload.orgPeer).connection.set_remote_description("answer", message.payload.data)
+			webRTCPeer.get_peer(int(message.payload.orgPeer)).connection.set_remote_description("answer", message.payload.data)
 		Action_Candidate:
-			webRTCPeer.get_peer(message.payload.orgPeer).connection.add_ice_candidate(message.payload.mid, message.payload.index, message.payload.sdp)
+			var data = message.payload
+			print("Got Candididate: " + str(data.orgPeer) + " my id is " + str(current_web_id))
+			webRTCPeer.get_peer(int(data.orgPeer)).connection.add_ice_candidate(data.mid, data.index, data.sdp)
 		Action_MessageToLobby:
 			if message.payload.has("message_text"):
 				signal_lobby_message.emit(message.payload)
@@ -318,7 +321,7 @@ func render_lobby_list(lobbies):
 
 		# if you are in here, we update your current lobby... lol.
 		#if lobby.player
-		if lobby.players.filter(func(_p): return int(_p.id) == current_web_id):
+		if lobby.players.filter(func(_p): return int(_p.id) == int(current_web_id)):
 			found_player_in_lobby = true
 			render_lobby_current(lobby)
 			
@@ -364,29 +367,29 @@ func render_lobby_message(message_payload):
 func _on_game_started():
 	webRTCPeer = WebRTCMultiplayerPeer.new()
 	# Currently, we are using `create_mesh`, but we may want server authority.
-	webRTCPeer.create_mesh(current_web_id)
+	webRTCPeer.create_mesh(int(current_web_id))
 	# CRITICAL: Use server authority.
 	#if is_lobby_host:
 		#webRTCPeer.create_server()
 	#else:
 		#webRTCPeer.create_client(current_web_id)
 	multiplayer.multiplayer_peer = webRTCPeer
-
+	await get_tree().create_timer(0.5).timeout
 	# Game world. Scripts within take care of adding players.
 	var new_game_world = GameWorldScene.instantiate()
-	call_deferred("add_child", new_game_world)
-	var menu_preview = get_parent().get_node_or_null('LobbyMenuLevel')
-	if menu_preview != null: menu_preview.queue_free()
+	await get_tree().create_timer(0.5).timeout
+
+	add_child(new_game_world)
 	hide()
 
 # NOTE: The server will send a candidate, offer, and answer for each peer in the lobby
 func create_multiplayer_peer_connection(id: int):
-	if id != current_web_id:
+	if id != int(current_web_id):
 		var new_peer_connection: WebRTCPeerConnection = WebRTCPeerConnection.new()
 		new_peer_connection.initialize({
 			"iceServers" : [{ "urls": ["stun:stun.l.google.com:19302"] }]
 		})
-		#print("binding id " + str(id) + " my id is " + str(current_web_id))
+		print("binding id " + str(id) + " my id is " + str(current_web_id))
 
 		new_peer_connection.session_description_created.connect(self.offerCreated.bind(id))
 		new_peer_connection.ice_candidate_created.connect(self.iceCandidateCreated.bind(id))

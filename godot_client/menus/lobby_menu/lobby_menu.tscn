@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://chqusw4w4e11"]
+[gd_scene load_steps=8 format=3 uid="uid://chqusw4w4e11"]
 
 [ext_resource type="Script" uid="uid://e1via0bhi4hy" path="res://menus/lobby_menu/lobby_menu.gd" id="1_3p3bs"]
-[ext_resource type="Material" uid="uid://buguph1wmcp08" path="res://shaders/snow_shader_material.tres" id="2_07jv1"]
 [ext_resource type="StyleBox" uid="uid://8nr6rb2m1nto" path="res://assets/ui/section_panel_style_box_flat.tres" id="2_urr6r"]
 [ext_resource type="PackedScene" uid="uid://cr0rjm7booup1" path="res://menus/lobby_menu/lobby_color_grid.tscn" id="4_07jv1"]
 
@@ -44,15 +43,6 @@ script = ExtResource("1_3p3bs")
 
 [node name="BlackBackground" type="Panel" parent="."]
 modulate = Color(1, 1, 1, 0.63529414)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="SnowShader" type="Panel" parent="."]
-material = ExtResource("2_07jv1")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
