@@ -366,13 +366,7 @@ func render_lobby_message(message_payload):
 
 func _on_game_started():
 	webRTCPeer = WebRTCMultiplayerPeer.new()
-	# Currently, we are using `create_mesh`, but we may want server authority.
 	webRTCPeer.create_mesh(int(current_web_id))
-	# CRITICAL: Use server authority.
-	#if is_lobby_host:
-		#webRTCPeer.create_server()
-	#else:
-		#webRTCPeer.create_client(current_web_id)
 	multiplayer.multiplayer_peer = webRTCPeer
 	await get_tree().create_timer(0.5).timeout
 	# Game world. Scripts within take care of adding players.

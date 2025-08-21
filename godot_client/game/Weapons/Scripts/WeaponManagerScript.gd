@@ -36,8 +36,8 @@ var rng = RandomNumberGenerator.new()
 @onready var ammoManager : Node3D = %AmmunitionManager
 @onready var animPlayer : AnimationPlayer = %AnimationPlayer
 @onready var animManager : Node3D = %AnimationManager
-@onready var audioManager : PackedScene = preload("res://game/Misc/Scenes/AudioManagerScene.tscn")
-@onready var bulletDecal : PackedScene = preload("res://game/Misc/Scenes/BulletDecalScene.tscn")
+@onready var audioManager : PackedScene = preload("res://game/Weapons/Misc/Scenes/AudioManagerScene.tscn")
+@onready var bulletDecal : PackedScene = preload("res://game/Weapons/Misc/Scenes/BulletDecalScene.tscn")
 #@onready var hud : CanvasLayer = %HUD
 #@onready var linkComponent : Node3D = %LinkComponent
 

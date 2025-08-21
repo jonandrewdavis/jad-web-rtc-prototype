@@ -36,11 +36,10 @@ enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/ra
 [file_customization]
 
 folder_colors={
-"res://assets/": "purple",
 "res://game/": "green",
+"res://game/assets/": "purple",
 "res://game/fpc/": "blue",
 "res://menus/": "red",
-"res://scripts/": "yellow",
 "res://shaders/": "orange"
 }
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://chqusw4w4e11"]
 
 [ext_resource type="Script" uid="uid://e1via0bhi4hy" path="res://menus/lobby_menu/lobby_menu.gd" id="1_3p3bs"]
-[ext_resource type="StyleBox" uid="uid://8nr6rb2m1nto" path="res://assets/ui/section_panel_style_box_flat.tres" id="2_urr6r"]
+[ext_resource type="StyleBox" uid="uid://8nr6rb2m1nto" path="res://game/assets/ui/section_panel_style_box_flat.tres" id="2_urr6r"]
 [ext_resource type="PackedScene" uid="uid://cr0rjm7booup1" path="res://menus/lobby_menu/lobby_color_grid.tscn" id="4_07jv1"]
 
 [sub_resource type="Gradient" id="Gradient_urr6r"]
